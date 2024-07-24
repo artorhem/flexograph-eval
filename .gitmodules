@@ -1,3 +1,6 @@
 [submodule "systems/blaze"]
 	path = systems/blaze
 	url = git@github.com:artorhem/blaze.git
+[submodule "systems/graphchi-cpp"]
+	path = systems/graphchi-cpp
+	url = git@github.com:artorhem/graphchi-cpp.git
