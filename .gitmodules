@@ -1,0 +1,3 @@
+[submodule "systems/blaze"]
+	path = systems/blaze
+	url = git@github.com:artorhem/blaze.git
