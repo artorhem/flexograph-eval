@@ -4,3 +4,10 @@
 [submodule "systems/graphchi-cpp"]
 	path = systems/graphchi-cpp
 	url = git@github.com:artorhem/graphchi-cpp.git
+[submodule "systems/x-stream"]
+	path = systems/x-stream
+  url = git@github.com:artorhem/x-stream.git
+  branch = sosp
+[submodule "systems/lumos"]
+	path = systems/lumos
+	url = git@github.com:artorhem/lumos.git
