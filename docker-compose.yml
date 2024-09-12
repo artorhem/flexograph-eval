@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  gapbs:
+    privileged: true
+    build:
+      context: ./
+      dockerfile: ./containers/GAPBS.Dockerfile
+    container_name: gapbs
+    volumes:
+      - systems:/systems
+      - datasets:/datasets
+      - results:/results
+
+volumes:
+  systems:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/puneet/scratch/flexograph-eval/systems/
+  datasets:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/puneet/scratch/flexograph-eval/datasets/
+  results:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/puneet/scratch/flexograph-eval/results/
