@@ -14,10 +14,11 @@ RUN apt-get install --reinstall -y  ca-certificates
 ENV CC=/usr/bin/gcc
 ENV CXX=/usr/bin/g++
 
+ADD scripts/gapbs.sh /gapbs.sh
 # The volume containing the source code is mounted at /systems
 WORKDIR /systems/in-mem/gapbs
 
 # Make the project
-CMD make clean && make
+CMD ["make", "all"]
 
 CMD sleep infinity

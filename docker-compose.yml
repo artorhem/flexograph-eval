@@ -24,7 +24,7 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/puneet/scratch/flexograph-eval/datasets/
+      device: /drives/hdd_main/datasets_downloads/
   results:
     driver: local
     driver_opts:
