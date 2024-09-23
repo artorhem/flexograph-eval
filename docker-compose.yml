@@ -11,6 +11,17 @@ services:
       - systems:/systems
       - datasets:/datasets
       - results:/results
+  
+  ligra:
+    privileged: true
+    build:
+      context: ./
+      dockerfile: ./containers/ligra.Dockerfile
+    container_name: ligra
+    volumes:
+      - systems:/systems
+      - datasets:/datasets
+      - results:/results
 
 volumes:
   systems:

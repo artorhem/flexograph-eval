@@ -1,12 +1,11 @@
-FROM ubuntu:22.04 AS gapbs
+FROM ubuntu:22.04 AS ligra
 
-LABEL project="GAPBS"
+LABEL project="Ligra"
 LABEL maintainer="Puneet Mehrotra"
-LABEL description="Build environment for GAPBS"
+LABEL description="Build environment for Ligra"
 USER root
 SHELL [ "/bin/bash" , "-c" ]
 
-# Install dependencies
 RUN apt-get update && apt-get --no-install-recommends -y install build-essential cmake git libboost-all-dev libomp-dev wget gdb time
 RUN apt-get install --reinstall -y  ca-certificates
 
@@ -14,11 +13,9 @@ RUN apt-get install --reinstall -y  ca-certificates
 ENV CC=/usr/bin/gcc
 ENV CXX=/usr/bin/g++
 
-ADD scripts/gapbs.sh /gapbs.sh
+ADD scripts/ligra.sh /ligra.sh
+
 # The volume containing the source code is mounted at /systems
-WORKDIR /systems/in-mem/gapbs
+WORKDIR /systems/in-mem/ligra/apps
 
-# Make the project
-RUN make all
-
-CMD sleep infinity
+CMD bash /ligra.sh > /results/ligra/ligra.log 2>&1
