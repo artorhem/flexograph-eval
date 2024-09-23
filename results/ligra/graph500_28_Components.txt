@@ -1,0 +1,2 @@
+Time to convert graph500_28 to adj: 404.27 seconds
+Unable to open file: graph500_28

@@ -1,0 +1,14 @@
+Read Time:           7.96546
+Build Time:          0.35537
+Graph has 4847572 nodes and 68475391 directed edges for degree: 14
+Skipping largest intermediate component (ID: 1, approx. 89% of the graph)
+Trial Time:          0.02063
+Skipping largest intermediate component (ID: 1, approx. 89% of the graph)
+Trial Time:          0.01643
+Skipping largest intermediate component (ID: 1, approx. 89% of the graph)
+Trial Time:          0.01536
+Skipping largest intermediate component (ID: 1, approx. 89% of the graph)
+Trial Time:          0.01571
+Skipping largest intermediate component (ID: 1, approx. 89% of the graph)
+Trial Time:          0.01573
+Average Time:        0.01677

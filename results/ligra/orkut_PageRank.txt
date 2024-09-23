@@ -1,0 +1,6 @@
+Time to convert orkut to adj: 26.85 seconds
+Running time : 3.98
+Running time : 3.87
+Running time : 3.86
+Running time : 3.88
+Running time : 3.84

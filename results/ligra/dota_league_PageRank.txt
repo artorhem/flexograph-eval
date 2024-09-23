@@ -1,0 +1,6 @@
+Time to convert dota_league to adj: 14.57 seconds
+Running time : 1.15
+Running time : 1.19
+Running time : 1.21
+Running time : 1.13
+Running time : 1.12

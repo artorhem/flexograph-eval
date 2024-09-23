@@ -1,0 +1,12 @@
+Time to convert graph500_26 to adj: 191.05 seconds
+triangle count = 8162022804
+triangle count = 8162022804
+Running time : 288
+triangle count = 8162022804
+Running time : 278
+triangle count = 8162022804
+Running time : 288
+triangle count = 8162022804
+Running time : 272
+triangle count = 8162022804
+Running time : 282

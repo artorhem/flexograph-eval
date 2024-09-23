@@ -1,0 +1,12 @@
+Time to convert orkut to adj: 26.85 seconds
+triangle count = 0
+triangle count = 0
+Running time : 0.129
+triangle count = 0
+Running time : 0.131
+triangle count = 0
+Running time : 0.134
+triangle count = 0
+Running time : 0.132
+triangle count = 0
+Running time : 0.145

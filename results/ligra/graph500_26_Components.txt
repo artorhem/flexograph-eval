@@ -1,0 +1,6 @@
+Time to convert graph500_26 to adj: 191.05 seconds
+Running time : 3.75
+Running time : 3.78
+Running time : 3.79
+Running time : 3.76
+Running time : 3.9

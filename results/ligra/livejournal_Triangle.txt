@@ -1,0 +1,12 @@
+Time to convert livejournal to adj: 15.94 seconds
+triangle count = 187551052
+triangle count = 187551052
+Running time : 2.1
+triangle count = 187551052
+Running time : 2.14
+triangle count = 187551052
+Running time : 2.13
+triangle count = 187551052
+Running time : 2.16
+triangle count = 187551052
+Running time : 2.12

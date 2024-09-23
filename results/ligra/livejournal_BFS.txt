@@ -1,0 +1,6 @@
+Time to convert livejournal to adj: 15.94 seconds
+Running time : 0.000158
+Running time : 0.000401
+Running time : 0.000139
+Running time : 0.000132
+Running time : 0.000137
