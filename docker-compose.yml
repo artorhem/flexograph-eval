@@ -23,6 +23,17 @@ services:
       - datasets:/datasets
       - results:/results
 
+  galois:
+    privileged: true
+    build:
+      context: ./
+      dockerfile: ./containers/galois.Dockerfile
+    container_name: galois
+    volumes:
+      - systems:/systems
+      - datasets:/datasets
+      - results:/results
+
 volumes:
   systems:
     driver: local
