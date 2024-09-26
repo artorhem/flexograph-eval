@@ -2,14 +2,17 @@
 import math
 import random
 import sys
-from tqdm import tqdm
 
 def edges(filename):
 	with open(filename) as f:
 		for line in f:
 			line = line.strip()
 			if line[0] == '#': continue
-			src,tar,_ = line.split()
+			#check if the split returns 3 values
+			if len(line.split()) == 3:
+				src,tar,_ = line.split()
+			else:
+				src,tar = line.split()
 			yield(int(src),int(tar))
 
 def sizeof_graph(filename):
@@ -163,70 +166,9 @@ def get_intersection_count(A, B):
 			count += 1
 	return count
 
-def triangles(filename):
-	adj_graph = dict()
-	for src,tar in edges(filename):
-		adj_graph[src] = adj_graph.setdefault(src,[]) + [tar]
-
-	print("Finished loading the graph")
-	num_trust = 0
-	num_cycle = 0
-	pbar = tqdm(total=len(adj_graph))
-	for vertex, neighbors in adj_graph.items():
-		for neighbor in neighbors:
-			if neighbor not in adj_graph:
-				continue
-			neighbors2 = adj_graph[neighbor]
-			num_trust += get_intersection_count(neighbors, neighbors2)
-			if neighbor > vertex:
-				for extra_neighbor in neighbors2:
-					if extra_neighbor not in adj_graph:
-						continue
-					if extra_neighbor > vertex:
-						extra_extra_neighbors = adj_graph[extra_neighbor]
-						if vertex in extra_extra_neighbors:
-							num_cycle += 1
-		pbar.update(1)
-
-	print("Number of trust triangles:", num_trust)
-	print("Number of cycle triangles:", num_cycle)
-
-def triangles_set(filename):
-	adj_graph = dict()
-	for src,tar in edges(filename):
-		if src not in adj_graph:
-			adj_graph[src] = {tar}
-		else:
-			adj_graph[src].add(tar)
-
-	print("Finished loading the graph")
-	num_trust = 0
-	num_cycle = 0
-	pbar = tqdm(total=len(adj_graph))
-	for vertex, neighbors in adj_graph.items():
-		for neighbor in neighbors:
-			if neighbor not in adj_graph:
-				continue
-			if neighbor == vertex:
-				continue
-			neighbors2 = adj_graph[neighbor]
-			num_trust += len((neighbors & neighbors2) - {vertex, neighbor})
-			if neighbor > vertex:
-				for extra_neighbor in neighbors2:
-					if extra_neighbor not in adj_graph:
-						continue
-					if extra_neighbor > vertex:
-						extra_extra_neighbors = adj_graph[extra_neighbor]
-						if vertex in extra_extra_neighbors:
-							num_cycle += 1
-		pbar.update(1)
-
-	print("Number of trust triangles:", num_trust)
-	print("Number of cycle triangles:", num_cycle)
-
 if __name__ == '__main__':
 	if len(sys.argv) < 3:
-		print("Usage: python graph_utils.py [info|degree|zero|edgedeg|maxver|bfsver|triangles|triangles_set|dup_edges] <filename> <optional: bfsver output file>")
+		print("Usage: python graph_utils.py [info|degree|zero|edgedeg|maxver|bfsver|dup_edges] <filename> <optional: bfsver output file>")
 		sys.exit(1)
 	option = sys.argv[1]
 	if option == 'info':
@@ -241,13 +183,9 @@ if __name__ == '__main__':
 		max_deg_vertex(sys.argv[2])
 	elif option == 'bfsver':
 		bfs_random_starts(sys.argv[2], sys.argv[3])
-	elif option == 'triangles':
-		triangles(sys.argv[2])
-	elif option == 'triangles_set':
-		triangles_set(sys.argv[2])
 	elif option == 'dup_edges':
 		duplicate_edges(sys.argv[2])
 	else:
-		print("Usage: python graph_utils.py [info|degree|zero|edgedeg|maxver|bfsver|triangles|triangles_set|dup_edges] <filename> <optional: bfsver output file>")
+		print("Usage: python graph_utils.py [info|degree|zero|edgedeg|maxver|bfsver|dup_edges] <filename> <optional: bfsver output file>")
 		sys.exit(1)
 

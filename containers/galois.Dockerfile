@@ -6,7 +6,7 @@ LABEL description="Build environment for Galois"
 USER root
 SHELL [ "/bin/bash" , "-c" ]
 
-RUN apt-get update && apt-get --no-install-recommends -y install build-essential cmake git libboost-all-dev libomp-dev wget gdb time gnupg2
+RUN apt-get update && apt-get --no-install-recommends -y install build-essential cmake git libboost-all-dev libomp-dev wget gdb time gnupg2 python3 vim
 RUN apt-get install --reinstall -y  ca-certificates
 
 # #add llvm sources
@@ -21,10 +21,12 @@ RUN apt-get install libllvm20 llvm-20 llvm-20-dev llvm-20-runtime -y
 ENV CC=/usr/bin/gcc
 ENV CXX=/usr/bin/g++
 
-# ADD scripts/galois.sh /galois.sh
+ADD scripts/galois.sh /galois.sh
+ADD scripts/galois/bfs.sh /bfs.sh
+ADD scripts/galois/sssp.sh /sssp.sh
+RUN chmod +x /galois.sh
+ADD scripts/graph_utils.py /graph_utils.py
 
 # The volume containing the source code is mounted at /systems
 WORKDIR /systems/in-mem/Galois
-
-
 CMD sleep infinity
