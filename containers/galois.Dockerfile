@@ -23,7 +23,10 @@ ENV CXX=/usr/bin/g++
 
 ADD scripts/galois.sh /galois.sh
 ADD scripts/galois/bfs.sh /bfs.sh
-ADD scripts/galois/sssp.sh /sssp.sh
+# ADD scripts/galois/sssp.sh /sssp.sh <-- Not working
+ADD scripts/galois/pagerank.sh /pagerank.sh
+ADD scripts/galois/connectedcomponents.sh /connectedcomponents.sh 
+
 RUN chmod +x /galois.sh
 ADD scripts/graph_utils.py /graph_utils.py
 
