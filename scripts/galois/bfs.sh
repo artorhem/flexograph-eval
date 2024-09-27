@@ -22,16 +22,13 @@ bfs () {
 }
 
 #add the header if the file is empty or if it does not exist
-
-if [ $(wc -l < $OUTFILE_P) -eq 0 || -e $OUTFILE_P ]; then
+if [ ! -s $OUTFILE_P ]; then
     echo "Real,User,Sys,Algorithm,Vertex_ID,Thread_Count" > $OUTFILE_P
 fi
 
-
-if [ $(wc -l < $OUTFILE_S) -eq 0 || -e $OUTFILE_S ]; then
+if [ ! -s $OUTFILE_S ]; then
     echo "Real,User,Sys,Algorithm,Vertex_ID,Thread_Count" > $OUTFILE_S
 fi
 
 bfs $DATASET $OUTFILE_P PARALLEL ${START_NODE} ${THREADS}
 bfs $DATASET $OUTFILE_S SERIAL ${START_NODE} ${THREADS}
-

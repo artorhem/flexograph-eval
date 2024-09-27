@@ -47,6 +47,7 @@ datasets=("orkut")
 
 benchmarks=(
   "bfs"
+  "sssp"
 )
 
 THREADS=`nproc --all`
@@ -77,8 +78,7 @@ do
   for benchmark in "${benchmarks[@]}"
   do
     #cleanup the output files from previous runs
-    rm -f /results/galois/${dataset}_${benchmark}-parallel.csv
-    rm -f /results/galois/${dataset}_${benchmark}-serial.csv
+    rm -f /results/galois/${dataset}_${benchmark}-*.csv
 
     for nodes in "${random_starts[@]}"
     do
