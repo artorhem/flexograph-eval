@@ -2,7 +2,7 @@
 
 SRC_DIR="/systems/in-mem/Galois"
 BUILD_DIR="/systems/in-mem/Galois/build"
-ITERATIONS=1
+ITERATIONS=5
 
 DATASET=$1
 OUTFILE_BASE=$2
@@ -30,5 +30,8 @@ if [ ! -s $OUTFILE_S ]; then
     echo "Real,User,Sys,Algorithm,Vertex_ID,Thread_Count" > $OUTFILE_S
 fi
 
-bfs $DATASET $OUTFILE_P PARALLEL ${START_NODE} ${THREADS}
-bfs $DATASET $OUTFILE_S SERIAL ${START_NODE} ${THREADS}
+for i in `seq 1 $ITERATIONS`;
+do
+    bfs $DATASET $OUTFILE_P PARALLEL ${START_NODE} ${THREADS}
+    bfs $DATASET $OUTFILE_S SERIAL ${START_NODE} ${THREADS}
+done

@@ -145,8 +145,8 @@ def bfs_random_starts(infile, outfile):
 		if v >= max_value:
 			max_value = v
 			max_vertex = k
-	bfs_random_start_nodes = [1, max_vertex] # 1 is the default node used for warming the cache. max_vertex is node with max out degree.
-	for i in range(1,len(degs)): #Milad changed this from 0 to 1
+	bfs_random_start_nodes = [0, max_vertex]
+	for i in range(1,len(degs)): # Check if there are any zero degree nodes
 		if i not in degs:
 			print("Zero degree node found", i)
 			bfs_random_start_nodes += [i] # Add a zero degree node for representation

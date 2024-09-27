@@ -24,31 +24,25 @@ if [ ! -d /datasets/galois ]; then
   mkdir -p /datasets/galois
 fi
 
-# datasets=(
-#   "graph500_23"
-#   "graph500_26"
-#   "graph500_28"
-#   "graph500_30"
-#   "dota_league"
-#   "livejournal"
-#   "orkut"
-#   "road_asia"
-#   "road_usa"
-# )
-datasets=("orkut")
-
-# benchmarks=(
-#   "bfs"
-#   "connectedcomponents"
-#   "pagerank"
-#   "triangles"
-#   "sssp"
-# )
+datasets=(
+  "graph500_23"
+  "graph500_26"
+  "graph500_28"
+  "graph500_30"
+  "dota_league"
+  "livejournal"
+  "orkut"
+  "road_asia"
+  "road_usa"
+)
 
 benchmarks=(
+  "pagerank"
   "bfs"
-  "sssp"
+  "connectedcomponents"
+  "triangles"
 )
+#sssp is not working; segfaults
 
 THREADS=`nproc --all`
 
@@ -80,18 +74,14 @@ do
     #cleanup the output files from previous runs
     rm -f /results/galois/${dataset}_${benchmark}-*.csv
 
-    for nodes in "${random_starts[@]}"
-    do
-      /${benchmark}.sh /datasets/galois/${dataset}.gr /results/galois/${dataset}_${benchmark} ${nodes} ${THREADS}
-    done
+    #check if benchmark is bfs
+    if [ "$benchmark" == "bfs" ]; then
+      for nodes in "${random_starts[@]}"
+      do
+        /${benchmark}.sh /datasets/galois/${dataset}.gr /results/galois/${dataset}_${benchmark} ${nodes} ${THREADS}
+      done
+    else
+      /${benchmark}.sh /datasets/galois/${dataset}.gr /results/galois/${dataset}_${benchmark} ${THREADS}
+    fi
   done
-
-  # for benchmark in ("connectedcomponents","pagerank","triangles")
-  # do
-  #       #measure the time to run the benchmark and save in a variable
-  #     COMMAND="$BUILD_DIR/lonestar/${benchmark}/${benchmark} ${dataset}.gr ${nodes} ${ITERATIONS}"
-  #     TIME_OUTPUT=$(/usr/bin/time -p $COMMAND 2>&1)
-  #     echo "Time to run $benchmark on $dataset with $nodes: $TIME_OUTPUT"
-  #     TIME_TAKEN=$(echo "$TIME_OUTPUT" | grep real | awk '{print $2}')
-  # done
 done
