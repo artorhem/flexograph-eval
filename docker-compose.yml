@@ -11,6 +11,17 @@ services:
       - systems:/systems
       - datasets:/datasets
       - results:/results
+
+  gemini:
+    privileged: true
+    build:
+      context: ./
+      dockerfile: ./containers/gemini.Dockerfile
+    container_name: gemini
+    volumes:
+      - systems:/systems
+      - datasets:/datasets
+      - results:/results
   
   ligra:
     privileged: true

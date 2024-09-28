@@ -22,15 +22,25 @@ ENV CC=/usr/bin/gcc
 ENV CXX=/usr/bin/g++
 
 ADD scripts/galois.sh /galois.sh
-ADD scripts/galois/bfs.sh /bfs.sh
-# ADD scripts/galois/sssp.sh /sssp.sh <-- Not working
-ADD scripts/galois/pagerank.sh /pagerank.sh
-ADD scripts/galois/connectedcomponents.sh /connectedcomponents.sh 
-ADD scripts/galois/triangles.sh /triangles.sh
-
 RUN chmod +x /galois.sh
+
+ADD scripts/galois/bfs.sh /bfs.sh
+RUN chmod +x /bfs.sh
+
+# ADD scripts/galois/sssp.sh /sssp.sh <-- Not working
+
+ADD scripts/galois/pagerank.sh /pagerank.sh
+RUN chmod +x /pagerank.sh
+
+ADD scripts/galois/connectedcomponents.sh /connectedcomponents.sh 
+RUN chmod +x /connectedcomponents.sh
+
+ADD scripts/galois/triangles.sh /triangles.sh
+RUN chmod +x /triangles.sh
+
 ADD scripts/graph_utils.py /graph_utils.py
 
 # The volume containing the source code is mounted at /systems
-WORKDIR /systems/in-mem/Galois
-CMD sleep infinity
+WORKDIR /
+#redirect the output to /results/galois.log
+CMD ./galois.sh > /results/galois.log 2>&1 && sleep infinity
