@@ -26,6 +26,7 @@ ADD scripts/galois/bfs.sh /bfs.sh
 # ADD scripts/galois/sssp.sh /sssp.sh <-- Not working
 ADD scripts/galois/pagerank.sh /pagerank.sh
 ADD scripts/galois/connectedcomponents.sh /connectedcomponents.sh 
+ADD scripts/galois/triangles.sh /triangles.sh
 
 RUN chmod +x /galois.sh
 ADD scripts/graph_utils.py /graph_utils.py
