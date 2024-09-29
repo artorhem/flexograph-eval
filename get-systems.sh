@@ -30,3 +30,5 @@ git clone git@github.com:SICS-Fundamental-Research-Center/Planar.git #Planar, VL
 git clone git@github.com:artorhem/x-stream.git 
 cd x-stream
 git checkout sosp
+
+cd 

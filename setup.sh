@@ -9,17 +9,15 @@ if [ "$#" -ne 2 ]; then
     exit 1
 fi
 results=$3
-data=$2
+datasets=$2
 #make the directories
-mkdir -p $data
+mkdir -p $datasets
 mkdir -p $results
 
 #run the get-systems script
 ./get-systems.sh
 
-#Now copy the datasets to the datasets directory
-mkdir -p datasets
-cd datasets
+
 
 #download the datasets
-./dataset.sh $data
+./dataset.sh $datasets

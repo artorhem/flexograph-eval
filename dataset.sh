@@ -3,6 +3,7 @@ set -e
 set -x
 
 #Accepts two arguments, the dataset directory, and the dataset name. If the dataset name is "all", it downloads all the datasets
+echo $#
 if [ "$#" -ne 2 ]; then
     echo "Illegal number of parameters"
     echo "Usage: ./setup.sh <absolute_path_data_directory> <dataset name or all>"
@@ -131,4 +132,5 @@ do
     cd ..
     rm -r graph500
   fi
+  cd $1
 done
