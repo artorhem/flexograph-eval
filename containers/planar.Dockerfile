@@ -13,3 +13,5 @@ COPY scripts/planar.sh /systems/ooc/Planar/planar.sh
 
 #move to Planar
 WORKDIR /systems/ooc/Planar
+
+CMD sleep infinity
