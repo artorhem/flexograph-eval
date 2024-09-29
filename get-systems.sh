@@ -24,6 +24,7 @@ cd systems/ooc
 git clone git@github.com:artorhem/blaze.git #Blaze
 git clone git@github.com:artorhem/graphchi-cpp.git #GraphChi
 git clone git@github.com:artorhem/lumos.git #Lumos
+git clone git@github.com:SICS-Fundamental-Research-Center/Planar.git #Planar, VLDB2024
 
 #Clone X-Stream and checkout their sosp branch
 git clone git@github.com:artorhem/x-stream.git 
