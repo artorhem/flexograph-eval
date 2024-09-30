@@ -11,6 +11,17 @@ services:
       - systems:/systems
       - datasets:/datasets
       - results:/results
+  
+  planar:
+    privileged: true
+    build:
+      context: ./
+      dockerfile: ./containers/planar.Dockerfile
+    container_name: planar
+    volumes:
+      - systems:/systems
+      - datasets:/datasets
+      - results:/results
 
   gemini:
     privileged: true
@@ -51,16 +62,16 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/puneet/scratch/flexograph-eval/systems/
+      device: ./systems/
   datasets:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /drives/hdd_main/datasets_downloads/
+      device: ./datasets/
   results:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/puneet/scratch/flexograph-eval/results/
+      device: ./results/
