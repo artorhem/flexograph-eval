@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   gapbs:
     privileged: true
@@ -22,6 +20,8 @@ services:
       - systems:/systems
       - datasets:/datasets
       - results:/results
+      - folly:/folly
+      - scratch:/scratch
 
   gemini:
     privileged: true
@@ -75,3 +75,15 @@ volumes:
       type: none
       o: bind
       device: ./results/
+  folly:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./folly/
+  scratch:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./planar-scratch/
