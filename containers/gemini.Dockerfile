@@ -12,8 +12,8 @@ RUN apt-get install --reinstall -y  ca-certificates
 ENV CC=/usr/bin/gcc
 ENV CXX=/usr/bin/g++
 
-ADD scripts/gemini.sh /gemini.sh
+ADD scripts/gemini.py /gemini.py
 ADD scripts/gemini/gemini_converter /gemini_converter
 
-RUN chmod +x /gemini.sh
+RUN chmod +x /gemini.py
 CMD sleep infinity
