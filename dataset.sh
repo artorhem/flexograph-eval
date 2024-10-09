@@ -132,5 +132,4 @@ do
     cd ..
     rm -r graph500
   fi
-  cd $1
 done

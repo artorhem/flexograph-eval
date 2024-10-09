@@ -1,6 +1,7 @@
 #!/bin/bash
+set -ex
 
-source ./galois.sh
+BUILD_DIR="/systems/in-mem/Galois/build"
 
 ITERATIONS=5
 THREADS=$3

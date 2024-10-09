@@ -7,9 +7,6 @@ regex = r"^(Read|Build|Trial)\sTime:\s+(\d+\.\d+)"
 # Open the file in read mode
 #the input will be piped in from the command line
 input = sys.stdin.read()
-# with open('/home/puneet/scratch/gapbs/pr.txt', 'r') as file:
-#     # Read the content of the file
-#     content = file.read()
 
 # Search for all occurrences of the regex pattern
 matches = re.finditer(regex, input, re.MULTILINE)
@@ -27,6 +24,11 @@ for match in matches:
     else:
         trial_times.append(float(match.group(2)))
 
-print("Average Read Time: ", sum(read_times)/len(read_times))
-print("Average Build Time: ", sum(build_times)/len(build_times))
-print("Average Trial Time: ", sum(trial_times)/len(trial_times))
+# print("Average Read Time: ", sum(read_times)/len(read_times))
+# print("Average Build Time: ", sum(build_times)/len(build_times))
+# print("Average Trial Time: ", sum(trial_times)/len(trial_times))
+
+preprocessing_time = sum(read_times)/len(read_times) + sum(build_times)/len(build_times)
+
+print("preprocessing_time,exec_time")
+print(f"{round(preprocessing_time,4)},{round(sum(trial_times)/len(trial_times),4)}")
