@@ -47,13 +47,10 @@ def main(self):
 
   os.chdir(TOOLS_DIR)
 
-  with open('/data.json', 'r') as file:
-      data = json.load(file)
+  datasets = ["road_asia", "road_usa", "livejournal", "orkut", "dota_league", "graph500_23", "graph500_26", "graph500_28"]
 
-  for dataset in data:
-    print ("Running for dataset: ", dataset.get("dataset_name"))
-    dataset_name = dataset.get("dataset_name")
-    num_vertices  = dataset.get("num_nodes")+1
+  for dataset_name in datasets:
+    print (f"Running for dataset: {dataset_name}")
 
     #read the random start nodes from the .bfsver file
     start_nodes = []
@@ -67,14 +64,23 @@ def main(self):
     cmd = f"{TOOLS_DIR}/convert {DATASET_DIR}/{dataset_name}/{dataset_name} >> {RESULTS_DIR}/{dataset_name}_gemini_convert.log"
     print(cmd)
     os.system(cmd)
+
+    #now find the max_vertex_id in the convert.log file
+    max_vertex_id = 0
+    with open(f"{RESULTS_DIR}/{dataset_name}_gemini_convert.log") as f:
+      lines = f.readlines()
+      if lines[-1].startswith("max_vertex_id"):
+        max_vertex_id = int(lines[-1].split()[1])
+    
+    num_vertices = max_vertex_id + 1
     
     #Now we can run each benchmark:
     print("PageRank...")
     cmd = f"{TOOLS_DIR}/pagerank {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {NUM_ITERATIONS} >> {RESULTS_DIR}/{dataset_name}_pagerank.log"
     print(cmd)
     for iter in range(NUM_ITERATIONS):
-      os.system(cmd)
-      #pass
+      # os.system(cmd)
+      pass
     parse_log( dataset_name, "pagerank")
       
 
@@ -82,22 +88,22 @@ def main(self):
     for start_node in start_nodes:
       cmd = f"{TOOLS_DIR}/bfs {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {start_node} >> {RESULTS_DIR}/{dataset_name}_bfs.log"
       print(cmd)
-      os.system(cmd)
+      # os.system(cmd)
     parse_log( dataset_name, "bfs")
 
     print("CC...")
     cmd = f"{TOOLS_DIR}/cc {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} >> {RESULTS_DIR}/{dataset_name}_cc.log"
     print(cmd)
     for iter in range(NUM_ITERATIONS):
-      os.system(cmd)
-      #pass
+      # os.system(cmd)
+      pass
     parse_log( dataset_name, "cc")
 
     print("SSSP...")
     for start_node in start_nodes:
       cmd = f"{TOOLS_DIR}/sssp {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {start_node} >> {RESULTS_DIR}/{dataset_name}_sssp.log"
       print(cmd)
-      os.system(cmd)
+      # os.system(cmd)
     parse_log(dataset_name, "sssp")
 
 if __name__ == "__main__":
