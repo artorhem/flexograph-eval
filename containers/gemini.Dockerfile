@@ -13,7 +13,6 @@ ENV CC=/usr/bin/gcc
 ENV CXX=/usr/bin/g++
 
 ADD scripts/gemini.py /gemini.py
-ADD scripts/gemini/gemini_converter /gemini_converter
-
+ADD datasets.json /data.json
 RUN chmod +x /gemini.py
 CMD sleep infinity

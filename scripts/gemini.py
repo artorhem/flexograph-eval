@@ -47,13 +47,13 @@ def main(self):
 
   os.chdir(TOOLS_DIR)
 
-  with open('data.json', 'r') as file:
+  with open('/data.json', 'r') as file:
       data = json.load(file)
 
   for dataset in data:
     print ("Running for dataset: ", dataset.get("dataset_name"))
     dataset_name = dataset.get("dataset_name")
-    num_vertices  = dataset.get("num_nodes")
+    num_vertices  = dataset.get("num_nodes")+1
 
     #read the random start nodes from the .bfsver file
     start_nodes = []
@@ -66,38 +66,38 @@ def main(self):
     
     cmd = f"{TOOLS_DIR}/convert {DATASET_DIR}/{dataset_name}/{dataset_name} >> {RESULTS_DIR}/{dataset_name}_gemini_convert.log"
     print(cmd)
-    # os.system(cmd)
+    os.system(cmd)
     
     #Now we can run each benchmark:
     print("PageRank...")
-    cmd = f"{TOOLS_DIR}/pagerank {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {NUM_ITERATIONS}>> {RESULTS_DIR}/{dataset_name}_pagerank.log"
+    cmd = f"{TOOLS_DIR}/pagerank {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {NUM_ITERATIONS} >> {RESULTS_DIR}/{dataset_name}_pagerank.log"
     print(cmd)
     for iter in range(NUM_ITERATIONS):
-      #os.system(cmd)
-      pass
+      os.system(cmd)
+      #pass
     parse_log( dataset_name, "pagerank")
       
 
     print("BFS...")
     for start_node in start_nodes:
-      cmd = f"{TOOLS_DIR}/bfs {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {start_node}>> {RESULTS_DIR}/{dataset_name}_bfs.log"
+      cmd = f"{TOOLS_DIR}/bfs {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {start_node} >> {RESULTS_DIR}/{dataset_name}_bfs.log"
       print(cmd)
-      #os.system(cmd)
+      os.system(cmd)
     parse_log( dataset_name, "bfs")
 
     print("CC...")
-    cmd = f"{TOOLS_DIR}/cc {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices}>> {RESULTS_DIR}/{dataset_name}_cc.log"
+    cmd = f"{TOOLS_DIR}/cc {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} >> {RESULTS_DIR}/{dataset_name}_cc.log"
     print(cmd)
     for iter in range(NUM_ITERATIONS):
-      #os.system(cmd)
-      pass
+      os.system(cmd)
+      #pass
     parse_log( dataset_name, "cc")
 
     print("SSSP...")
     for start_node in start_nodes:
-      cmd = f"{TOOLS_DIR}/sssp {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {start_node}>> {RESULTS_DIR}/{dataset_name}_sssp.log"
+      cmd = f"{TOOLS_DIR}/sssp {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {start_node} >> {RESULTS_DIR}/{dataset_name}_sssp.log"
       print(cmd)
-      #os.system(cmd)
+      os.system(cmd)
     parse_log(dataset_name, "sssp")
 
 if __name__ == "__main__":
