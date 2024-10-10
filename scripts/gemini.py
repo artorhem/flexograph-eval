@@ -79,31 +79,31 @@ def main(self):
     cmd = f"{TOOLS_DIR}/pagerank {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {NUM_ITERATIONS} >> {RESULTS_DIR}/{dataset_name}_pagerank.log"
     print(cmd)
     for iter in range(NUM_ITERATIONS):
-      # os.system(cmd)
-      pass
+      os.system(cmd)
+      #pass
     parse_log( dataset_name, "pagerank")
       
 
     print("BFS...")
     for start_node in start_nodes:
       cmd = f"{TOOLS_DIR}/bfs {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {start_node} >> {RESULTS_DIR}/{dataset_name}_bfs.log"
-      print(cmd)
-      # os.system(cmd)
+      #print(cmd)
+      os.system(cmd)
     parse_log( dataset_name, "bfs")
 
     print("CC...")
     cmd = f"{TOOLS_DIR}/cc {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} >> {RESULTS_DIR}/{dataset_name}_cc.log"
     print(cmd)
     for iter in range(NUM_ITERATIONS):
-      # os.system(cmd)
-      pass
+      os.system(cmd)
+      #pass
     parse_log( dataset_name, "cc")
 
     print("SSSP...")
     for start_node in start_nodes:
       cmd = f"{TOOLS_DIR}/sssp {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {start_node} >> {RESULTS_DIR}/{dataset_name}_sssp.log"
-      print(cmd)
-      # os.system(cmd)
+      #print(cmd)
+      os.system(cmd)
     parse_log(dataset_name, "sssp")
 
 if __name__ == "__main__":
