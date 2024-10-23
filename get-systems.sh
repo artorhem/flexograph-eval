@@ -46,8 +46,8 @@ fi
 cd x-stream
 git checkout sosp
 
-cd ../../
+# Clone FlexoGraph and checkout the iter_fix branch
 mkdir -p systems/FlexoGraph
-git clone git@github.com:ubc-systopia/margraphita.git FlexoGraph/
+git clone git@github.com:ubc-systopia/margraphita.git systems/FlexoGraph/
 cd systems/FlexoGraph
-
+git fetch && git checkout iter_fix

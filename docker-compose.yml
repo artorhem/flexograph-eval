@@ -71,11 +71,12 @@ services:
     privileged: true
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: ./containers/Flexograph.Dockerfile
     container_name: flexograph
     volumes:
       - db:/db
-      - flexograph:/FlexoGraph
+      - systems:/systems
+      - results:/results
 
 volumes:
   systems:
