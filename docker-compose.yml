@@ -55,6 +55,17 @@ services:
       - systems:/systems
       - datasets:/datasets
       - results:/results
+  
+  blaze:
+    privileged: true
+    build:
+      context: ./
+      dockerfile: ./containers/blaze.Dockerfile
+    container_name: blaze
+    volumes:
+      - systems:/systems
+      - datasets:/mnt/nvme
+      - results:/results
 
 volumes:
   systems:

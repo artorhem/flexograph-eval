@@ -31,4 +31,7 @@ git clone git@github.com:artorhem/x-stream.git
 cd x-stream
 git checkout sosp
 
-cd 
+cd ../../
+mkdir -p systems/FlexoGraph
+git clone git@github.com:ubc-systopia/margraphita.git FlexoGraph/
+cd systems/FlexoGraph
