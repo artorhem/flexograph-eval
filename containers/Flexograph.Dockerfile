@@ -15,11 +15,11 @@ ENV CC=/usr/bin/gcc
 ENV CXX=/usr/bin/g++
 
 #Build and install FlexoGraph
-ENV GRAPH_PROJECT_DIR="/FlexoGraph"
-WORKDIR /FlexoGraph
+ENV GRAPH_PROJECT_DIR="/systems/FlexoGraph"
+WORKDIR /
 
 ADD scripts/flexograph.py /flexograph.py
 RUN chmod +x /flexograph.py
-
+ADD datasets.json /data.json
 
 CMD sleep infinity
