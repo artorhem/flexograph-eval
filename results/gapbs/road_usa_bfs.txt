@@ -1,33 +1,33 @@
-Read Time:           3.64515
-Build Time:          0.15604
+Read Time:           2.93851
+Build Time:          0.14253
 Graph has 23947348 nodes and 28854312 directed edges for degree: 1
 Source:             19127555
-    i                0.01047
-   td          2     0.00143
-   td          1     0.00001
-   td          0     0.00001
-Trial Time:          0.02098
+    i                0.00666
+   td          2     0.00528
+   td          1     0.00006
+   td          0     0.00005
+Trial Time:          0.01572
 Source:             10401419
-    i                0.00701
-   td          1     0.00001
-   td          0     0.00001
-Trial Time:          0.01095
+    i                0.00395
+   td          1     0.00007
+   td          0     0.00005
+Trial Time:          0.00503
 Source:               384132
-    i                0.00567
-   td          1     0.00001
-   td          0     0.00000
-Trial Time:          0.00949
+    i                0.00403
+   td          1     0.00006
+   td          0     0.00004
+Trial Time:          0.00503
 Source:             15922158
-    i                0.00577
-   td          3     0.00001
-   td          2     0.00001
-   td          0     0.00001
-Trial Time:          0.00960
+    i                0.00387
+   td          3     0.00006
+   td          2     0.00005
+   td          0     0.00005
+Trial Time:          0.00488
 Source:             22076308
-    i                0.00572
-   td          2     0.00001
-   td          2     0.00001
-   td          1     0.00000
-   td          0     0.00001
-Trial Time:          0.00951
-Average Time:        0.01211
+    i                0.00399
+   td          2     0.00006
+   td          2     0.00005
+   td          1     0.00004
+   td          0     0.00004
+Trial Time:          0.00503
+Average Time:        0.00714

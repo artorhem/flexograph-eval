@@ -10,18 +10,18 @@ services:
       - datasets:/datasets
       - results:/results
   
-  planar:
-    privileged: true
-    build:
-      context: ./
-      dockerfile: ./containers/planar.Dockerfile
-    container_name: planar
-    volumes:
-      - systems:/systems
-      - datasets:/datasets
-      - results:/results
-      - folly:/folly
-      - scratch:/scratch
+        #planar:
+        #privileged: true
+        #build:
+        #context: ./
+        #dockerfile: ./containers/planar.Dockerfile
+        #container_name: planar
+        #volumes:
+        #- systems:/systems
+        #- datasets:/datasets
+        #- results:/results
+        # - folly:/folly
+        #- scratch:/scratch
 
   gemini:
     privileged: true
@@ -86,15 +86,15 @@ volumes:
       type: none
       o: bind
       device: ./results/
-  folly:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ./folly/
-  scratch:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ./planar-scratch/
+        #folly:
+        #driver: local
+        #driver_opts:
+        #type: none
+        #o: bind
+        #device: ./folly/
+        #scratch:
+        # driver: local
+        # driver_opts:
+        #type: none
+        #o: bind
+        #device: ./planar-scratch/

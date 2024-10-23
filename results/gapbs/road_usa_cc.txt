@@ -1,14 +1,14 @@
-Read Time:           3.65777
-Build Time:          0.15102
+Read Time:           2.94479
+Build Time:          0.14957
 Graph has 23947348 nodes and 28854312 directed edges for degree: 1
 Skipping largest intermediate component (ID: 2043, approx. 77% of the graph)
-Trial Time:          0.05313
+Trial Time:          0.03894
 Skipping largest intermediate component (ID: 2043, approx. 77% of the graph)
-Trial Time:          0.04278
+Trial Time:          0.04121
 Skipping largest intermediate component (ID: 2043, approx. 77% of the graph)
-Trial Time:          0.04273
+Trial Time:          0.04472
 Skipping largest intermediate component (ID: 2043, approx. 77% of the graph)
-Trial Time:          0.04304
+Trial Time:          0.04340
 Skipping largest intermediate component (ID: 2043, approx. 77% of the graph)
-Trial Time:          0.04308
-Average Time:        0.04495
+Trial Time:          0.04492
+Average Time:        0.04264

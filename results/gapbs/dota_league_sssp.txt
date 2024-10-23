@@ -1,24 +1,24 @@
-Read Time:           0.00123
-Build Time:          0.00019
+Read Time:           0.01384
+Build Time:          0.03209
 Graph has 3 nodes and 1 directed edges for degree: 0
-    0          1     0.02476
-  235          1     0.01714
+    0          1     0.07318
+  235          1     0.03911
+took 2 iterations
+Trial Time:          0.00023
+    0          1     0.07849
+  235          1     0.02226
+took 2 iterations
+Trial Time:          0.00018
+    0          1     0.06460
+  235          1     0.02754
+took 2 iterations
+Trial Time:          0.00264
+    0          1     0.07377
+  235          1     0.03553
+took 2 iterations
+Trial Time:          0.00025
+    0          1     0.06347
+  235          1     0.02442
 took 2 iterations
 Trial Time:          0.00016
-    0          1     0.08536
-  235          1     0.01504
-took 2 iterations
-Trial Time:          0.00016
-    0          1     0.06479
-  235          1     0.01155
-took 2 iterations
-Trial Time:          0.00013
-    0          1     0.01758
-  235          1     0.01403
-took 2 iterations
-Trial Time:          0.00007
-    0          1     0.01844
-  235          1     0.01813
-took 2 iterations
-Trial Time:          0.00016
-Average Time:        0.00014
+Average Time:        0.00069

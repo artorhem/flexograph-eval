@@ -19,6 +19,6 @@ ADD scripts/gapbs.sh /gapbs.sh
 WORKDIR /systems/in-mem/gapbs
 
 # Make the project
-RUN make all
+#RUN make all
 
 CMD sleep infinity

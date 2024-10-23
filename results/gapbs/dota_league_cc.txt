@@ -1,14 +1,14 @@
-Read Time:           0.00155
-Build Time:          0.00018
+Read Time:           0.01332
+Build Time:          0.00646
 Graph has 3 nodes and 1 directed edges for degree: 0
 Skipping largest intermediate component (ID: 1, approx. 66% of the graph)
-Trial Time:          0.00023
+Trial Time:          0.00042
 Skipping largest intermediate component (ID: 1, approx. 66% of the graph)
-Trial Time:          0.00022
+Trial Time:          0.00040
 Skipping largest intermediate component (ID: 1, approx. 66% of the graph)
-Trial Time:          0.00020
+Trial Time:          0.00041
 Skipping largest intermediate component (ID: 1, approx. 66% of the graph)
-Trial Time:          0.00021
+Trial Time:          0.00042
 Skipping largest intermediate component (ID: 1, approx. 66% of the graph)
-Trial Time:          0.00020
-Average Time:        0.00021
+Trial Time:          0.00040
+Average Time:        0.00041

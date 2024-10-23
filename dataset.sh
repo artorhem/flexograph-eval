@@ -14,7 +14,7 @@ fi
 
 datasets=()
 if [ "$2" == "all" ]; then
-  datasets+=("livejournal" "orkut" "road_usa" "road_asia" "dota_league" "graph500_22" "graph500_23" "graph500_26" "graph500_28" "graph500_30")
+  datasets+=("livejournal" "orkut" "road_usa" "road_asia" "dota_league" "graph500_22" "graph500_23" "graph500_26" "graph500_28")
 else
   datasets+=($2)
 fi
