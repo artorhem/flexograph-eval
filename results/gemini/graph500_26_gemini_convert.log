@@ -1,0 +1,6 @@
+output_file: /datasets/graph500_26/graph500_26.bin
+time: 364.496414
+edges: 1051922853
+vertices: 19286023
+min_vertex_id: 0
+max_vertex_id: 67108862

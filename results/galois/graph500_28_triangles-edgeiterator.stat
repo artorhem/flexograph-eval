@@ -1,0 +1,13 @@
+STAT_TYPE, REGION, CATEGORY, TOTAL_TYPE, TOTAL
+STAT, PageAlloc, MeminfoPre, TSUM, 34564
+STAT, PageAlloc, MeminfoPost, TSUM, 34564
+STAT, Initialize, Iterations, TSUM, 268435456
+STAT, Initialize, Time, TMAX, 310
+STAT, edgeIteratingAlgo, Iterations, TSUM, 2579574845
+STAT, edgeIteratingAlgo, Time, TMAX, 197801
+STAT, edgeIteratorAlgo, Time, TMAX, 197801
+STAT, (NULL), Time, TMAX, 198485
+STAT, (NULL), GraphReadingTime, TMAX, 15953
+PARAM, (NULL), CommandLine, SINGLE, /systems/in-mem/Galois/build/lonestar/triangles/triangles -algo=edgeiterator -t=192 -noverify -statFile=/results/galois/graph500_28_triangles-edgeiterator.stat /datasets/galois/graph500_28.gr
+PARAM, (NULL), Threads, SINGLE, 192
+PARAM, (NULL), Hostname, SINGLE, ff7c27ff1ccc

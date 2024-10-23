@@ -1,0 +1,13 @@
+STAT_TYPE, REGION, CATEGORY, TOTAL_TYPE, TOTAL
+STAT, PageAlloc, MeminfoPre, TSUM, 1156
+STAT, PageAlloc, MeminfoPost, TSUM, 1156
+STAT, Initialize, Iterations, TSUM, 3072627
+STAT, Initialize, Time, TMAX, 10
+STAT, edgeIteratingAlgo, Iterations, TSUM, 94880322
+STAT, edgeIteratingAlgo, Time, TMAX, 401
+STAT, edgeIteratorAlgo, Time, TMAX, 401
+STAT, (NULL), Time, TMAX, 413
+STAT, (NULL), GraphReadingTime, TMAX, 177
+PARAM, (NULL), CommandLine, SINGLE, /systems/in-mem/Galois/build/lonestar/triangles/triangles -algo=edgeiterator -t=192 -noverify -statFile=/results/galois/orkut_triangles-edgeiterator.stat /datasets/galois/orkut.gr
+PARAM, (NULL), Threads, SINGLE, 192
+PARAM, (NULL), Hostname, SINGLE, ff7c27ff1ccc

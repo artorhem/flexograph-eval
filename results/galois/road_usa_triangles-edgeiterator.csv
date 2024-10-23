@@ -1,0 +1,6 @@
+Real,User,Sys,Algorithm,Thread_Count
+5.64,78.98,7.22,edgeIterator,192
+5.68,78.73,7.50,edgeIterator,192
+5.63,77.82,7.77,edgeIterator,192
+5.60,78.01,7.19,edgeIterator,192
+5.58,77.80,7.20,edgeIterator,192

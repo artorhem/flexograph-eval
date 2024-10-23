@@ -1,0 +1,11 @@
+STAT_TYPE, REGION, CATEGORY, TOTAL_TYPE, TOTAL
+STAT, PageAlloc, MeminfoPre, TSUM, 772
+STAT, PageAlloc, MeminfoPost, TSUM, 772
+STAT, nodeIteratingAlgo, Iterations, TSUM, 4847572
+STAT, nodeIteratingAlgo, Time, TMAX, 250
+STAT, nodeIteratorAlgo, Time, TMAX, 250
+STAT, (NULL), Time, TMAX, 251
+STAT, (NULL), GraphReadingTime, TMAX, 102
+PARAM, (NULL), CommandLine, SINGLE, /systems/in-mem/Galois/build/lonestar/triangles/triangles -algo=nodeiterator -t=192 -noverify -statFile=/results/galois/livejournal_triangles-nodeiterator.stat /datasets/galois/livejournal.gr
+PARAM, (NULL), Threads, SINGLE, 192
+PARAM, (NULL), Hostname, SINGLE, ff7c27ff1ccc

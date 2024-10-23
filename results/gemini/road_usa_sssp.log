@@ -1,0 +1,1216 @@
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+exec_time=0.017626(s)
+distance[19098957]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.004916(s)
+distance[19098957]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.004825(s)
+distance[19098957]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.004656(s)
+distance[19098957]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.004686(s)
+distance[19098957]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.007099(s)
+distance[19098957]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.017458(s)
+distance[1]=0.000000
+active(0)>=1
+exec_time=0.004679(s)
+distance[1]=0.000000
+active(0)>=1
+exec_time=0.004408(s)
+distance[1]=0.000000
+active(0)>=1
+exec_time=0.004330(s)
+distance[1]=0.000000
+active(0)>=1
+exec_time=0.004544(s)
+distance[1]=0.000000
+active(0)>=1
+exec_time=0.004376(s)
+distance[1]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.006012(s)
+distance[3438212]=0.000000
+active(0)>=1
+exec_time=0.006917(s)
+distance[3438212]=0.000000
+active(0)>=1
+exec_time=0.004404(s)
+distance[3438212]=0.000000
+active(0)>=1
+exec_time=0.004328(s)
+distance[3438212]=0.000000
+active(0)>=1
+exec_time=0.004938(s)
+distance[3438212]=0.000000
+active(0)>=1
+exec_time=0.005151(s)
+distance[3438212]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.011473(s)
+distance[16572421]=0.000000
+active(0)>=1
+exec_time=0.004789(s)
+distance[16572421]=0.000000
+active(0)>=1
+exec_time=0.004387(s)
+distance[16572421]=0.000000
+active(0)>=1
+exec_time=0.004322(s)
+distance[16572421]=0.000000
+active(0)>=1
+exec_time=0.004351(s)
+distance[16572421]=0.000000
+active(0)>=1
+exec_time=0.006031(s)
+distance[16572421]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.006910(s)
+distance[4492293]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.007985(s)
+distance[4492293]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.005270(s)
+distance[4492293]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.005346(s)
+distance[4492293]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.008016(s)
+distance[4492293]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.005084(s)
+distance[4492293]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.006059(s)
+distance[4695308]=0.000000
+active(0)>=1
+exec_time=0.006367(s)
+distance[4695308]=0.000000
+active(0)>=1
+exec_time=0.004433(s)
+distance[4695308]=0.000000
+active(0)>=1
+exec_time=0.004244(s)
+distance[4695308]=0.000000
+active(0)>=1
+exec_time=0.006952(s)
+distance[4695308]=0.000000
+active(0)>=1
+exec_time=0.004290(s)
+distance[4695308]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+exec_time=0.006695(s)
+distance[19250169]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.007926(s)
+distance[19250169]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.004852(s)
+distance[19250169]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.004689(s)
+distance[19250169]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.004958(s)
+distance[19250169]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.005103(s)
+distance[19250169]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+exec_time=0.017895(s)
+distance[23078404]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.005207(s)
+distance[23078404]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.004878(s)
+distance[23078404]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.004674(s)
+distance[23078404]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.004943(s)
+distance[23078404]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.004573(s)
+distance[23078404]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=2
+active(2)>=2
+exec_time=0.007224(s)
+distance[7451493]=0.000000
+active(0)>=1
+active(1)>=2
+active(2)>=2
+exec_time=0.007408(s)
+distance[7451493]=0.000000
+active(0)>=1
+active(1)>=2
+active(2)>=2
+exec_time=0.005160(s)
+distance[7451493]=0.000000
+active(0)>=1
+active(1)>=2
+active(2)>=2
+exec_time=0.005430(s)
+distance[7451493]=0.000000
+active(0)>=1
+active(1)>=2
+active(2)>=2
+exec_time=0.005037(s)
+distance[7451493]=0.000000
+active(0)>=1
+active(1)>=2
+active(2)>=2
+exec_time=0.007054(s)
+distance[7451493]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+active(2)>=2
+exec_time=0.007129(s)
+distance[21684633]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=2
+exec_time=0.007400(s)
+distance[21684633]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=2
+exec_time=0.005468(s)
+distance[21684633]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=2
+exec_time=0.005342(s)
+distance[21684633]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=2
+exec_time=0.007517(s)
+distance[21684633]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=2
+exec_time=0.005290(s)
+distance[21684633]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.006164(s)
+distance[11341106]=0.000000
+active(0)>=1
+exec_time=0.007039(s)
+distance[11341106]=0.000000
+active(0)>=1
+exec_time=0.004368(s)
+distance[11341106]=0.000000
+active(0)>=1
+exec_time=0.004628(s)
+distance[11341106]=0.000000
+active(0)>=1
+exec_time=0.006785(s)
+distance[11341106]=0.000000
+active(0)>=1
+exec_time=0.004386(s)
+distance[11341106]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.006221(s)
+distance[17230004]=0.000000
+active(0)>=1
+exec_time=0.006547(s)
+distance[17230004]=0.000000
+active(0)>=1
+exec_time=0.004595(s)
+distance[17230004]=0.000000
+active(0)>=1
+exec_time=0.004345(s)
+distance[17230004]=0.000000
+active(0)>=1
+exec_time=0.006676(s)
+distance[17230004]=0.000000
+active(0)>=1
+exec_time=0.004399(s)
+distance[17230004]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+active(2)>=1
+active(3)>=2
+active(4)>=1
+active(5)>=1
+active(6)>=2
+active(7)>=1
+active(8)>=1
+exec_time=0.009767(s)
+distance[1560963]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+active(3)>=2
+active(4)>=1
+active(5)>=1
+active(6)>=2
+active(7)>=1
+active(8)>=1
+exec_time=0.010408(s)
+distance[1560963]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+active(3)>=2
+active(4)>=1
+active(5)>=1
+active(6)>=2
+active(7)>=1
+active(8)>=1
+exec_time=0.008230(s)
+distance[1560963]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+active(3)>=2
+active(4)>=1
+active(5)>=1
+active(6)>=2
+active(7)>=1
+active(8)>=1
+exec_time=0.008299(s)
+distance[1560963]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+active(3)>=2
+active(4)>=1
+active(5)>=1
+active(6)>=2
+active(7)>=1
+active(8)>=1
+exec_time=0.010383(s)
+distance[1560963]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+active(3)>=2
+active(4)>=1
+active(5)>=1
+active(6)>=2
+active(7)>=1
+active(8)>=1
+exec_time=0.008050(s)
+distance[1560963]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.006164(s)
+distance[19132098]=0.000000
+active(0)>=1
+exec_time=0.006569(s)
+distance[19132098]=0.000000
+active(0)>=1
+exec_time=0.004571(s)
+distance[19132098]=0.000000
+active(0)>=1
+exec_time=0.004689(s)
+distance[19132098]=0.000000
+active(0)>=1
+exec_time=0.007036(s)
+distance[19132098]=0.000000
+active(0)>=1
+exec_time=0.004447(s)
+distance[19132098]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.015350(s)
+distance[1091163]=0.000000
+active(0)>=1
+exec_time=0.004618(s)
+distance[1091163]=0.000000
+active(0)>=1
+exec_time=0.004445(s)
+distance[1091163]=0.000000
+active(0)>=1
+exec_time=0.004331(s)
+distance[1091163]=0.000000
+active(0)>=1
+exec_time=0.004398(s)
+distance[1091163]=0.000000
+active(0)>=1
+exec_time=0.004410(s)
+distance[1091163]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.007154(s)
+distance[4416607]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.007334(s)
+distance[4416607]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.005193(s)
+distance[4416607]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.005017(s)
+distance[4416607]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.005045(s)
+distance[4416607]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.007703(s)
+distance[4416607]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=4
+active(2)>=2
+exec_time=0.008146(s)
+distance[17644262]=0.000000
+active(0)>=1
+active(1)>=4
+active(2)>=2
+exec_time=0.007731(s)
+distance[17644262]=0.000000
+active(0)>=1
+active(1)>=4
+active(2)>=2
+exec_time=0.005383(s)
+distance[17644262]=0.000000
+active(0)>=1
+active(1)>=4
+active(2)>=2
+exec_time=0.005322(s)
+distance[17644262]=0.000000
+active(0)>=1
+active(1)>=4
+active(2)>=2
+exec_time=0.007858(s)
+distance[17644262]=0.000000
+active(0)>=1
+active(1)>=4
+active(2)>=2
+exec_time=0.005418(s)
+distance[17644262]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.006195(s)
+distance[13424355]=0.000000
+active(0)>=1
+exec_time=0.006632(s)
+distance[13424355]=0.000000
+active(0)>=1
+exec_time=0.004529(s)
+distance[13424355]=0.000000
+active(0)>=1
+exec_time=0.004322(s)
+distance[13424355]=0.000000
+active(0)>=1
+exec_time=0.006509(s)
+distance[13424355]=0.000000
+active(0)>=1
+exec_time=0.004300(s)
+distance[13424355]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+exec_time=0.006661(s)
+distance[10880601]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.007073(s)
+distance[10880601]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.004848(s)
+distance[10880601]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.004755(s)
+distance[10880601]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.007610(s)
+distance[10880601]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.004672(s)
+distance[10880601]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.008750(s)
+distance[5037423]=0.000000
+active(0)>=1
+exec_time=0.007003(s)
+distance[5037423]=0.000000
+active(0)>=1
+exec_time=0.004572(s)
+distance[5037423]=0.000000
+active(0)>=1
+exec_time=0.004303(s)
+distance[5037423]=0.000000
+active(0)>=1
+exec_time=0.007233(s)
+distance[5037423]=0.000000
+active(0)>=1
+exec_time=0.004412(s)
+distance[5037423]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.008878(s)
+distance[5664625]=0.000000
+active(0)>=1
+exec_time=0.007142(s)
+distance[5664625]=0.000000
+active(0)>=1
+exec_time=0.004283(s)
+distance[5664625]=0.000000
+active(0)>=1
+exec_time=0.004433(s)
+distance[5664625]=0.000000
+active(0)>=1
+exec_time=0.006351(s)
+distance[5664625]=0.000000
+active(0)>=1
+exec_time=0.004354(s)
+distance[5664625]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.006030(s)
+distance[10955122]=0.000000
+active(0)>=1
+exec_time=0.007465(s)
+distance[10955122]=0.000000
+active(0)>=1
+exec_time=0.004329(s)
+distance[10955122]=0.000000
+active(0)>=1
+exec_time=0.004344(s)
+distance[10955122]=0.000000
+active(0)>=1
+exec_time=0.006532(s)
+distance[10955122]=0.000000
+active(0)>=1
+exec_time=0.004261(s)
+distance[10955122]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+exec_time=0.006773(s)
+distance[19098957]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.007226(s)
+distance[19098957]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.004828(s)
+distance[19098957]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.004784(s)
+distance[19098957]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.007232(s)
+distance[19098957]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.004752(s)
+distance[19098957]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.006907(s)
+distance[1]=0.000000
+active(0)>=1
+exec_time=0.006222(s)
+distance[1]=0.000000
+active(0)>=1
+exec_time=0.004794(s)
+distance[1]=0.000000
+active(0)>=1
+exec_time=0.004659(s)
+distance[1]=0.000000
+active(0)>=1
+exec_time=0.004722(s)
+distance[1]=0.000000
+active(0)>=1
+exec_time=0.004469(s)
+distance[1]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.008550(s)
+distance[3438212]=0.000000
+active(0)>=1
+exec_time=0.006493(s)
+distance[3438212]=0.000000
+active(0)>=1
+exec_time=0.004852(s)
+distance[3438212]=0.000000
+active(0)>=1
+exec_time=0.004523(s)
+distance[3438212]=0.000000
+active(0)>=1
+exec_time=0.005155(s)
+distance[3438212]=0.000000
+active(0)>=1
+exec_time=0.005176(s)
+distance[3438212]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.020753(s)
+distance[16572421]=0.000000
+active(0)>=1
+exec_time=0.006540(s)
+distance[16572421]=0.000000
+active(0)>=1
+exec_time=0.004538(s)
+distance[16572421]=0.000000
+active(0)>=1
+exec_time=0.004377(s)
+distance[16572421]=0.000000
+active(0)>=1
+exec_time=0.005152(s)
+distance[16572421]=0.000000
+active(0)>=1
+exec_time=0.005103(s)
+distance[16572421]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.021311(s)
+distance[4492293]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.007426(s)
+distance[4492293]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.005784(s)
+distance[4492293]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.005806(s)
+distance[4492293]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.008968(s)
+distance[4492293]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.005743(s)
+distance[4492293]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.006244(s)
+distance[4695308]=0.000000
+active(0)>=1
+exec_time=0.008424(s)
+distance[4695308]=0.000000
+active(0)>=1
+exec_time=0.004498(s)
+distance[4695308]=0.000000
+active(0)>=1
+exec_time=0.004540(s)
+distance[4695308]=0.000000
+active(0)>=1
+exec_time=0.007621(s)
+distance[4695308]=0.000000
+active(0)>=1
+exec_time=0.005034(s)
+distance[4695308]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+exec_time=0.017966(s)
+distance[19250169]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.006773(s)
+distance[19250169]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.005133(s)
+distance[19250169]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.005043(s)
+distance[19250169]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.005243(s)
+distance[19250169]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.005483(s)
+distance[19250169]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+exec_time=0.006962(s)
+distance[23078404]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.005780(s)
+distance[23078404]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.005070(s)
+distance[23078404]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.005157(s)
+distance[23078404]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.006000(s)
+distance[23078404]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.005319(s)
+distance[23078404]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=2
+active(2)>=2
+exec_time=0.006870(s)
+distance[7451493]=0.000000
+active(0)>=1
+active(1)>=2
+active(2)>=2
+exec_time=0.005836(s)
+distance[7451493]=0.000000
+active(0)>=1
+active(1)>=2
+active(2)>=2
+exec_time=0.005276(s)
+distance[7451493]=0.000000
+active(0)>=1
+active(1)>=2
+active(2)>=2
+exec_time=0.005306(s)
+distance[7451493]=0.000000
+active(0)>=1
+active(1)>=2
+active(2)>=2
+exec_time=0.005498(s)
+distance[7451493]=0.000000
+active(0)>=1
+active(1)>=2
+active(2)>=2
+exec_time=0.005256(s)
+distance[7451493]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+active(2)>=2
+exec_time=0.007367(s)
+distance[21684633]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=2
+exec_time=0.009576(s)
+distance[21684633]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=2
+exec_time=0.005665(s)
+distance[21684633]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=2
+exec_time=0.005255(s)
+distance[21684633]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=2
+exec_time=0.010246(s)
+distance[21684633]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=2
+exec_time=0.006693(s)
+distance[21684633]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.012483(s)
+distance[11341106]=0.000000
+active(0)>=1
+exec_time=0.008695(s)
+distance[11341106]=0.000000
+active(0)>=1
+exec_time=0.004612(s)
+distance[11341106]=0.000000
+active(0)>=1
+exec_time=0.004377(s)
+distance[11341106]=0.000000
+active(0)>=1
+exec_time=0.004941(s)
+distance[11341106]=0.000000
+active(0)>=1
+exec_time=0.004609(s)
+distance[11341106]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.007140(s)
+distance[17230004]=0.000000
+active(0)>=1
+exec_time=0.008529(s)
+distance[17230004]=0.000000
+active(0)>=1
+exec_time=0.004392(s)
+distance[17230004]=0.000000
+active(0)>=1
+exec_time=0.004324(s)
+distance[17230004]=0.000000
+active(0)>=1
+exec_time=0.004679(s)
+distance[17230004]=0.000000
+active(0)>=1
+exec_time=0.004486(s)
+distance[17230004]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+active(2)>=1
+active(3)>=2
+active(4)>=1
+active(5)>=1
+active(6)>=2
+active(7)>=1
+active(8)>=1
+exec_time=0.009811(s)
+distance[1560963]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+active(3)>=2
+active(4)>=1
+active(5)>=1
+active(6)>=2
+active(7)>=1
+active(8)>=1
+exec_time=0.011904(s)
+distance[1560963]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+active(3)>=2
+active(4)>=1
+active(5)>=1
+active(6)>=2
+active(7)>=1
+active(8)>=1
+exec_time=0.008404(s)
+distance[1560963]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+active(3)>=2
+active(4)>=1
+active(5)>=1
+active(6)>=2
+active(7)>=1
+active(8)>=1
+exec_time=0.007830(s)
+distance[1560963]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+active(3)>=2
+active(4)>=1
+active(5)>=1
+active(6)>=2
+active(7)>=1
+active(8)>=1
+exec_time=0.011722(s)
+distance[1560963]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+active(3)>=2
+active(4)>=1
+active(5)>=1
+active(6)>=2
+active(7)>=1
+active(8)>=1
+exec_time=0.008068(s)
+distance[1560963]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.006186(s)
+distance[19132098]=0.000000
+active(0)>=1
+exec_time=0.007971(s)
+distance[19132098]=0.000000
+active(0)>=1
+exec_time=0.004697(s)
+distance[19132098]=0.000000
+active(0)>=1
+exec_time=0.004542(s)
+distance[19132098]=0.000000
+active(0)>=1
+exec_time=0.005047(s)
+distance[19132098]=0.000000
+active(0)>=1
+exec_time=0.004888(s)
+distance[19132098]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.017363(s)
+distance[1091163]=0.000000
+active(0)>=1
+exec_time=0.005046(s)
+distance[1091163]=0.000000
+active(0)>=1
+exec_time=0.004706(s)
+distance[1091163]=0.000000
+active(0)>=1
+exec_time=0.004406(s)
+distance[1091163]=0.000000
+active(0)>=1
+exec_time=0.004570(s)
+distance[1091163]=0.000000
+active(0)>=1
+exec_time=0.004605(s)
+distance[1091163]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.016282(s)
+distance[4416607]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.006937(s)
+distance[4416607]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.005789(s)
+distance[4416607]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.005477(s)
+distance[4416607]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.005449(s)
+distance[4416607]=0.000000
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.005479(s)
+distance[4416607]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=4
+active(2)>=2
+exec_time=0.018229(s)
+distance[17644262]=0.000000
+active(0)>=1
+active(1)>=4
+active(2)>=2
+exec_time=0.005612(s)
+distance[17644262]=0.000000
+active(0)>=1
+active(1)>=4
+active(2)>=2
+exec_time=0.005782(s)
+distance[17644262]=0.000000
+active(0)>=1
+active(1)>=4
+active(2)>=2
+exec_time=0.005517(s)
+distance[17644262]=0.000000
+active(0)>=1
+active(1)>=4
+active(2)>=2
+exec_time=0.005894(s)
+distance[17644262]=0.000000
+active(0)>=1
+active(1)>=4
+active(2)>=2
+exec_time=0.005663(s)
+distance[17644262]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.006180(s)
+distance[13424355]=0.000000
+active(0)>=1
+exec_time=0.008825(s)
+distance[13424355]=0.000000
+active(0)>=1
+exec_time=0.004904(s)
+distance[13424355]=0.000000
+active(0)>=1
+exec_time=0.004352(s)
+distance[13424355]=0.000000
+active(0)>=1
+exec_time=0.005413(s)
+distance[13424355]=0.000000
+active(0)>=1
+exec_time=0.011189(s)
+distance[13424355]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+exec_time=0.006976(s)
+distance[10880601]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.009055(s)
+distance[10880601]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.005296(s)
+distance[10880601]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.005045(s)
+distance[10880601]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.008537(s)
+distance[10880601]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.005542(s)
+distance[10880601]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.006347(s)
+distance[5037423]=0.000000
+active(0)>=1
+exec_time=0.008015(s)
+distance[5037423]=0.000000
+active(0)>=1
+exec_time=0.004821(s)
+distance[5037423]=0.000000
+active(0)>=1
+exec_time=0.004571(s)
+distance[5037423]=0.000000
+active(0)>=1
+exec_time=0.004885(s)
+distance[5037423]=0.000000
+active(0)>=1
+exec_time=0.004592(s)
+distance[5037423]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.006550(s)
+distance[5664625]=0.000000
+active(0)>=1
+exec_time=0.008489(s)
+distance[5664625]=0.000000
+active(0)>=1
+exec_time=0.004746(s)
+distance[5664625]=0.000000
+active(0)>=1
+exec_time=0.004581(s)
+distance[5664625]=0.000000
+active(0)>=1
+exec_time=0.004941(s)
+distance[5664625]=0.000000
+active(0)>=1
+exec_time=0.005098(s)
+distance[5664625]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.017491(s)
+distance[10955122]=0.000000
+active(0)>=1
+exec_time=0.006458(s)
+distance[10955122]=0.000000
+active(0)>=1
+exec_time=0.005178(s)
+distance[10955122]=0.000000
+active(0)>=1
+exec_time=0.004725(s)
+distance[10955122]=0.000000
+active(0)>=1
+exec_time=0.005475(s)
+distance[10955122]=0.000000
+active(0)>=1
+exec_time=0.005063(s)
+distance[10955122]=0.000000
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+exec_time=0.006716(s)
+distance[19098957]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.008604(s)
+distance[19098957]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.005114(s)
+distance[19098957]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.004794(s)
+distance[19098957]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.007785(s)
+distance[19098957]=0.000000
+active(0)>=1
+active(1)>=1
+exec_time=0.005198(s)
+distance[19098957]=0.000000

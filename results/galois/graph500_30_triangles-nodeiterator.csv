@@ -1,0 +1,6 @@
+Real,User,Sys,Algorithm,Thread_Count
+6.46,67.41,4.63,nodeIterator,192
+10.10,53.24,4.59,nodeIterator,192
+6.33,48.44,4.56,nodeIterator,192
+10.05,53.26,5.43,nodeIterator,192
+10.03,53.05,4.94,nodeIterator,192

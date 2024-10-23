@@ -1,0 +1,28 @@
+processing...
+output file: /datasets/road_asia/road_asia.bin
+time cost: 4468065790
+edges: 12711603
+vertices: 11656040
+min vertex id: 2
+max vertex id: 11950757
+Are all ids continuous: no
+processing...
+output file: /datasets/road_asia/road_asia.bin
+time cost: 4493591414
+edges: 12711603
+vertices: 11656040
+min vertex id: 2
+max vertex id: 11950757
+Are all ids continuous: no
+output_file: /datasets/road_asia/road_asia.bin
+time: 4.589455
+edges: 12711603
+vertices: 11656040
+min_vertex_id: 2
+max_vertex_id: 11950757
+output_file: /datasets/road_asia/road_asia.bin
+time: 4.580605
+edges: 12711603
+vertices: 11656040
+min_vertex_id: 2
+max_vertex_id: 11950757

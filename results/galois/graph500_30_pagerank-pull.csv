@@ -1,0 +1,11 @@
+Real,User,Sys,Algorithm,Tolerance,Thread_Count
+13.29,36.20,4.81,Async-Pull,0.0001,192
+9.51,37.44,4.67,Pull-Residual,0.0001,192
+13.06,35.30,5.03,Async-Pull,0.0001,192
+9.73,37.56,4.96,Pull-Residual,0.0001,192
+9.51,38.10,4.71,Async-Pull,0.0001,192
+9.54,38.35,4.85,Pull-Residual,0.0001,192
+9.63,37.52,4.38,Async-Pull,0.0001,192
+9.49,37.52,4.94,Pull-Residual,0.0001,192
+9.73,37.81,5.18,Async-Pull,0.0001,192
+9.63,37.85,4.76,Pull-Residual,0.0001,192

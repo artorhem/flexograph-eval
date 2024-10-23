@@ -1,0 +1,336 @@
+Real,User,Sys,Algorithm,Vertex_ID,Thread_Count
+7.20,133.19,5.89,PARALLEL,1,192
+11.37,153.68,6.16,PARALLEL,1,192
+11.26,150.71,5.57,PARALLEL,1,192
+7.18,132.51,5.65,PARALLEL,1,192
+11.48,139.98,6.12,PARALLEL,1,192
+failed to set report: 1 or failed to set source: 12198
+Command terminated by signal 6
+5.46,1.16,3.80,PARALLEL,12198,192
+failed to set report: 1 or failed to set source: 12198
+Command terminated by signal 6
+5.48,0.86,4.11,PARALLEL,12198,192
+failed to set report: 1 or failed to set source: 12198
+Command terminated by signal 6
+5.12,0.87,3.76,PARALLEL,12198,192
+failed to set report: 1 or failed to set source: 12198
+Command terminated by signal 6
+5.16,0.74,3.90,PARALLEL,12198,192
+failed to set report: 1 or failed to set source: 12198
+Command terminated by signal 6
+5.88,1.05,4.28,PARALLEL,12198,192
+failed to set report: 1 or failed to set source: 3
+Command terminated by signal 6
+5.23,0.83,4.06,PARALLEL,3,192
+failed to set report: 1 or failed to set source: 3
+Command terminated by signal 6
+5.17,0.64,4.01,PARALLEL,3,192
+failed to set report: 1 or failed to set source: 3
+Command terminated by signal 6
+5.62,0.68,4.49,PARALLEL,3,192
+failed to set report: 1 or failed to set source: 3
+Command terminated by signal 6
+5.28,0.87,3.98,PARALLEL,3,192
+failed to set report: 1 or failed to set source: 3
+Command terminated by signal 6
+5.50,1.18,3.88,PARALLEL,3,192
+failed to set report: 1 or failed to set source: 237841
+Command terminated by signal 6
+5.27,0.65,4.29,PARALLEL,237841,192
+failed to set report: 1 or failed to set source: 237841
+Command terminated by signal 6
+5.20,0.87,3.85,PARALLEL,237841,192
+failed to set report: 1 or failed to set source: 237841
+Command terminated by signal 6
+5.14,0.58,4.08,PARALLEL,237841,192
+failed to set report: 1 or failed to set source: 237841
+Command terminated by signal 6
+5.19,0.70,4.02,PARALLEL,237841,192
+failed to set report: 1 or failed to set source: 237841
+Command terminated by signal 6
+5.14,0.74,3.97,PARALLEL,237841,192
+failed to set report: 1 or failed to set source: 310986
+Command terminated by signal 6
+5.26,1.04,3.75,PARALLEL,310986,192
+failed to set report: 1 or failed to set source: 310986
+Command terminated by signal 6
+5.26,0.75,4.01,PARALLEL,310986,192
+failed to set report: 1 or failed to set source: 310986
+Command terminated by signal 6
+5.12,0.75,4.17,PARALLEL,310986,192
+failed to set report: 1 or failed to set source: 310986
+Command terminated by signal 6
+5.17,0.64,4.00,PARALLEL,310986,192
+failed to set report: 1 or failed to set source: 310986
+Command terminated by signal 6
+5.71,0.91,4.22,PARALLEL,310986,192
+failed to set report: 1 or failed to set source: 26663
+Command terminated by signal 6
+5.16,0.85,3.89,PARALLEL,26663,192
+failed to set report: 1 or failed to set source: 26663
+Command terminated by signal 6
+5.20,0.91,3.76,PARALLEL,26663,192
+failed to set report: 1 or failed to set source: 26663
+Command terminated by signal 6
+6.86,1.26,5.16,PARALLEL,26663,192
+failed to set report: 1 or failed to set source: 26663
+Command terminated by signal 6
+5.40,1.16,3.89,PARALLEL,26663,192
+failed to set report: 1 or failed to set source: 26663
+Command terminated by signal 6
+5.11,0.57,4.06,PARALLEL,26663,192
+failed to set report: 1 or failed to set source: 60236
+Command terminated by signal 6
+6.27,1.06,4.71,PARALLEL,60236,192
+failed to set report: 1 or failed to set source: 60236
+Command terminated by signal 6
+5.20,1.11,3.60,PARALLEL,60236,192
+failed to set report: 1 or failed to set source: 60236
+Command terminated by signal 6
+5.16,0.68,3.96,PARALLEL,60236,192
+failed to set report: 1 or failed to set source: 60236
+Command terminated by signal 6
+5.42,0.87,4.19,PARALLEL,60236,192
+failed to set report: 1 or failed to set source: 60236
+Command terminated by signal 6
+5.25,1.02,3.76,PARALLEL,60236,192
+failed to set report: 1 or failed to set source: 98048
+Command terminated by signal 6
+5.13,0.75,3.86,PARALLEL,98048,192
+failed to set report: 1 or failed to set source: 98048
+Command terminated by signal 6
+5.24,0.65,4.01,PARALLEL,98048,192
+failed to set report: 1 or failed to set source: 98048
+Command terminated by signal 6
+5.22,1.03,3.69,PARALLEL,98048,192
+failed to set report: 1 or failed to set source: 98048
+Command terminated by signal 6
+5.17,0.68,4.02,PARALLEL,98048,192
+failed to set report: 1 or failed to set source: 98048
+Command terminated by signal 6
+5.43,0.81,4.09,PARALLEL,98048,192
+failed to set report: 1 or failed to set source: 3871
+Command terminated by signal 6
+5.20,0.97,3.78,PARALLEL,3871,192
+failed to set report: 1 or failed to set source: 3871
+Command terminated by signal 6
+5.12,0.74,4.04,PARALLEL,3871,192
+failed to set report: 1 or failed to set source: 3871
+Command terminated by signal 6
+6.23,0.90,4.82,PARALLEL,3871,192
+failed to set report: 1 or failed to set source: 3871
+Command terminated by signal 6
+5.31,1.05,3.78,PARALLEL,3871,192
+failed to set report: 1 or failed to set source: 3871
+Command terminated by signal 6
+5.16,0.63,4.03,PARALLEL,3871,192
+failed to set report: 1 or failed to set source: 291330
+Command terminated by signal 6
+5.29,0.65,4.14,PARALLEL,291330,192
+failed to set report: 1 or failed to set source: 291330
+Command terminated by signal 6
+5.16,0.71,3.98,PARALLEL,291330,192
+failed to set report: 1 or failed to set source: 291330
+Command terminated by signal 6
+5.21,0.79,3.97,PARALLEL,291330,192
+failed to set report: 1 or failed to set source: 291330
+Command terminated by signal 6
+6.08,0.79,4.74,PARALLEL,291330,192
+failed to set report: 1 or failed to set source: 291330
+Command terminated by signal 6
+5.08,0.67,3.94,PARALLEL,291330,192
+failed to set report: 1 or failed to set source: 126692
+Command terminated by signal 6
+5.40,0.98,4.08,PARALLEL,126692,192
+failed to set report: 1 or failed to set source: 126692
+Command terminated by signal 6
+5.40,0.98,3.94,PARALLEL,126692,192
+failed to set report: 1 or failed to set source: 126692
+Command terminated by signal 6
+5.13,0.63,4.06,PARALLEL,126692,192
+failed to set report: 1 or failed to set source: 126692
+Command terminated by signal 6
+5.16,0.68,3.98,PARALLEL,126692,192
+failed to set report: 1 or failed to set source: 126692
+Command terminated by signal 6
+5.13,0.59,3.88,PARALLEL,126692,192
+failed to set report: 1 or failed to set source: 202763
+Command terminated by signal 6
+5.13,0.87,3.79,PARALLEL,202763,192
+failed to set report: 1 or failed to set source: 202763
+Command terminated by signal 6
+5.29,0.87,4.21,PARALLEL,202763,192
+failed to set report: 1 or failed to set source: 202763
+Command terminated by signal 6
+5.82,1.00,4.32,PARALLEL,202763,192
+failed to set report: 1 or failed to set source: 202763
+Command terminated by signal 6
+5.06,0.78,3.81,PARALLEL,202763,192
+failed to set report: 1 or failed to set source: 202763
+Command terminated by signal 6
+5.69,1.22,3.94,PARALLEL,202763,192
+failed to set report: 1 or failed to set source: 185026
+Command terminated by signal 6
+6.23,0.91,4.79,PARALLEL,185026,192
+failed to set report: 1 or failed to set source: 185026
+Command terminated by signal 6
+4.55,0.77,4.03,PARALLEL,185026,192
+failed to set report: 1 or failed to set source: 185026
+Command terminated by signal 6
+5.21,0.67,4.03,PARALLEL,185026,192
+failed to set report: 1 or failed to set source: 185026
+Command terminated by signal 6
+5.32,0.70,4.07,PARALLEL,185026,192
+failed to set report: 1 or failed to set source: 185026
+Command terminated by signal 6
+5.09,0.83,3.81,PARALLEL,185026,192
+failed to set report: 1 or failed to set source: 235603
+Command terminated by signal 6
+5.18,0.59,4.08,PARALLEL,235603,192
+failed to set report: 1 or failed to set source: 235603
+Command terminated by signal 6
+5.98,0.74,4.72,PARALLEL,235603,192
+failed to set report: 1 or failed to set source: 235603
+Command terminated by signal 6
+5.14,0.84,3.81,PARALLEL,235603,192
+failed to set report: 1 or failed to set source: 235603
+Command terminated by signal 6
+5.23,0.68,4.04,PARALLEL,235603,192
+failed to set report: 1 or failed to set source: 235603
+Command terminated by signal 6
+5.97,0.97,4.46,PARALLEL,235603,192
+failed to set report: 1 or failed to set source: 252973
+Command terminated by signal 6
+5.14,0.87,3.89,PARALLEL,252973,192
+failed to set report: 1 or failed to set source: 252973
+Command terminated by signal 6
+5.18,0.62,4.03,PARALLEL,252973,192
+failed to set report: 1 or failed to set source: 252973
+Command terminated by signal 6
+5.57,0.70,4.33,PARALLEL,252973,192
+failed to set report: 1 or failed to set source: 252973
+Command terminated by signal 6
+5.28,0.91,3.87,PARALLEL,252973,192
+failed to set report: 1 or failed to set source: 252973
+Command terminated by signal 6
+5.07,0.61,3.97,PARALLEL,252973,192
+failed to set report: 1 or failed to set source: 189240
+Command terminated by signal 6
+5.49,0.83,4.13,PARALLEL,189240,192
+failed to set report: 1 or failed to set source: 189240
+Command terminated by signal 6
+5.10,0.97,3.64,PARALLEL,189240,192
+failed to set report: 1 or failed to set source: 189240
+Command terminated by signal 6
+5.04,0.72,3.86,PARALLEL,189240,192
+failed to set report: 1 or failed to set source: 189240
+Command terminated by signal 6
+5.30,0.73,3.97,PARALLEL,189240,192
+failed to set report: 1 or failed to set source: 189240
+Command terminated by signal 6
+5.08,0.69,4.08,PARALLEL,189240,192
+failed to set report: 1 or failed to set source: 249426
+Command terminated by signal 6
+5.09,0.68,3.90,PARALLEL,249426,192
+failed to set report: 1 or failed to set source: 249426
+Command terminated by signal 6
+5.10,0.68,3.95,PARALLEL,249426,192
+failed to set report: 1 or failed to set source: 249426
+Command terminated by signal 6
+5.26,0.90,4.08,PARALLEL,249426,192
+failed to set report: 1 or failed to set source: 249426
+Command terminated by signal 6
+5.10,0.81,3.79,PARALLEL,249426,192
+failed to set report: 1 or failed to set source: 249426
+Command terminated by signal 6
+6.34,0.90,5.01,PARALLEL,249426,192
+failed to set report: 1 or failed to set source: 44384
+Command terminated by signal 6
+5.06,0.65,3.91,PARALLEL,44384,192
+failed to set report: 1 or failed to set source: 44384
+Command terminated by signal 6
+5.25,0.84,3.91,PARALLEL,44384,192
+failed to set report: 1 or failed to set source: 44384
+Command terminated by signal 6
+6.90,0.89,5.47,PARALLEL,44384,192
+failed to set report: 1 or failed to set source: 44384
+Command terminated by signal 6
+5.10,0.81,3.82,PARALLEL,44384,192
+failed to set report: 1 or failed to set source: 44384
+Command terminated by signal 6
+5.30,0.93,3.88,PARALLEL,44384,192
+failed to set report: 1 or failed to set source: 260429
+Command terminated by signal 6
+5.62,1.22,3.93,PARALLEL,260429,192
+failed to set report: 1 or failed to set source: 260429
+Command terminated by signal 6
+5.16,0.92,3.91,PARALLEL,260429,192
+failed to set report: 1 or failed to set source: 260429
+Command terminated by signal 6
+5.11,0.57,4.10,PARALLEL,260429,192
+failed to set report: 1 or failed to set source: 260429
+Command terminated by signal 6
+5.32,0.81,3.94,PARALLEL,260429,192
+failed to set report: 1 or failed to set source: 260429
+Command terminated by signal 6
+5.17,0.85,3.87,PARALLEL,260429,192
+failed to set report: 1 or failed to set source: 268824
+Command terminated by signal 6
+5.39,1.07,4.05,PARALLEL,268824,192
+failed to set report: 1 or failed to set source: 268824
+Command terminated by signal 6
+5.43,0.58,4.45,PARALLEL,268824,192
+failed to set report: 1 or failed to set source: 268824
+Command terminated by signal 6
+5.10,0.58,4.09,PARALLEL,268824,192
+failed to set report: 1 or failed to set source: 268824
+Command terminated by signal 6
+5.13,0.65,3.96,PARALLEL,268824,192
+failed to set report: 1 or failed to set source: 268824
+Command terminated by signal 6
+5.80,0.84,4.43,PARALLEL,268824,192
+failed to set report: 1 or failed to set source: 161512
+Command terminated by signal 6
+5.07,0.84,3.77,PARALLEL,161512,192
+failed to set report: 1 or failed to set source: 161512
+Command terminated by signal 6
+5.20,0.89,3.85,PARALLEL,161512,192
+failed to set report: 1 or failed to set source: 161512
+Command terminated by signal 6
+6.50,1.01,4.91,PARALLEL,161512,192
+failed to set report: 1 or failed to set source: 161512
+Command terminated by signal 6
+5.04,0.61,3.98,PARALLEL,161512,192
+failed to set report: 1 or failed to set source: 161512
+Command terminated by signal 6
+5.15,0.83,3.80,PARALLEL,161512,192
+failed to set report: 1 or failed to set source: 72607
+Command terminated by signal 6
+5.33,0.76,4.10,PARALLEL,72607,192
+failed to set report: 1 or failed to set source: 72607
+Command terminated by signal 6
+5.26,1.04,3.85,PARALLEL,72607,192
+failed to set report: 1 or failed to set source: 72607
+Command terminated by signal 6
+5.11,0.84,3.80,PARALLEL,72607,192
+failed to set report: 1 or failed to set source: 72607
+Command terminated by signal 6
+5.64,0.80,4.31,PARALLEL,72607,192
+failed to set report: 1 or failed to set source: 72607
+Command terminated by signal 6
+4.99,0.61,3.93,PARALLEL,72607,192
+failed to set report: 1 or failed to set source: 289627
+Command terminated by signal 6
+5.16,0.80,3.84,PARALLEL,289627,192
+failed to set report: 1 or failed to set source: 289627
+Command terminated by signal 6
+6.27,1.14,4.56,PARALLEL,289627,192
+failed to set report: 1 or failed to set source: 289627
+Command terminated by signal 6
+5.22,0.94,4.13,PARALLEL,289627,192
+failed to set report: 1 or failed to set source: 289627
+Command terminated by signal 6
+5.23,0.78,3.95,PARALLEL,289627,192
+failed to set report: 1 or failed to set source: 289627
+Command terminated by signal 6
+5.27,1.22,3.66,PARALLEL,289627,192

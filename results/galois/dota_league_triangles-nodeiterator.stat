@@ -1,0 +1,11 @@
+STAT_TYPE, REGION, CATEGORY, TOTAL_TYPE, TOTAL
+STAT, PageAlloc, MeminfoPre, TSUM, 196
+STAT, PageAlloc, MeminfoPost, TSUM, 578
+STAT, nodeIteratingAlgo, Iterations, TSUM, 3
+STAT, nodeIteratingAlgo, Time, TMAX, 159
+STAT, nodeIteratorAlgo, Time, TMAX, 159
+STAT, (NULL), Time, TMAX, 159
+STAT, (NULL), GraphReadingTime, TMAX, 2
+PARAM, (NULL), CommandLine, SINGLE, /systems/in-mem/Galois/build/lonestar/triangles/triangles -algo=nodeiterator -t=192 -noverify -statFile=/results/galois/dota_league_triangles-nodeiterator.stat /datasets/galois/dota_league.gr
+PARAM, (NULL), Threads, SINGLE, 192
+PARAM, (NULL), Hostname, SINGLE, ff7c27ff1ccc

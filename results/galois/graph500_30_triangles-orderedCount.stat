@@ -1,0 +1,10 @@
+STAT_TYPE, REGION, CATEGORY, TOTAL_TYPE, TOTAL
+STAT, PageAlloc, MeminfoPre, TSUM, 196
+STAT, PageAlloc, MeminfoPost, TSUM, 578
+STAT, orderedCountAlgo, Iterations, TSUM, 1
+STAT, orderedCountAlgo, Time, TMAX, 259
+STAT, (NULL), Time, TMAX, 260
+STAT, (NULL), GraphReadingTime, TMAX, 2
+PARAM, (NULL), CommandLine, SINGLE, /systems/in-mem/Galois/build/lonestar/triangles/triangles -algo=orderedCount -t=192 -noverify -statFile=/results/galois/graph500_30_triangles-orderedCount.stat /datasets/galois/graph500_30.gr
+PARAM, (NULL), Threads, SINGLE, 192
+PARAM, (NULL), Hostname, SINGLE, ff7c27ff1ccc

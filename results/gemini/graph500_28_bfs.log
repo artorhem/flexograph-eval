@@ -1,0 +1,604 @@
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.058696(s)
+found_vertices = 3
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.068023(s)
+found_vertices = 3
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.076587(s)
+found_vertices = 3
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.070189(s)
+found_vertices = 3
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.071447(s)
+found_vertices = 3
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.071647(s)
+found_vertices = 3
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.054707(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.064027(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.065757(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.065765(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.069505(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.065290(s)
+found_vertices = 1
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+exec_time=0.056582(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.067008(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.069237(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.068515(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.074749(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.069992(s)
+found_vertices = 2
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.063522(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.063468(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.065606(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.070651(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.065587(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.064275(s)
+found_vertices = 1
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.063538(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.064008(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.066192(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.071572(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.066183(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.069032(s)
+found_vertices = 1
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.053136(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.064155(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.064123(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.066276(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.065757(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.064978(s)
+found_vertices = 1
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+exec_time=0.064372(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.068229(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.067244(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.066685(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.070302(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.070051(s)
+found_vertices = 2
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.062849(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.065366(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.066683(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.075069(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.073898(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.073701(s)
+found_vertices = 1
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+exec_time=0.056309(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.066235(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.067713(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.068578(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.071729(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.067978(s)
+found_vertices = 2
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+exec_time=0.068237(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.068045(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.070009(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.070443(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.076698(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.069481(s)
+found_vertices = 2
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.053649(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.064809(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.066593(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.066699(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.078947(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.069991(s)
+found_vertices = 1
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+exec_time=0.065826(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.066718(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.067330(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.066539(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.071245(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.066276(s)
+found_vertices = 2
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+exec_time=0.056330(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.067850(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.070730(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.070251(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.071345(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.069881(s)
+found_vertices = 2
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+exec_time=0.056930(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.065707(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.066955(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.067348(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.073899(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.068133(s)
+found_vertices = 2
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.054067(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.065307(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.066107(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.066577(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.067438(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.066306(s)
+found_vertices = 1
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.055413(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.064577(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.071479(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.066167(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.067074(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.066807(s)
+found_vertices = 1
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+exec_time=0.056419(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.066793(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.068364(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.067692(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.069050(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.078856(s)
+found_vertices = 2
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.071881(s)
+found_vertices = 3
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.069748(s)
+found_vertices = 3
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.069964(s)
+found_vertices = 3
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.073135(s)
+found_vertices = 3
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.069806(s)
+found_vertices = 3
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.069807(s)
+found_vertices = 3
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.059224(s)
+found_vertices = 3
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.070529(s)
+found_vertices = 3
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.070353(s)
+found_vertices = 3
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.071540(s)
+found_vertices = 3
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.070983(s)
+found_vertices = 3
+active(0)>=1
+active(1)>=1
+active(2)>=1
+exec_time=0.071055(s)
+found_vertices = 3
+192	2
+threads_persocket 96
+active(0)>=1
+exec_time=0.053378(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.064799(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.065022(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.066251(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.065725(s)
+found_vertices = 1
+active(0)>=1
+exec_time=0.064722(s)
+found_vertices = 1
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+active(2)>=1
+active(3)>=1
+exec_time=0.062432(s)
+found_vertices = 4
+active(0)>=1
+active(1)>=1
+active(2)>=1
+active(3)>=1
+exec_time=0.072378(s)
+found_vertices = 4
+active(0)>=1
+active(1)>=1
+active(2)>=1
+active(3)>=1
+exec_time=0.073898(s)
+found_vertices = 4
+active(0)>=1
+active(1)>=1
+active(2)>=1
+active(3)>=1
+exec_time=0.074549(s)
+found_vertices = 4
+active(0)>=1
+active(1)>=1
+active(2)>=1
+active(3)>=1
+exec_time=0.084725(s)
+found_vertices = 4
+active(0)>=1
+active(1)>=1
+active(2)>=1
+active(3)>=1
+exec_time=0.073790(s)
+found_vertices = 4
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+exec_time=0.056904(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.067173(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.067496(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.067997(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.071584(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.068975(s)
+found_vertices = 2
+192	2
+threads_persocket 96
+active(0)>=1
+active(1)>=1
+exec_time=0.067268(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.067866(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.070695(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.080267(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.072965(s)
+found_vertices = 2
+active(0)>=1
+active(1)>=1
+exec_time=0.069615(s)
+found_vertices = 2

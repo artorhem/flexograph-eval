@@ -1,0 +1,14 @@
+processing...
+output file: /datasets/graph500_23/graph500_23.bin
+time cost: 38668735988
+edges: 129333677
+vertices: 2731292
+min vertex id: 0
+max vertex id: 8388604
+Are all ids continuous: no
+output_file: /datasets/graph500_23/graph500_23.bin
+time: 39.466714
+edges: 129333677
+vertices: 2731292
+min_vertex_id: 0
+max_vertex_id: 8388604

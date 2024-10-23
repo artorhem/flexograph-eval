@@ -1,0 +1,10 @@
+STAT_TYPE, REGION, CATEGORY, TOTAL_TYPE, TOTAL
+STAT, PageAlloc, MeminfoPre, TSUM, 388
+STAT, PageAlloc, MeminfoPost, TSUM, 579
+STAT, orderedCountAlgo, Iterations, TSUM, 11950758
+STAT, orderedCountAlgo, Time, TMAX, 184
+STAT, (NULL), Time, TMAX, 184
+STAT, (NULL), GraphReadingTime, TMAX, 68
+PARAM, (NULL), CommandLine, SINGLE, /systems/in-mem/Galois/build/lonestar/triangles/triangles -algo=orderedCount -t=192 -noverify -statFile=/results/galois/road_asia_triangles-orderedCount.stat /datasets/galois/road_asia.gr
+PARAM, (NULL), Threads, SINGLE, 192
+PARAM, (NULL), Hostname, SINGLE, ff7c27ff1ccc
