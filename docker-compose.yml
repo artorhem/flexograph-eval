@@ -66,6 +66,16 @@ services:
       - systems:/systems
       - datasets:/mnt/nvme
       - results:/results
+  
+  flexograph:
+    privileged: true
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: flexograph
+    volumes:
+      - db:/db
+      - flexograph:/FlexoGraph
 
 volumes:
   systems:
@@ -86,6 +96,18 @@ volumes:
       type: none
       o: bind
       device: ./results/
+  flexograph:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./systems/FlexoGraph
+  db:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./db/
         #folly:
         #driver: local
         #driver_opts:
