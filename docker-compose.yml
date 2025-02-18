@@ -10,17 +10,17 @@ services:
       - datasets:/datasets
       - results:/results
   
-        #planar:
-        #privileged: true
-        #build:
-        #context: ./
-        #dockerfile: ./containers/planar.Dockerfile
-        #container_name: planar
-        #volumes:
-        #- systems:/systems
-        #- datasets:/datasets
-        #- results:/results
-        # - folly:/folly
+  minigraph:
+    privileged: true
+    build:
+      context: ./
+      dockerfile: ./containers/minigraph.Dockerfile
+    container_name: minigraph
+    volumes:
+      - systems:/systems
+      - datasets:/datasets
+      - results:/results
+      - folly:/folly
         #- scratch:/scratch
 
   gemini:
@@ -123,12 +123,12 @@ volumes:
       type: none
       o: bind
       device: ./db/
-        #folly:
-        #driver: local
-        #driver_opts:
-        #type: none
-        #o: bind
-        #device: ./folly/
+  folly:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./folly/
         #scratch:
         # driver: local
         # driver_opts:

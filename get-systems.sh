@@ -37,6 +37,7 @@ do
 done
 
 #git clone git@github.com:SICS-Fundamental-Research-Center/Planar.git #Planar, VLDB2024
+git clone git@github.com:SICS-Fundamental-Research-Center/MiniGraph.git #MiniGraph, VLDB 2023
 
 #Clone X-Stream and checkout their sosp branch
 if [ -d "x-stream" ]; then
@@ -48,7 +49,6 @@ cd x-stream
 git checkout sosp
 
 # Clone FlexoGraph and checkout the iter_fix branch
-
 cd $SYS_DIR
 mkdir -p systems/FlexoGraph
 git clone git@github.com:ubc-systopia/margraphita.git systems/FlexoGraph/
