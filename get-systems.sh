@@ -5,11 +5,12 @@
 
 # The systems are cloned into systems directory
 # First add the in-mem systems
+SYS_DIR=`pwd`
 mkdir -p systems/in-mem
 cd systems/in-mem
 
 #Now clone the systems
-systems=( "galois" "gapbs" "ligra" "gemini" "graphit" )
+systems=( "Galois" "gapbs" "ligra" "GeminiGraph" "graphit" )
 for system in "${systems[@]}"
 do
     if [ -d "$system" ]; then
@@ -47,6 +48,8 @@ cd x-stream
 git checkout sosp
 
 # Clone FlexoGraph and checkout the iter_fix branch
+
+cd $SYS_DIR
 mkdir -p systems/FlexoGraph
 git clone git@github.com:ubc-systopia/margraphita.git systems/FlexoGraph/
 cd systems/FlexoGraph

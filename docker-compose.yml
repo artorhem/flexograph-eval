@@ -78,6 +78,20 @@ services:
       - systems:/systems
       - results:/results
 
+  margraphita:
+    privileged: true
+    mem_limit: "1g"
+    build:
+      context: ./
+      dockerfile: ../margraphita/Dockerfile
+    container_name: margraphita
+    volumes:
+      - db:/db
+      - margraphita:/margraphita
+      - results:/results
+
+
+
 volumes:
   systems:
     driver: local
@@ -85,6 +99,12 @@ volumes:
       type: none
       o: bind
       device: ./systems/
+  margraphita:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ../margraphita/
   datasets:
     driver: local
     driver_opts:
@@ -97,12 +117,6 @@ volumes:
       type: none
       o: bind
       device: ./results/
-  flexograph:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ./systems/FlexoGraph
   db:
     driver: local
     driver_opts:
