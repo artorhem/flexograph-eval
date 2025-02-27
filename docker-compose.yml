@@ -20,7 +20,6 @@ services:
       - systems:/systems
       - datasets:/datasets
       - results:/results
-      - folly:/folly
         #- scratch:/scratch
 
   gemini:
@@ -123,12 +122,6 @@ volumes:
       type: none
       o: bind
       device: ./db/
-  folly:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ./folly/
         #scratch:
         # driver: local
         # driver_opts:
