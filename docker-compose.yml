@@ -6,9 +6,9 @@ services:
       dockerfile: ./containers/GAPBS.Dockerfile
     container_name: gapbs
     volumes:
-      - systems:/systems
       - datasets:/datasets
       - results:/results
+      - extra_space:/extra_space
   
   minigraph:
     privileged: true
@@ -17,7 +17,6 @@ services:
       dockerfile: ./containers/minigraph.Dockerfile
     container_name: minigraph
     volumes:
-      - systems:/systems
       - datasets:/datasets
       - results:/results
         #- scratch:/scratch
@@ -62,7 +61,6 @@ services:
       dockerfile: ./containers/blaze.Dockerfile
     container_name: blaze
     volumes:
-      - systems:/systems
       - datasets:/mnt/nvme
       - results:/results
   
@@ -116,6 +114,12 @@ volumes:
       type: none
       o: bind
       device: ./results/
+  extra_space:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./extra_space/
   db:
     driver: local
     driver_opts:

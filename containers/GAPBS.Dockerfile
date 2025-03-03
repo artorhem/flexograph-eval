@@ -7,18 +7,18 @@ USER root
 SHELL [ "/bin/bash" , "-c" ]
 
 # Install dependencies
-RUN apt-get update && apt-get --no-install-recommends -y install build-essential cmake git libboost-all-dev libomp-dev wget gdb time
+RUN apt-get update && apt-get --no-install-recommends -y install build-essential cmake git libboost-all-dev libomp-dev wget gdb time python3
 RUN apt-get install --reinstall -y  ca-certificates
 
 #Environment variables
 ENV CC=/usr/bin/gcc
 ENV CXX=/usr/bin/g++
 
-ADD scripts/gapbs.sh /gapbs.sh
-# The volume containing the source code is mounted at /systems
-WORKDIR /systems/in-mem/gapbs
+# Copy the source code
+COPY systems/in-mem/gapbs /gapbs
+WORKDIR /gapbs
+RUN cd /gapbs && make -j
 
-# Make the project
-#RUN make all
+COPY scripts/gapbs/gapbs.py /gapbs
 
-CMD sleep infinity
+CMD ["python3", "gapbs.py"]

@@ -26,7 +26,7 @@ mkdir -p systems/ooc
 cd systems/ooc
 
 #Now clone the systems
-systems=("blaze" "graphchi-cpp" "lumos" )
+systems=("blaze" "graphchi-cpp" "lumos" "MiniGraph")
 for system in "${systems[@]}"
 do
     if [ -d "$system" ]; then
@@ -35,9 +35,6 @@ do
         git clone git@github.com:artorhem/$system.git
     fi
 done
-
-#git clone git@github.com:SICS-Fundamental-Research-Center/Planar.git #Planar, VLDB2024
-git clone git@github.com:SICS-Fundamental-Research-Center/MiniGraph.git #MiniGraph, VLDB 2023
 
 #Clone X-Stream and checkout their sosp branch
 if [ -d "x-stream" ]; then
