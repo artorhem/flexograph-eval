@@ -13,9 +13,10 @@ RUN apt-get install --reinstall -y  ca-certificates
 ENV CC=/usr/bin/gcc
 ENV CXX=/usr/bin/g++
 
-ADD scripts/ligra.sh /ligra.sh
+COPY scripts/ligra/ligra.py /ligra.py
 
 # The volume containing the source code is mounted at /systems
 WORKDIR /systems/in-mem/ligra/apps
 
-CMD bash /ligra.sh > /results/ligra/ligra.log 2>&1
+CMD bash /ligra.py > /results/ligra/ligra.log 2>&1
+#CMD sleep infinity
