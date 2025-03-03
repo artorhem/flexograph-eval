@@ -108,6 +108,12 @@ volumes:
       type: none
       o: bind
       device: ./datasets/
+  graph30:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /drives/graph30
   results:
     driver: local
     driver_opts:

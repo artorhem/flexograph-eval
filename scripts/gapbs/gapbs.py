@@ -10,6 +10,9 @@ tempdir = "/extra_space"
 
 for dataset in datasets:
     src = f"/datasets/{dataset}/{dataset}"
+    if not os.path.exists(src):
+        print(f"Dataset {dataset} does not exist")
+        continue
     dst = f"{tempdir}/{dataset}.el"
     print(f"Copying {src} to {dst}")
     os.system(f"cp {src} {dst}")
