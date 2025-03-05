@@ -23,9 +23,9 @@ for dataset in datasets:
         if dataset not in directed:
             with open(result_file, "w") as f:
                 print(f"./{benchmark} -f {dst} -n 5 -l -s")
-                subprocess.run([f"./{benchmark}", "-f", f"{dst}", "-n", "5", "-l", "-s"], stdout=f, stderr=subprocess.STDOUT)
+                subprocess.run([f"./{benchmark}", "-f", f"{dst}", "-n", "5", "-s"], stdout=f, stderr=subprocess.STDOUT)
         else:
             with open(result_file, "w") as f:
-                subprocess.run([f"./{benchmark}", "-f", f"{dst}", "-n", "5", "-l"], stdout=f, stderr=subprocess.STDOUT)
+                subprocess.run([f"./{benchmark}", "-f", f"{dst}", "-n", "5"], stdout=f, stderr=subprocess.STDOUT)
     
     os.remove(dst)

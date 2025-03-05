@@ -21,4 +21,5 @@ RUN cd /gapbs && make -j
 
 COPY scripts/gapbs/gapbs.py /gapbs
 
+#CMD sleep infinity
 CMD ["python3", "gapbs.py"]

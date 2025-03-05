@@ -1,19 +1,9 @@
-Read Time:           0.01341
-Build Time:          0.15176
-Graph has 3 nodes and 1 directed edges for degree: 0
-    0                0.80750
-    1                0.00000
-Trial Time:          0.00025
-    0                0.80750
-    1                0.00000
-Trial Time:          0.00025
-    0                0.80750
-    1                0.00000
+Read Time:           0.01378
+Build Time:          0.06482
+Graph has 3 nodes and 1 undirected edges for degree: 0
 Trial Time:          0.00024
-    0                0.80750
-    1                0.00000
 Trial Time:          0.00024
-    0                0.80750
-    1                0.00000
+Trial Time:          0.00024
+Trial Time:          0.00024
 Trial Time:          0.00023
 Average Time:        0.00024

@@ -1,1 +1,9 @@
-Couldn't open file graph500_30.el
+Read Time:           1780.93999
+Build Time:          66.63272
+Graph has 1073741823 nodes and 17022117362 undirected edges for degree: 15
+Trial Time:          3.13688
+Trial Time:          2.99793
+Trial Time:          2.01342
+Trial Time:          1.97096
+Trial Time:          1.80803
+Average Time:        2.38545

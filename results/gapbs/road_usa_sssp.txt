@@ -1,34 +1,9 @@
-Read Time:           3.03225
-Build Time:          0.17955
-Graph has 23947348 nodes and 28854312 directed edges for degree: 1
-    0          1     0.07746
-  225          1     0.03596
-  234          1     0.02499
-  383          1     0.01506
-took 4 iterations
-Trial Time:          0.00689
-    0          1     0.05388
-  113          1     0.02773
-took 2 iterations
-Trial Time:          0.00361
-    0          1     0.04818
-   46          1     0.02547
-took 2 iterations
-Trial Time:          0.00364
-    0          1     0.06109
-   32          1     0.05391
-  117          1     0.01469
-  155          1     0.01441
-  250          1     0.06556
-  298          1     0.01558
-took 6 iterations
-Trial Time:          0.00396
-    0          1     0.05595
-   36          1     0.04775
-   37          1     0.01606
-  140          1     0.04658
-  191          1     0.05320
-  429          1     0.01965
-took 6 iterations
-Trial Time:          0.00387
-Average Time:        0.00439
+Read Time:           3.06264
+Build Time:          0.13168
+Graph has 23947348 nodes and 28854312 undirected edges for degree: 1
+Trial Time:          106.93066
+Trial Time:          90.07555
+Trial Time:          77.39170
+Trial Time:          77.55265
+Trial Time:          94.20494
+Average Time:        89.23110
