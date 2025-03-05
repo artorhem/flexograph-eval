@@ -1,0 +1,6 @@
+real_t,user_t,sys_t,algorithm,num_threads
+1.58,27.11,1.25,OrderedCount,28
+1.58,27.01,1.23,OrderedCount,28
+1.57,27.15,1.29,OrderedCount,28
+1.59,27.07,1.25,OrderedCount,28
+1.58,26.84,1.21,OrderedCount,28

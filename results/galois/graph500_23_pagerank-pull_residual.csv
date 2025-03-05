@@ -1,0 +1,6 @@
+real_t,user_t,sys_t,algorithm,num_threads
+2.36,46.34,1.02,pull_residual,28
+2.18,44.79,1.02,pull_residual,28
+2.18,44.46,1.01,pull_residual,28
+2.20,44.82,1.04,pull_residual,28
+2.47,45.73,1.02,pull_residual,28

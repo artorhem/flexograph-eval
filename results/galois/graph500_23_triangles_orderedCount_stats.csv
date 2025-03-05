@@ -1,0 +1,90 @@
+LoneStar Benchmark Suite v5.0.0 (unknown)
+Copyright (C) 2018 The University of Texas at Austin
+http://iss.ices.utexas.edu/galois/
+
+application: Triangles
+Counts the triangles in a graph
+
+Num Triangles: 131234687
+STAT_TYPE, REGION, CATEGORY, TOTAL_TYPE, TOTAL
+STAT, PageAlloc, MeminfoPre, TSUM, 1096
+STAT, PageAlloc, MeminfoPost, TSUM, 1096
+STAT, orderedCountAlgo, Iterations, TSUM, 8388608
+STAT, orderedCountAlgo, Time, TMAX, 523
+STAT, (NULL), Time, TMAX, 523
+STAT, (NULL), GraphReadingTime, TMAX, 90
+PARAM, (NULL), CommandLine, SINGLE, /systems/in-mem/Galois/build/lonestar/triangles/triangles -t=28 -algo=orderedCount -noverify /datasets/galois/graph500_23.gr
+PARAM, (NULL), Threads, SINGLE, 28
+PARAM, (NULL), Hostname, SINGLE, fe32a45fa70f
+LoneStar Benchmark Suite v5.0.0 (unknown)
+Copyright (C) 2018 The University of Texas at Austin
+http://iss.ices.utexas.edu/galois/
+
+application: Triangles
+Counts the triangles in a graph
+
+Num Triangles: 131234687
+STAT_TYPE, REGION, CATEGORY, TOTAL_TYPE, TOTAL
+STAT, PageAlloc, MeminfoPre, TSUM, 1096
+STAT, PageAlloc, MeminfoPost, TSUM, 1096
+STAT, orderedCountAlgo, Iterations, TSUM, 8388608
+STAT, orderedCountAlgo, Time, TMAX, 522
+STAT, (NULL), Time, TMAX, 522
+STAT, (NULL), GraphReadingTime, TMAX, 90
+PARAM, (NULL), CommandLine, SINGLE, /systems/in-mem/Galois/build/lonestar/triangles/triangles -t=28 -algo=orderedCount -noverify /datasets/galois/graph500_23.gr
+PARAM, (NULL), Threads, SINGLE, 28
+PARAM, (NULL), Hostname, SINGLE, fe32a45fa70f
+LoneStar Benchmark Suite v5.0.0 (unknown)
+Copyright (C) 2018 The University of Texas at Austin
+http://iss.ices.utexas.edu/galois/
+
+application: Triangles
+Counts the triangles in a graph
+
+Num Triangles: 131234687
+STAT_TYPE, REGION, CATEGORY, TOTAL_TYPE, TOTAL
+STAT, PageAlloc, MeminfoPre, TSUM, 1096
+STAT, PageAlloc, MeminfoPost, TSUM, 1096
+STAT, orderedCountAlgo, Iterations, TSUM, 8388608
+STAT, orderedCountAlgo, Time, TMAX, 517
+STAT, (NULL), Time, TMAX, 517
+STAT, (NULL), GraphReadingTime, TMAX, 93
+PARAM, (NULL), CommandLine, SINGLE, /systems/in-mem/Galois/build/lonestar/triangles/triangles -t=28 -algo=orderedCount -noverify /datasets/galois/graph500_23.gr
+PARAM, (NULL), Threads, SINGLE, 28
+PARAM, (NULL), Hostname, SINGLE, fe32a45fa70f
+LoneStar Benchmark Suite v5.0.0 (unknown)
+Copyright (C) 2018 The University of Texas at Austin
+http://iss.ices.utexas.edu/galois/
+
+application: Triangles
+Counts the triangles in a graph
+
+Num Triangles: 131234687
+STAT_TYPE, REGION, CATEGORY, TOTAL_TYPE, TOTAL
+STAT, PageAlloc, MeminfoPre, TSUM, 1096
+STAT, PageAlloc, MeminfoPost, TSUM, 1096
+STAT, orderedCountAlgo, Iterations, TSUM, 8388608
+STAT, orderedCountAlgo, Time, TMAX, 519
+STAT, (NULL), Time, TMAX, 519
+STAT, (NULL), GraphReadingTime, TMAX, 94
+PARAM, (NULL), CommandLine, SINGLE, /systems/in-mem/Galois/build/lonestar/triangles/triangles -t=28 -algo=orderedCount -noverify /datasets/galois/graph500_23.gr
+PARAM, (NULL), Threads, SINGLE, 28
+PARAM, (NULL), Hostname, SINGLE, fe32a45fa70f
+LoneStar Benchmark Suite v5.0.0 (unknown)
+Copyright (C) 2018 The University of Texas at Austin
+http://iss.ices.utexas.edu/galois/
+
+application: Triangles
+Counts the triangles in a graph
+
+Num Triangles: 131234687
+STAT_TYPE, REGION, CATEGORY, TOTAL_TYPE, TOTAL
+STAT, PageAlloc, MeminfoPre, TSUM, 1096
+STAT, PageAlloc, MeminfoPost, TSUM, 1096
+STAT, orderedCountAlgo, Iterations, TSUM, 8388608
+STAT, orderedCountAlgo, Time, TMAX, 521
+STAT, (NULL), Time, TMAX, 521
+STAT, (NULL), GraphReadingTime, TMAX, 95
+PARAM, (NULL), CommandLine, SINGLE, /systems/in-mem/Galois/build/lonestar/triangles/triangles -t=28 -algo=orderedCount -noverify /datasets/galois/graph500_23.gr
+PARAM, (NULL), Threads, SINGLE, 28
+PARAM, (NULL), Hostname, SINGLE, fe32a45fa70f
