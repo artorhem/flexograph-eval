@@ -39,4 +39,13 @@ WORKDIR /root
 RUN wget https://github.com/jemalloc/jemalloc/archive/refs/tags/5.3.0.tar.gz && \
     tar -xvf 5.3.0.tar.gz && cd jemalloc-5.3.0 && ./autogen.sh && ./configure && make -j && make install
 
+#Now clone MiniGraph and build
+RUN mkdir -p  /systems/ooc/MiniGraph
+WORKDIR /systems/ooc/MiniGraph
+RUN git clone https://github.com/artorhem/MiniGraph.git . && \
+    git submodule init && git submodule update && \
+    mkdir build && cd build && \
+    cmake .. && make -j
+
+COPY scripts/MiniGraph/run_minigraph.py /systems/ooc/MiniGraph/run_minigraph.py
 CMD sleep infinity

@@ -14,11 +14,11 @@ RUN pip3 install pandas
 RUN ln -s /usr/lib/x86_64-linux-gnu/libtcmalloc.so.4 /usr/lib/x86_64-linux-gnu/libtcmalloc.so
 
 # Build Blaze
-# RUN mkdir -p ${PROJECT_HOME}
-# WORKDIR ${PROJECT_HOME}
-# RUN mkdir build && \
-#     cd build && cmake -DCMAKE_BUILD_TYPE=${BLAZE_BUILD_TYPE} .. && make -j${NUM_CORES}
+RUN mkdir -p ${PROJECT_HOME}
+COPY systems/ooc/blaze ${PROJECT_HOME}/
+WORKDIR ${PROJECT_HOME}
+RUN mkdir -p build && \
+    cd build && cmake -DCMAKE_BUILD_TYPE=${BLAZE_BUILD_TYPE} .. && make -j${NUM_CORES}
 
-# RUN mkdir -p $DATASET_HOME
-
+#RUN mkdir -p $DATASET_HOME
 CMD sleep infinity

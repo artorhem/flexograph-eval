@@ -9,17 +9,6 @@ services:
       - datasets:/datasets
       - results:/results
       - extra_space:/extra_space
-  
-  minigraph:
-    privileged: true
-    build:
-      context: ./
-      dockerfile: ./containers/minigraph.Dockerfile
-    container_name: minigraph
-    volumes:
-      - datasets:/datasets
-      - results:/results
-        #- scratch:/scratch
 
   gemini:
     privileged: true
@@ -89,8 +78,6 @@ services:
       - margraphita:/margraphita
       - results:/results
 
-
-
 volumes:
   systems:
     driver: local
@@ -134,9 +121,3 @@ volumes:
       type: none
       o: bind
       device: ./db/
-        #scratch:
-        # driver: local
-        # driver_opts:
-        #type: none
-        #o: bind
-        #device: ./planar-scratch/

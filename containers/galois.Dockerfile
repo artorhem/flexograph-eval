@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y llvm-15 llvm-15-dev llvm-15-runtime
 ENV CC=/usr/bin/gcc
 ENV CXX=/usr/bin/g++
 #
-ADD scripts/galois.py /galois.py
+ADD scripts/galois/galois.py /galois.py
 
-CMD python3 /galois.py
-#CMD sleep infinity
+#CMD python3 /galois.py
+CMD sleep infinity

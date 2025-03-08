@@ -8,37 +8,69 @@ TOOLS_DIR = "/systems/in-mem/GeminiGraph/toolkits"
 DATASET_DIR = "/datasets"
 RESULTS_DIR = "/results/gemini"
 
-NUM_ITERATIONS = 25 # Number of iterations for PageRank
+REPEATS = 5
+PR_MAX_ITERS = 20
+def make_gemini_csv():
+    csv_file = f"{RESULTS_DIR}/gemini_runs.csv"
+    with open (csv_file, 'w') as f:
+        f.write(f"dataset_name, benchmark_name, runs, max_iterations, threads, sockets, convert_time, read_time(s), exec_time(s)\n")
 
-def parse_log(dataset_name, benchmark_name):
-  
+def parse_log_single(dataset_name, benchmark_name):
+  convert_log_file = f"{RESULTS_DIR}/{dataset_name}_gemini_convert.log"
   input_file = f"{RESULTS_DIR}/{dataset_name}_{benchmark_name}.log"
-  csv_file = f"{RESULTS_DIR}/{dataset_name}_{benchmark_name}.csv"
+  csv_file = f"{RESULTS_DIR}/gemini_runs.csv"
   regex_threads = r"^(\d+)\s(\d+)$"
   regex_exectime = r"exec_time=(\d+.\d+)\(s\)"
+  regex_readtime = r"read_time=(\d+.\d+)\(s\)"
+  regex_convert_time = r"^time=(\d+.\d+)"
 
   #extract the dataset name and benchmark name from the logfile name:
   threads =0
-  cores = 0
+  sockets = 0
+  read_time = 0
+  convert_time = 0
   times = []
   re.compile(regex_threads)
   re.compile(regex_exectime)
+
+  with open(convert_log_file, 'r') as f:
+    for line in f:
+      #regex_thread matches number of cores and number of sockets and returns 2 groups
+      match = re.match(regex_convert_time, line)
+      if match:
+        convert_time = int(match.group(1))
 
   with open(input_file, 'r') as f:
     for line in f:
       #regex_thread matches number of cores and number of sockets and returns 2 groups
       match = re.match(regex_threads, line)
       if match:
-        cores = int(match.group(1))
-        threads = int(match.group(2))
+        threads = int(match.group(1))
+        sockets = int(match.group(2))
       #regex_exectime matches the execution time and returns 1 group with the time. append to list
       match = re.match(regex_exectime, line)
       if match:
         times.append(float(match.group(1)))
+      #regex_readtime matches the read time and returns 1 group with the time.
+      match = re.match(regex_readtime, line)
+      if match:
+        read_time = float(match.group(1))
+
+  if(benchmark_name == "pagerank"):
+    max_iters = PR_MAX_ITERS
+  else:
+    max_iters = 1
+
   with open (csv_file, 'w') as f:
-    f.write(f"dataset_name, benchmark_name, cores, threads, time(s)\n")
-    for i in range(len(times)):
-      f.write(f"{dataset_name}, {benchmark_name}, {cores}, {threads}, {times[i]}\n")
+    f.write(f"dataset_name, benchmark_name, runs, max_iterations, threads, sockets, convert_time, read_time(s), exec_time(s)\n")
+    f.write(f"{dataset_name}, {benchmark_name}, {REPEATS}, {max_iters},{threads}, {sockets}, {convert_time}, {read_time}, {sum(times)/len(times)}\n")
+
+def parse_log(datasets, benchmarks):
+  make_gemini_csv()
+  for dataset_name in datasets:
+    for benchmark_name in benchmarks:
+      parse_log_single(dataset_name, benchmark_name)
+
 
 def main(self):
   os.chdir(SRC_DIR)
@@ -63,7 +95,7 @@ def main(self):
     
     cmd = f"{TOOLS_DIR}/convert {DATASET_DIR}/{dataset_name}/{dataset_name} >> {RESULTS_DIR}/{dataset_name}_gemini_convert.log"
     print(cmd)
-    os.system(cmd)
+    #os.system(cmd)
 
     #now find the max_vertex_id in the convert.log file
     max_vertex_id = 0
@@ -76,35 +108,46 @@ def main(self):
     
     #Now we can run each benchmark:
     print("PageRank...")
-    cmd = f"{TOOLS_DIR}/pagerank {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {NUM_ITERATIONS} >> {RESULTS_DIR}/{dataset_name}_pagerank.log"
+    #delete the previous log file
+    if os.path.exists(f"{RESULTS_DIR}/{dataset_name}_pagerank.log"):
+      os.remove(f"{RESULTS_DIR}/{dataset_name}_pagerank.log")
+    max_iters = 20
+    cmd = f"{TOOLS_DIR}/pagerank {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {max_iters} >> {RESULTS_DIR}/{dataset_name}_pagerank.log"
     print(cmd)
-    for iter in range(NUM_ITERATIONS):
-      os.system(cmd)
-      #pass
-    parse_log( dataset_name, "pagerank")
-      
+    for iter in range(REPEATS):
+      print(cmd)
+      #os.system(cmd)
 
     print("BFS...")
+    #delete the previous log file
+    if os.path.exists(f"{RESULTS_DIR}/{dataset_name}_bfs.log"):
+      os.remove(f"{RESULTS_DIR}/{dataset_name}_bfs.log")
     for start_node in start_nodes:
       cmd = f"{TOOLS_DIR}/bfs {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {start_node} >> {RESULTS_DIR}/{dataset_name}_bfs.log"
-      #print(cmd)
-      os.system(cmd)
-    parse_log( dataset_name, "bfs")
+      print(cmd)
+      #os.system(cmd)
+
 
     print("CC...")
+    #delete the previous log file
+    if os.path.exists(f"{RESULTS_DIR}/{dataset_name}_cc.log"):
+      os.remove(f"{RESULTS_DIR}/{dataset_name}_cc.log")
     cmd = f"{TOOLS_DIR}/cc {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} >> {RESULTS_DIR}/{dataset_name}_cc.log"
     print(cmd)
-    for iter in range(NUM_ITERATIONS):
-      os.system(cmd)
-      #pass
-    parse_log( dataset_name, "cc")
+    for iter in range(REPEATS):
+      print(cmd)
+      # os.system(cmd)
 
     print("SSSP...")
+    #delete the previous log file
+    if os.path.exists(f"{RESULTS_DIR}/{dataset_name}_sssp.log"):
+      os.remove(f"{RESULTS_DIR}/{dataset_name}_sssp.log")
     for start_node in start_nodes:
       cmd = f"{TOOLS_DIR}/sssp {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {start_node} >> {RESULTS_DIR}/{dataset_name}_sssp.log"
-      #print(cmd)
-      os.system(cmd)
-    parse_log(dataset_name, "sssp")
+      print(cmd)
+      # os.system(cmd)
+
+  # parse_log( datasets, ["pagerank", "bfs", "cc", "sssp"])
 
 if __name__ == "__main__":
   main(sys.argv)
