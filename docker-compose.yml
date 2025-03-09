@@ -52,8 +52,9 @@ services:
       dockerfile: ./containers/blaze.Dockerfile
     container_name: blaze
     volumes:
-      - datasets:/mnt/nvme
+      - datasets:/datasets
       - results:/results
+      - extra_space:/extra_space
   
   flexograph:
     privileged: true
