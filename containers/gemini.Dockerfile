@@ -12,7 +12,7 @@ RUN apt-get install --reinstall -y  ca-certificates
 ENV CC=/usr/bin/gcc
 ENV CXX=/usr/bin/g++
 
-ADD scripts/gemini.py /gemini.py
-ADD datasets.json /data.json
-RUN chmod +x /gemini.py
-CMD sleep infinity
+ADD scripts/gemini/gemini.py /gemini.py
+WORKDIR /
+CMD python3 /gemini.py --parse
+#CMD sleep infinity
