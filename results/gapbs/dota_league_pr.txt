@@ -1,9 +1,0 @@
-Read Time:           0.01378
-Build Time:          0.06482
-Graph has 3 nodes and 1 undirected edges for degree: 0
-Trial Time:          0.00024
-Trial Time:          0.00024
-Trial Time:          0.00024
-Trial Time:          0.00024
-Trial Time:          0.00023
-Average Time:        0.00024

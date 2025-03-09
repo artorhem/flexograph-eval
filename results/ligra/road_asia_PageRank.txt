@@ -1,6 +1,0 @@
-Time to convert road_asia to adj: 4.11 seconds
-Running time : 1.72
-Running time : 1.7
-Running time : 1.86
-Running time : 1.68
-Running time : 1.68

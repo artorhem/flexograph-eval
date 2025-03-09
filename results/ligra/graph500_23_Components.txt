@@ -1,6 +1,0 @@
-Time to convert graph500_23 to adj: 22.30 seconds
-Running time : 0.265
-Running time : 0.261
-Running time : 0.288
-Running time : 0.266
-Running time : 0.262

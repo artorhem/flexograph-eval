@@ -1,9 +1,0 @@
-Read Time:           2.96141
-Build Time:          0.10372
-Graph has 23947348 nodes and 28854312 undirected edges for degree: 1
-Trial Time:          0.29788
-Trial Time:          0.31774
-Trial Time:          0.31904
-Trial Time:          0.31840
-Trial Time:          0.31818
-Average Time:        0.31425

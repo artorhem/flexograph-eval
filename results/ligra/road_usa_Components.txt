@@ -1,6 +1,0 @@
-Time to convert road_usa to adj: 8.91 seconds
-Running time : 0.0682
-Running time : 0.0568
-Running time : 0.0559
-Running time : 0.0558
-Running time : 0.0582
