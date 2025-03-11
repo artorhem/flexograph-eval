@@ -7,7 +7,7 @@ ARG NUM_CORES=8
 
 RUN apt update
 RUN apt install -y build-essential cmake git libboost-dev \
-    sysstat psmisc vim python3-pip python3 google-perftools
+    sysstat psmisc vim python3-pip python3 google-perftools time
 
 RUN pip3 install pandas
 
@@ -20,5 +20,6 @@ WORKDIR ${PROJECT_HOME}
 RUN mkdir -p build && \
     cd build && cmake -DCMAKE_BUILD_TYPE=${BLAZE_BUILD_TYPE} .. && make -j${NUM_CORES}
 
-#RUN mkdir -p $DATASET_HOME
+ADD scripts/blaze/blaze.py /blaze.py
+WORKDIR /
 CMD sleep infinity
