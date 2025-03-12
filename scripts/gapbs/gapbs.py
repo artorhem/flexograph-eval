@@ -1,31 +1,89 @@
 import subprocess
-import shutil
+import re
 import os
 
 datasets = ["graph500_23", "graph500_26", "graph500_28", "graph500_30", "dota_league", "livejournal", "orkut", "road_asia", "road_usa"]
 directed = ["livejournal"]
-benchmarks = ["bfs", "cc", "pr", "sssp"]
+benchmarks = ["cc", "pr", "sssp", "bfs"]
 dataset_dir = "/datasets"
 tempdir = "/extra_space"
-
-for dataset in datasets:
-    src = f"/datasets/{dataset}/{dataset}"
-    if not os.path.exists(src):
-        print(f"Dataset {dataset} does not exist")
-        continue
-    dst = f"{tempdir}/{dataset}.el"
-    print(f"Copying {src} to {dst}")
-    os.system(f"cp {src} {dst}")
-    
-    for benchmark in benchmarks:
-        print(f"Running {benchmark} on {dataset}")
-        result_file = f"/results/gapbs/{dataset}_{benchmark}.txt"
-        if dataset not in directed:
-            with open(result_file, "w") as f:
-                print(f"./{benchmark} -f {dst} -n 5 -l -s")
-                subprocess.run([f"./{benchmark}", "-f", f"{dst}", "-n", "5", "-s"], stdout=f, stderr=subprocess.STDOUT)
+num_threads =1
+def parse_log(buffer):
+    '''
+    Returns the average preprocessing time (average read time + average build time),
+    average trial time, and memory usage from the log file
+    '''
+    buffer = buffer.decode("ASCII")
+    regex = r"^(Read|Build|Trial)\sTime:\s+(\d+\.\d+)"
+    regex_mem = r"MemoryCounter:\s+\d+\s+MB\s->\s+\d+\s+MB,\s+(\d+)\s+MB\s+total"
+    matches_time = re.finditer(regex, buffer, re.MULTILINE)
+    matches_mem = re.finditer(regex_mem, buffer, re.MULTILINE)
+    # Print the matches
+    read_time = []
+    build_time = []
+    trial_times = []
+    mem = []
+    for match in matches_time:
+        #we want to print the sum of times if the first element of the tuple is 'Read' or 'Build'
+        if match.group(1) == 'Read':
+            read_time.append(float(match.group(2)))
+        elif match.group(1) == 'Build':
+            build_time.append(float(match.group(2)))
         else:
+            trial_times.append(float(match.group(2)))
+    for matches in matches_mem:
+        mem.append(int(matches.group(1)))
+
+    read_avg = sum(read_time) / len(read_time)
+    build_avg = sum(build_time) / len(build_time)
+    trial_avg = sum(trial_times) / len(trial_times)
+    mem_avg = sum(mem) / len(mem)
+    pp_time = read_avg + build_avg
+    return pp_time, trial_avg, mem_avg
+
+def main():
+    num_threads = os.cpu_count()
+    for dataset in datasets:
+        src = f"/datasets/{dataset}/{dataset}"
+        if not os.path.exists(src):
+            print(f"Dataset {dataset} does not exist")
+            continue
+        dst = f"{tempdir}/{dataset}.el"
+        print(f"Copying {src} to {dst}")
+        os.system(f"cp {src} {dst}")
+
+        bfsver_path = f"{src}.bfsver"
+        if not os.path.exists(bfsver_path):
+            print("BFS vertex start file does not exist. SKIPPING BFS")
+
+
+        for benchmark in benchmarks[:-1]: #all benchmarks except bfs
+            print(f"Running {benchmark} on {dataset}")
+            result_file = f"/results/gapbs/{dataset}_{benchmark}.txt"
             with open(result_file, "w") as f:
-                subprocess.run([f"./{benchmark}", "-f", f"{dst}", "-n", "5"], stdout=f, stderr=subprocess.STDOUT)
-    
-    os.remove(dst)
+                f.write("pp_time(s),algo_time(s),mem(MB),num_threads\n")
+                process = 0
+                if dataset not in directed:
+                    process = subprocess.run([f"./{benchmark}", "-f", f"{dst}", "-n", "5", "-s"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                else:
+                    process = subprocess.run([f"./{benchmark}", "-f", f"{dst}", "-n", "5"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                pp_time, algo_time, mem = parse_log(process.stdout)
+                f.write(f"{pp_time},{algo_time},{mem},{num_threads}")
+        #run bfs
+        print(f"Running BFS on {dataset}")
+        result_file = f"/results/gapbs/{dataset}_bfs.txt"
+        with open(bfsver_path, "r") as f:
+            random_starts = f.read().splitlines()
+            print(random_starts)
+
+        with open(result_file, "w") as f, open ("/results/gapbs/{dataset}_bfs.log", "w") as flout:
+            f.write("pp_time(s),algo_time(s),mem(MB),num_threads\n")
+            for start_vertex in random_starts[0:3]:
+                process = subprocess.run([f"./bfs", "-f", f"{dst}", "-n", "5", "-s", "-r", f"{start_vertex}"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                flout.write(process.stdout.decode("ASCII"))
+                pp_time, algo_time, mem = parse_log(process.stdout)
+                f.write(f"{pp_time},{algo_time},{mem},{num_threads}\n")
+        os.remove(dst)
+
+if __name__ == "__main__":
+    main()

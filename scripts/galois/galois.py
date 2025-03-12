@@ -20,6 +20,7 @@ def parse_log(buffer, algo):
     regex_mem = re.compile(r"MemoryCounter:\s+\d+\s+MB\s->\s+\d+\s+MB,\s+(\d+)\s+MB\s+total")
     algo_time =0
     read_time =0
+    mem = 0
     for line in buffer.splitlines():
         if "ReadGraph" in line:
             read_time = regex_read.search(line).group(1)
