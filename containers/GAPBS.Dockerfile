@@ -17,7 +17,7 @@ ENV CXX=/usr/bin/g++
 # Copy the source code
 COPY systems/in-mem/gapbs /gapbs
 WORKDIR /gapbs
-RUN cd /gapbs && make -j
+RUN cd /gapbs && make clean && make -j
 
 COPY scripts/gapbs/gapbs.py /gapbs
 
