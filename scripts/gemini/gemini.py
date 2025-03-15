@@ -11,19 +11,15 @@ RESULTS_DIR = "/results/gemini"
 
 REPEATS = 5
 PR_MAX_ITERS = 20
-def make_gemini_csv():
-  csv_file = f"{RESULTS_DIR}/gemini_runs.csv"
-  with open (csv_file, 'w') as f:
-    f.write(f"dataset_name, benchmark_name, runs, max_iterations, threads, sockets, convert_time, read_time(s), exec_time(s)\n")
 
 def parse_log_single(dataset_name, benchmark_name):
   convert_log_file = f"{RESULTS_DIR}/{dataset_name}_gemini_convert.log"
   input_file = f"{RESULTS_DIR}/{dataset_name}_{benchmark_name}.log"
-  csv_file = f"{RESULTS_DIR}/gemini_runs.csv"
   regex_threads = r"^(\d+)\s(\d+)$"
   regex_exectime = r"exec_time=(\d+.\d+)\(s\)"
   regex_readtime = r"read_time=(\d+.\d+)\(s\)"
   regex_convert_time = r"^time=(\d+.\d+)"
+  regex_mem = r"MemoryCounter:\s+\d+\s+MB\s->\s+\d+\s+MB,\s+(\d+)\s+MB\s+total"
 
   #extract the dataset name and benchmark name from the logfile name:
   threads =0
@@ -31,6 +27,7 @@ def parse_log_single(dataset_name, benchmark_name):
   read_time = []
   convert_time = 0
   times = []
+  mem = 0
   re.compile(regex_threads)
   re.compile(regex_exectime)
 
@@ -56,22 +53,26 @@ def parse_log_single(dataset_name, benchmark_name):
       match = re.match(regex_readtime, line)
       if match:
         read_time.append(float(match.group(1)))
-
-  if(benchmark_name == "pagerank"):
-    max_iters = PR_MAX_ITERS
-  else:
-    max_iters = 1
-
-  with open (csv_file, 'w') as f:
-    f.write(f"dataset_name, benchmark_name, runs, max_iterations, threads, sockets, convert_time, read_time(s), exec_time(s)\n")
-    f.write(f"{dataset_name}, {benchmark_name}, {REPEATS}, {max_iters},{threads}, {sockets}, {convert_time}, {sum(read_time)/len(read_time)}, {sum(times)/len(times)}\n")
+      match = re.match(regex_mem, line)
+      if match:
+        mem = int(match.group(1))
+  return threads, sockets, convert_time, read_time, times, mem
 
 def parse_log(datasets, benchmarks):
-  make_gemini_csv()
-  for dataset_name in datasets:
-    for benchmark_name in benchmarks:
-      parse_log_single(dataset_name, benchmark_name)
-
+  csv_file = f"{RESULTS_DIR}/gemini_runs.csv"
+  with open (csv_file, 'w') as fmain:
+    fmain.write(f"dataset_name, benchmark_name, runs, max_iterations, threads, sockets, convert_time, read_time(s), exec_time(s), mem_used(MB)\n")
+    for dataset_name in datasets:
+      for benchmark_name in benchmarks:
+        with open (f"{RESULTS_DIR}/{dataset_name}_{benchmark_name}.csv", 'w') as frun:
+          frun.write("convert_time(s),read_time(s),algo_time(s),mem(MB),num_threads\n")
+          if(benchmark_name == "pagerank"):
+            max_iters = PR_MAX_ITERS
+          else:
+            max_iters = 1
+          threads, sockets, convert_time, read_time, times, mem = parse_log_single(dataset_name, benchmark_name)
+          fmain.write(f"{dataset_name}, {benchmark_name}, {REPEATS}, {max_iters},{threads}, {sockets}, {convert_time}, {round(sum(read_time)/len(read_time),4)}, {round(sum(times)/len(times),4)}\n")
+          frun.write(f"{convert_time}, {round(sum(read_time)/len(read_time),4)}, {round(sum(times)/len(times),4)}, {mem}, {threads}\n")
 
 def main(self):
   parser = argparse.ArgumentParser(description="run gemini benchmarks")
@@ -157,7 +158,7 @@ def main(self):
         os.system(cmd)
 
   if args.parse:
-    parse_log( ["graph500_23"], ["pagerank"])#, "bfs", "cc", "sssp"])
+    parse_log( datasets, ["pagerank", "bfs", "cc", "sssp"])
 
 if __name__ == "__main__":
   main(sys.argv)
