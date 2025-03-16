@@ -13,7 +13,6 @@ def parse_log(buffer):
     Returns the average preprocessing time (average read time + average build time),
     average trial time, and memory usage from the log file
     '''
-    print(buffer)
     regex = r"^(Read|Build|Trial)\sTime:\s+(\d+\.\d+)"
     regex_mem = r"MemoryCounter:\s+\d+\s+MB\s->\s+\d+\s+MB,\s+(\d+)\s+MB\s+total"
     matches_time = re.finditer(regex, buffer, re.MULTILINE)
