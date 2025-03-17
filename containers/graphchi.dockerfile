@@ -2,8 +2,6 @@ FROM ubuntu:22.04
 
 ARG PROJECT_HOME=/systems/ooc/graphchi
 ARG DATASET_HOME=/datasets
-ARG BLAZE_BUILD_TYPE=Release
-ARG NUM_CORES=8
 
 RUN apt-get update && apt-get install ca-certificates -y
 RUN apt-get --no-install-recommends -y install build-essential cmake git libboost-all-dev \
