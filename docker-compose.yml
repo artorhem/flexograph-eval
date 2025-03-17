@@ -68,6 +68,17 @@ services:
       - results:/results
       - extra_space:/extra_space
   
+  xstream:
+    privileged: true
+    build:
+      context: ./
+      dockerfile: ./containers/xstream.dockerfile
+    container_name: xstream
+    volumes:
+      - datasets:/datasets
+      - results:/results
+      - extra_space:/extra_space
+
   flexograph:
     privileged: true
     build:
