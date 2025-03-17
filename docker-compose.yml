@@ -55,6 +55,18 @@ services:
       - datasets:/datasets
       - results:/results
       - extra_space:/extra_space
+
+  graphchi:
+    privileged: true
+    build:
+      context: ./
+      dockerfile: ./containers/graphchi.dockerfile
+    container_name: graphchi
+    volumes:
+      - datasets:/datasets
+      - systems:/systems
+      - results:/results
+      - extra_space:/extra_space
   
   flexograph:
     privileged: true
