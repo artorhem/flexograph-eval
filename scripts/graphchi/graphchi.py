@@ -16,7 +16,7 @@ cachesize_mb = 100000
 
 datasets = [
   "graph500_23"]  # ,"road_asia", "road_usa", "livejournal", "orkut", "dota_league", "graph500_26", "graph500_28", "graph500_30"]
-benchmarks = ["pagerank_functional", "connectedcomponents", "trianglecounting"]
+benchmarks = ["trianglecounting"] #["pagerank_functional", "connectedcomponents", "trianglecounting"]
 
 def parse_log(filename):
   regexes = {
@@ -52,7 +52,7 @@ def copy_dataset(dataset):
     os.system(f"cp {dataset_dir}/{dataset}/{dataset} {dataset_cpy}/{dataset}")
 
 def cleanup(dataset):
-  os.system(f"rm -rf {dataset_cpy}/{dataset}")
+  os.system(f"rm -rf {dataset_cpy}/*")
 
 def make_pagerank_functional_cmd(dataset, benchmark):
   cmd = [f"{app_dir}/{benchmark}", "mode", "semisync", "filetype", "edgelist", "niters", f"{pr_iters}", "file",
@@ -65,8 +65,8 @@ def make_connectedcomponents_cmd(dataset, benchmark):
   return cmd
 
 def make_trianglecounting_cmd(dataset, benchmark):
-  cmd = [f"{app_dir}/{benchmark}", "filetype", "edgelist", "file", f"{dataset_cpy}/{dataset}, cachesize_mb",
-         f"{cachesize_mb}", "membudget_mb", f"{membudget_mb}"]
+  cmd = [f"{app_dir}/{benchmark}", "filetype", "edgelist", "file", f"{dataset_cpy}/{dataset}", "cachesize_mb",
+         f"{cachesize_mb}", "membudget_mb", f"{membudget_mb}", "--nshards=2"]
   return cmd
 
 def exec_benchmarks():
@@ -74,7 +74,7 @@ def exec_benchmarks():
     os.system("mkdir -p %s" % dataset_cpy)
     # Now copy the dataset to the graphchi directory
     copy_dataset(dataset)
-    for benchmark in benchmarks[:1]:
+    for benchmark in benchmarks:
       print("Running benchmark: ", benchmark, " on dataset: ", dataset)
       # Run the benchmark
       # start timer here
@@ -134,23 +134,23 @@ def main():
 
   #now we can parse the logs
   for dataset in datasets:
-    for benchmark in benchmarks[:1]:
+    for benchmark in benchmarks:
       extracted_data = parse_log(f"{results_dir}/{dataset}_{benchmark}.out")
       print(f"Dataset: {dataset}, Benchmark: {benchmark}")
       with open (f"{results_dir}/{dataset}_{benchmark}.csv", "w") as f:
-       f.write("preprocessing_total, num_shards, runtime_avg, cache_mb, membudget_mb, niters, runtime_mem_total_mb, preprocessing_mem_mb\n")
-       for key, values in extracted_data.items():
-         print(key, values)
-       mems = extracted_data['memory_total']
-       mems.sort()
-       f.write(f"{float(extracted_data['preprocessing'][0])}, "
-               f"{int(extracted_data['nshards'][0])}, "
-               f"{sum(extracted_data['runtime'])/len(extracted_data['runtime'])}, "
-               f"{int(extracted_data['cachesize_mb'][0])}, "
-               f"{int(extracted_data['membudget_mb'][0])}, "
-               f"{int(pr_iters)}, "
-               f"{sum(mems[:-1])/len(mems[:-1])}, "
-               f"{int(mems[-1])}\n")
+        f.write("preprocessing_total, num_shards, runtime_avg, cache_mb, membudget_mb, niters, runtime_mem_total_mb, preprocessing_mem_mb\n")
+        for key, values in extracted_data.items():
+          print(key, values)
+        mems = extracted_data['memory_total']
+        mems.sort()
+        f.write(f"{float(extracted_data['preprocessing'][0])}, "
+                f"{int(extracted_data['nshards'][0])}, "
+                f"{sum(extracted_data['runtime'])/len(extracted_data['runtime'])}, "
+                f"{int(extracted_data['cachesize_mb'][0])}, "
+                f"{int(extracted_data['membudget_mb'][0])}, "
+                f"{int(pr_iters)}, "
+                f"{sum(mems[:-1])/len(mems[:-1])}, "
+                f"{int(mems[-1])}\n")
       print("Parsed log file: ", dataset, benchmark)
 if __name__ == "__main__":
   main()
