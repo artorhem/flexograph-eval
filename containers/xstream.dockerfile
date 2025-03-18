@@ -12,7 +12,13 @@ RUN apt-get --no-install-recommends -y install build-essential cmake git libboos
 COPY systems/ooc/x-stream /xstream
 WORKDIR /xstream
 ENV LD_RUN_PATH="$LD_RUN_PATH:/usr/lib/x86_64-linux-gnu/"
+RUN make clean && make -j && make install
+
+# Clone LLAMA
+WORKDIR /
+RUN git clone https://github.com/artorhem/llama.git /llama && \
+    cd llama && git checkout puneet_local && \
+    make -j
 
 ADD scripts/xstream/xstream.py /xstream.py
-WORKDIR /
 CMD sleep infinity
