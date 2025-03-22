@@ -52,10 +52,26 @@ def parse_log(buffer):
     build_avg = sum(build_time) / len(build_time)
     trial_avg = round(sum(trial_times) / len(trial_times),4)
     mem_avg = round(sum(mem) / len(mem))
-    major_faults_avg = sum(major_faults) / len(major_faults)
-    minor_faults_avg = sum(minor_faults) / len(minor_faults)
-    block_in_avg = sum(block_in) / len(block_in)
-    block_out_avg = sum(block_out) / len(block_out)
+
+    if len(major_faults) == 0:
+        major_faults_avg = 0
+    else:
+        major_faults_avg = sum(major_faults) / len(major_faults)
+    if len(minor_faults) == 0:
+        minor_faults_avg = 0
+    else:
+        minor_faults_avg = sum(minor_faults) / len(minor_faults)
+
+    if len(block_in) == 0:
+        block_in_avg = 0
+    else:
+        block_in_avg = sum(block_in) / len(block_in)
+
+    if len(block_out) == 0:
+        block_out_avg = 0
+    else:
+        block_out_avg = sum(block_out) / len(block_out)
+
     pp_time = round(read_avg + build_avg, 4)
     return pp_time, trial_avg, mem_avg, major_faults_avg, minor_faults_avg, block_in_avg, block_out_avg
 
