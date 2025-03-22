@@ -20,14 +20,20 @@ def parse_log_single(dataset_name, benchmark_name):
   regex_readtime = r"read_time=(\d+.\d+)\(s\)"
   regex_convert_time = r"^time=(\d+.\d+)"
   regex_mem = r"MemoryCounter:\s+\d+\s+MB\s->\s+\d+\s+MB,\s+(\d+)\s+MB\s+total"
+  regex_faults = r"FaultCounter:\s+(\d+)\s+major\s+faults,\s+(\d+)\s+minor\s+faults"
+  regex_blockIO = r"BIOCounter:\s+(\d+)\s+block\s+input operations,\s+(\d+)\s+block\s+output\s+operations"
 
-  #extract the dataset name and benchmark name from the logfile name:
+#extract the dataset name and benchmark name from the logfile name:
   threads =0
   sockets = 0
   read_time = []
   convert_time = 0
   times = []
   mem = 0
+  maj_faults = []
+  min_faults = []
+  blkio_in = []
+  blkio_out = []
   re.compile(regex_threads)
   re.compile(regex_exectime)
 
@@ -53,26 +59,47 @@ def parse_log_single(dataset_name, benchmark_name):
       match = re.match(regex_readtime, line)
       if match:
         read_time.append(float(match.group(1)))
+
       match = re.match(regex_mem, line)
       if match:
         mem = int(match.group(1))
-  return threads, sockets, convert_time, read_time, times, mem
+
+      match = re.match(regex_faults, line)
+      if match:
+        maj_faults.append(int(match.group(1)))
+        min_faults.append(int(match.group(2)))
+
+      match = re.match(regex_blockIO, line)
+      if match:
+        blkio_in.append(int(match.group(1)))
+        blkio_out.append(int(match.group(2)))
+  return threads, sockets, convert_time, read_time, times, mem, maj_faults, min_faults, blkio_in, blkio_out
 
 def parse_log(datasets, benchmarks):
   csv_file = f"{RESULTS_DIR}/gemini_runs.csv"
-  with open (csv_file, 'w') as fmain:
+  with (open (csv_file, 'w') as fmain):
     fmain.write(f"dataset_name, benchmark_name, runs, max_iterations, threads, sockets, convert_time, read_time(s), exec_time(s), mem_used(MB)\n")
     for dataset_name in datasets:
       for benchmark_name in benchmarks:
         with open (f"{RESULTS_DIR}/{dataset_name}_{benchmark_name}.csv", 'w') as frun:
-          frun.write("convert_time(s),read_time(s),algo_time(s),mem(MB),num_threads\n")
+          frun.write("convert_time(s),read_time(s),algo_time(s),mem(MB),num_threads, maj_flt, min_flt, blk_in, blk_out\n")
           if(benchmark_name == "pagerank"):
             max_iters = PR_MAX_ITERS
           else:
             max_iters = 1
-          threads, sockets, convert_time, read_time, times, mem = parse_log_single(dataset_name, benchmark_name)
-          fmain.write(f"{dataset_name}, {benchmark_name}, {REPEATS}, {max_iters},{threads}, {sockets}, {convert_time}, {round(sum(read_time)/len(read_time),4)}, {round(sum(times)/len(times),4)}\n")
-          frun.write(f"{convert_time}, {round(sum(read_time)/len(read_time),4)}, {round(sum(times)/len(times),4)}, {mem}, {threads}\n")
+          threads, sockets, convert_time, read_time, times, mem, maj_faults, min_faults, blkio_in, blkio_out = parse_log_single(dataset_name, benchmark_name)
+          fmain.write(f"{dataset_name}, {benchmark_name}, {REPEATS}, {max_iters},{threads}, {sockets}, {convert_time}, "
+                      f"{round(sum(read_time)/len(read_time),4)}, {round(sum(times)/len(times),4)}, {mem}\n")
+          frun.write(f"{convert_time}, "
+                     f"{round(sum(read_time)/len(read_time),4)}, "
+                     f"{round(sum(times)/len(times),4)}, "
+                     f"{mem}, "
+                     f"{threads}, "
+                     f"{int(sum(maj_faults)/len(maj_faults))}, "
+                     f"{int(sum(min_faults)/len(min_faults))}, "
+                     f"{int(sum(blkio_in)/len(blkio_in))}, "
+                     f"{int(sum(blkio_out)/len(blkio_out))}\n")
+
 
 def main(self):
   parser = argparse.ArgumentParser(description="run gemini benchmarks")

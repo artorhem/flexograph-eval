@@ -27,7 +27,9 @@ def parse_log(filename):
     "cachesize_mb": re.compile(r'cachesize_mb:\s+(\d+)'),
     "membudget_mb": re.compile(r'membudget_mb:\s+(\d+)'),
     "niters": re.compile(r'niters:\s+(\d+)'),
-    "memory_total": re.compile(r"MemoryCounter:\s+\d+\s+MB\s->\s+\d+\s+MB,\s+(\d+)\s+MB\s+total")
+    "memory_total": re.compile(r"MemoryCounter:\s+\d+\s+MB\s->\s+\d+\s+MB,\s+(\d+)\s+MB\s+total"),
+    "regex_faults": re.compile(r"FaultCounter:\s+(\d+)\s+major\s+faults,\s+(\d+)\s+minor\s+faults"),
+    "regex_blockIO": re.compile(r"BIOCounter:\s+(\d+)\s+block\s+input operations,\s+(\d+)\s+block\s+output\s+operations")
   }
   # Dictionary to store extracted values
   extracted_data = {key: [] for key in regexes}
@@ -37,9 +39,15 @@ def parse_log(filename):
     for line in file:
       for key, pattern in regexes.items():
         match = pattern.search(line)
-        if match:
-          extracted_data[key].append(float(match.group(1)))  # Capture first group
-
+        if match :
+          if key == "regex_faults":
+            extracted_data['maj_flt'].append(int(match.group(1)))
+            extracted_data['min_flt'].append(int(match.group(2)))
+          elif key == "regex_blockIO":
+            extracted_data['blk_in'].append(int(match.group(1)))
+            extracted_data['blk_out'].append(int(match.group(2)))
+          else:
+            extracted_data[key].append(float(match.group(1)))  # Capture first group
   #remove the duplicate elements in the values of the dictionary
   for key, values in extracted_data.items():
     extracted_data[key] = list(set(values))
@@ -138,7 +146,7 @@ def main():
       extracted_data = parse_log(f"{results_dir}/{dataset}_{benchmark}.out")
       print(f"Dataset: {dataset}, Benchmark: {benchmark}")
       with open (f"{results_dir}/{dataset}_{benchmark}.csv", "w") as f:
-        f.write("preprocessing_total, num_shards, runtime_avg, cache_mb, membudget_mb, niters, runtime_mem_total_mb, preprocessing_mem_mb\n")
+        f.write("preprocessing_total, num_shards, runtime_avg, cache_mb, membudget_mb, niters, runtime_mem_total_mb, preprocessing_mem_mb, maj_flt, min_flt, blk_in, blk_out\n")
         for key, values in extracted_data.items():
           print(key, values)
         mems = extracted_data['memory_total']
@@ -150,7 +158,11 @@ def main():
                 f"{int(extracted_data['membudget_mb'][0])}, "
                 f"{int(pr_iters)}, "
                 f"{sum(mems[:-1])/len(mems[:-1])}, "
-                f"{int(mems[-1])}\n")
+                f"{int(mems[-1])},"
+                f"{int(sum(extracted_data['maj_flt'])/len(extracted_data['maj_flt']))},"
+                f"{int(sum(extracted_data['min_flt'])/len(extracted_data['min_flt']))},"
+                f"{int(sum(extracted_data['blk_in'])/len(extracted_data['blk_in']))},"
+                f"{int(sum(extracted_data['blk_out'])/len(extracted_data['blk_out']))}\n")
       print("Parsed log file: ", dataset, benchmark)
 if __name__ == "__main__":
   main()

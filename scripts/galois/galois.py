@@ -18,9 +18,15 @@ def parse_log(buffer, algo):
     regex_algo = re.compile(fr"STAT, {algo}_MAIN, Time, TMAX, (\d+)")
     regex_read = re.compile(r"STAT, ReadGraph, Time, TMAX, (\d+)")
     regex_mem = re.compile(r"MemoryCounter:\s+\d+\s+MB\s->\s+\d+\s+MB,\s+(\d+)\s+MB\s+total")
+    regex_faults = re.compile(r"FaultCounter:\s+(\d+)\s+major\s+faults,\s+(\d+)\s+minor\s+faults")
+    regex_blockIO = re.compile(r"BIOCounter:\s+(\d+)\s+block\s+input operations,\s+(\d+)\s+block\s+output\s+operations")
     algo_time =0
     read_time =0
     mem = 0
+    major_faults = 0
+    minor_faults = 0
+    block_input = 0
+    block_output = 0
     for line in buffer.splitlines():
         if "ReadGraph" in line:
             read_time = regex_read.search(line).group(1)
@@ -28,8 +34,14 @@ def parse_log(buffer, algo):
             algo_time = regex_algo.search(line).group(1)
         elif "MemoryCounter" in line:
             mem = regex_mem.search(line).group(1)
+        elif "FaultCounter" in line:
+            major_faults = regex_faults.search(line).group(1)
+            minor_faults = regex_faults.search(line).group(2)
+        elif "BIOCounter" in line:
+            block_input = regex_blockIO.search(line).group(1)
+            block_output = regex_blockIO.search(line).group(2)
 
-    return read_time, algo_time, mem
+    return read_time, algo_time, mem, major_faults, minor_faults, block_input, block_output
 
 def do_bfs(gr_path, output_path, random_starts, num_threads):
     dataset = gr_path
@@ -37,7 +49,7 @@ def do_bfs(gr_path, output_path, random_starts, num_threads):
     outfile_stats = f"{output_path}_synctile_parallel_stats.log"
     # Run serial BFS
     with open (outfile, "w") as f:
-        f.write("read_time(ms),algo_time(ms),start_node,mem_used(MB),num_threads\n")
+        f.write("read_time(ms), algo_time(ms), start_node, mem_used(MB), num_threads, major_faults, minor_faults, block_input, block_output\n")
     for start_node in random_starts:
         command = [f"{BUILD_DIR}/lonestar/bfs/bfs", "-algo=SyncTile", "-exec=PARALLEL", f"-t={num_threads}", f"-startNode={start_node}", "-noverify", f"{dataset}"]
         with open(outfile_stats, "a") as fout, open(outfile, "a") as f:
@@ -45,8 +57,8 @@ def do_bfs(gr_path, output_path, random_starts, num_threads):
             for i in range(ITERATIONS):
                 process = subprocess.run(command, stdout=subprocess.PIPE, text=True)
                 fout.write(f"{process.stdout}\n----------------\n")
-                read_time, algo_time, mem = parse_log(process.stdout, "BFS")
-                f.write(f"{read_time},{algo_time},{start_node},{mem},{num_threads}\n")
+                read_time, algo_time, mem, maj_flt, min_flt, blck_in, blck_out = parse_log(process.stdout, "BFS")
+                f.write(f"{read_time},{algo_time},{start_node},{mem},{num_threads},{maj_flt},{min_flt},{blck_in},{blck_out}\n")
 
 
 def do_pagerank(gr_path, output_path, num_threads):
@@ -56,15 +68,15 @@ def do_pagerank(gr_path, output_path, num_threads):
     outfile_stats = f"{output_path}_residual_stats.log"
     # Run PageRank
     with open (outfile, "w") as f:
-        f.write("read_time(ms),algo_time(ms),mem_used(MB),num_threads\n")
+        f.write("read_time(ms), algo_time(ms), mem_used(MB), num_threads, major_faults, minor_faults, block_input, block_output\n")
     command = [f"{BUILD_DIR}/lonestar/pagerank/pagerank-pull", f"-t={num_threads}", "-tolerance=0.0001", "-algo=Residual", "-noverify", f"{dataset}"]
     with open(outfile_stats, "a") as fout, open(outfile, "a") as f:
         print(command)
         for i in range(ITERATIONS):
             process = subprocess.run(command, stdout=subprocess.PIPE, text=True)
             fout.write(f"{process.stdout}\n----------------\n")
-            read_time, algo_time, mem = parse_log(process.stdout, "PAGERANK")
-            f.write(f"{read_time},{algo_time},{mem},{num_threads}\n")
+            read_time, algo_time, mem, maj_flt, min_flt, blck_in, blck_out= parse_log(process.stdout, "PAGERANK")
+            f.write(f"{read_time},{algo_time},{mem},{num_threads}, {maj_flt}, {min_flt}, {blck_in}, {blck_out}\n")
 
 def do_connectedcomponents(gr_path, output_path, num_threads):
     dataset = gr_path
@@ -72,15 +84,15 @@ def do_connectedcomponents(gr_path, output_path, num_threads):
     outfile_stats = f"{output_path}_labelprop_stats.log"
     # Run Connected Components
     with open (outfile, "w") as f:
-        f.write("read_time(ms),algo_time(ms),mem_used(MB),num_threads\n")
+        f.write("read_time(ms), algo_time(ms), mem_used(MB), num_threads, major_faults, minor_faults, block_input, block_output\n")
     command = [f"{BUILD_DIR}/lonestar/connectedcomponents/connectedcomponents", f"-t={num_threads}", "-algo=LabelProp", "-noverify", f"{dataset}"]
     with open(outfile_stats, "a") as fout, open(outfile, "a") as f:
         print(command)
         for i in range(ITERATIONS):
             process = subprocess.run(command, stdout=subprocess.PIPE, text=True)
             fout.write(f"{process.stdout}\n----------------\n")
-            read_time, algo_time, mem = parse_log(process.stdout, "LABELPROP")
-            f.write(f"{read_time},{algo_time},{mem},{num_threads}\n")
+            read_time, algo_time, mem, maj_flt, min_flt, blck_in, blck_out  = parse_log(process.stdout, "LABELPROP")
+            f.write(f"{read_time},{algo_time},{mem},{num_threads},{maj_flt},{min_flt},{blck_in},{blck_out}\n")
 
 def do_triangles(gr_path, output_path, num_threads):
     dataset = gr_path
@@ -88,15 +100,15 @@ def do_triangles(gr_path, output_path, num_threads):
     outfile_stats = f"{output_path}_orderedCount_stats.log"
     # Run Triangle Counting
     with open (outfile, "w") as f:
-        f.write("read_time(ms),algo_time(ms),mem_used(MB),num_threads\n")
+        f.write("read_time(ms),algo_time(ms),mem_used(MB),num_threads, major_faults, minor_faults, block_input, block_output\n")
     command = [f"{BUILD_DIR}/lonestar/triangles/triangles", f"-t={num_threads}", "-algo=orderedCount", "-noverify", f"{dataset}"]
     with open(outfile_stats, "a") as fout, open(outfile, "a") as f:
         print(command)
         for i in range(ITERATIONS):
             process = subprocess.run(command, stdout=subprocess.PIPE, text=True)
             fout.write(f"{process.stdout}\n----------------\n")
-            read_time, algo_time, mem = parse_log(process.stdout, "ORDEREDCOUNT")
-            f.write(f"read_time,{algo_time},{mem},{num_threads}\n")
+            read_time, algo_time, mem, maj_flt, min_flt, blck_in, blck_out  = parse_log(process.stdout, "ORDEREDCOUNT")
+            f.write(f"read_time,{algo_time},{mem},{num_threads},{maj_flt},{min_flt},{blck_in},{blck_out}\n")
 
 
 def main():
