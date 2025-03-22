@@ -54,8 +54,8 @@ def parse_log(buffer, algo):
   regex_algo = re.compile(fr"STAT, {algo}_MAIN, Time, TMAX, (\d+)")
   regex_read = re.compile(r"STAT, ReadGraph, Time, TMAX, (\d+)")
   regex_mem = re.compile(r"MemoryCounter:\s+\d+\s+MB\s->\s+\d+\s+MB,\s+(\d+)\s+MB\s+total")
-  regex_faults = re.compile(r"FaultCounter:\s+(\d+)\s+major\s+faults,\s+(\d+)\s+minor\s+faults")
-  regex_block_io = re.compile(r"BIOCounter:\s+(\d+)\s+block\s+input operations,\s+(\d+)\s+block\s+output\s+operations")
+  regex_faults = re.compile(r"MemoryCounter:\s+(\d+)\s+major\s+faults,\s+(\d+)\s+minor\s+faults")
+  regex_block_io = re.compile(r"MemoryCounter:\s+(\d+)\s+block\s+input operations,\s+(\d+)\s+block\s+output\s+operations")
 
   algo_time = 0
   read_time = 0
@@ -70,12 +70,12 @@ def parse_log(buffer, algo):
       read_time = regex_read.search(line).group(1)
     elif f"{algo}_MAIN" in line:
       algo_time = regex_algo.search(line).group(1)
-    elif "MemoryCounter" in line:
+    elif "MB total" in line:
       mem = regex_mem.search(line).group(1)
-    elif "FaultCounter" in line:
+    elif "faults" in line:
       maj_flt = regex_faults.search(line).group(1)
       min_flt = regex_faults.search(line).group(2)
-    elif "BIOCounter" in line:
+    elif "output operations" in line:
       blk_in = regex_block_io.search(line).group(1)
       blk_out = regex_block_io.search(line).group(2)
   return read_time, algo_time, mem, maj_flt, min_flt, blk_in, blk_out
@@ -112,7 +112,7 @@ def do_pagerank(blaze_index_file, blaze_adj_file, dataset):
     f.write("read_time(ms),algo_time(ms),mem_used(MB),num_threads, maj_flt, min_flt, blk_in, blk_out\n")
   command = [f"{BUILD_DIR}/bin/pagerank", f"-computeWorkers={NUM_WORKERS}", f"{blaze_index_file}", f"{blaze_adj_file}"]
   print(command)
-  with open(outfile_log, "a") as flog, open(outfile_csv, "w") as fcsv:
+  with open(outfile_log, "a") as flog, open(outfile_csv, "a") as fcsv:
     for i in range(REPEATS):
       process = subprocess.run(command, stdout=subprocess.PIPE, universal_newlines=True, check=True)
       flog.write(process.stdout)
@@ -131,8 +131,7 @@ def main():
   NUM_WORKERS = os.cpu_count() - 8
 
   # No need to build the project -- done in dockerfile
-  # ,"road_asia", "road_usa", "livejournal", "orkut", "dota_league", "graph500_26", "graph500_28", "graph500_30"]
-  datasets = ["graph500_23"]
+  datasets = ["graph500_23", "road_asia", "road_usa", "livejournal", "orkut", "dota_league", "graph500_26", "graph500_28", "graph500_30"]
 
   # Blaze needs the galois format to begin with. Galois stores the graph in a binary .gr format in /datasets/galois directory.
   # We need to convert this to blaze format. Once we are done, we can delete the galois format and the blaze format.

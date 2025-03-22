@@ -20,8 +20,8 @@ def parse_log_single(dataset_name, benchmark_name):
   regex_readtime = r"read_time=(\d+.\d+)\(s\)"
   regex_convert_time = r"^time=(\d+.\d+)"
   regex_mem = r"MemoryCounter:\s+\d+\s+MB\s->\s+\d+\s+MB,\s+(\d+)\s+MB\s+total"
-  regex_faults = r"FaultCounter:\s+(\d+)\s+major\s+faults,\s+(\d+)\s+minor\s+faults"
-  regex_blockIO = r"BIOCounter:\s+(\d+)\s+block\s+input operations,\s+(\d+)\s+block\s+output\s+operations"
+  regex_faults = r"MemoryCounter:\s+(\d+)\s+major\s+faults,\s+(\d+)\s+minor\s+faults"
+  regex_blockIO = r"MemoryCounter:\s+(\d+)\s+block\s+input operations,\s+(\d+)\s+block\s+output\s+operations"
 
 #extract the dataset name and benchmark name from the logfile name:
   threads =0
@@ -46,6 +46,7 @@ def parse_log_single(dataset_name, benchmark_name):
 
   with open(input_file, 'r') as f:
     for line in f:
+      print(line)
       #regex_thread matches number of cores and number of sockets and returns 2 groups
       match = re.match(regex_threads, line)
       if match:
@@ -88,17 +89,47 @@ def parse_log(datasets, benchmarks):
           else:
             max_iters = 1
           threads, sockets, convert_time, read_time, times, mem, maj_faults, min_faults, blkio_in, blkio_out = parse_log_single(dataset_name, benchmark_name)
+          #calculate the average read time if len(read_time) > 0
+          if len(read_time) > 0:
+            avg_read_time = sum(read_time)/len(read_time)
+          else:
+            avg_read_time = 0
+          if len(times) > 0:
+            avg_time = sum(times)/len(times)
+          else:
+            avg_time = 0
+
+          if len(maj_faults) > 0:
+            avg_maj_faults = int(sum(maj_faults)/len(maj_faults))
+          else:
+            avg_maj_faults = 0
+
+          if len(min_faults) > 0:
+            avg_min_faults = int(sum(min_faults)/len(min_faults))
+          else:
+            avg_min_faults = 0
+
+          if len(blkio_in) > 0:
+            avg_blkin = int(sum(blkio_in)/len(blkio_in))
+          else:
+            avg_blkin = 0
+
+          if len(blkio_out) > 0:
+            avg_blkout = int(sum(blkio_out)/len(blkio_out))
+          else:
+            avg_blkout = 0
+
           fmain.write(f"{dataset_name}, {benchmark_name}, {REPEATS}, {max_iters},{threads}, {sockets}, {convert_time}, "
-                      f"{round(sum(read_time)/len(read_time),4)}, {round(sum(times)/len(times),4)}, {mem}\n")
+                      f"{round(avg_read_time,4)}, {round(avg_time,4)}, {mem}\n")
           frun.write(f"{convert_time}, "
-                     f"{round(sum(read_time)/len(read_time),4)}, "
-                     f"{round(sum(times)/len(times),4)}, "
+                     f"{round(avg_read_time,4)}, "
+                     f"{round(avg_time,4)}, "
                      f"{mem}, "
                      f"{threads}, "
-                     f"{int(sum(maj_faults)/len(maj_faults))}, "
-                     f"{int(sum(min_faults)/len(min_faults))}, "
-                     f"{int(sum(blkio_in)/len(blkio_in))}, "
-                     f"{int(sum(blkio_out)/len(blkio_out))}\n")
+                     f"{int(avg_maj_faults)}, "
+                     f"{int(avg_min_faults)}, "
+                     f"{int(avg_blkin)}, "
+                     f"{int(avg_blkout)}\n")
 
 
 def main(self):
@@ -109,7 +140,7 @@ def main(self):
 
   os.chdir(SRC_DIR)
   #run make here
-  os.system("make -j")
+  os.system("make clean && make -j")
 
   os.chdir(TOOLS_DIR)
 

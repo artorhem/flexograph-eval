@@ -15,8 +15,8 @@ def parse_log(buffer):
     '''
     regex = r"^(Read|Build|Trial)\sTime:\s+(\d+\.\d+)"
     regex_mem = r"MemoryCounter:\s+\d+\s+MB\s->\s+\d+\s+MB,\s+(\d+)\s+MB\s+total"
-    regex_faults = r"FaultCounter:\s+(\d+)\s+major\s+faults,\s+(\d+)\s+minor\s+faults"
-    regex_blockIO = r"BIOCounter:\s+(\d+)\s+block\s+input operations,\s+(\d+)\s+block\s+output\s+operations"
+    regex_faults = r"MemoryCounter:\s+(\d+)\s+major\s+faults,\s+(\d+)\s+minor\s+faults"
+    regex_blockIO = r"MemoryCounter:\s+(\d+)\s+block\s+input operations,\s+(\d+)\s+block\s+output\s+operations"
     matches_time = re.finditer(regex, buffer, re.MULTILINE)
     matches_mem = re.finditer(regex_mem, buffer, re.MULTILINE)
     matches_faults = re.finditer(regex_faults, buffer, re.MULTILINE)
@@ -120,10 +120,10 @@ def main():
                 for start_vertex in random_starts:
                     process = 0
                     if dataset not in directed:
-                        print(f"./benchmark -f {dst} -r {start_vertex} -n 5 -s")
+                        print(f"./{benchmark} -f {dst} -r {start_vertex} -n 5 -s")
                         process = subprocess.run([f"./{benchmark}", "-f", f"{dst}", "-r", f"{start_vertex}", "-n", "5", "-s"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                     else:
-                        print(f"./benchmark -f {dst} -r {start_vertex} -n 5")
+                        print(f"./{benchmark} -f {dst} -r {start_vertex} -n 5")
                         process = subprocess.run([f"./{benchmark}", "-f", f"{dst}", "-r", f"{start_vertex}", "-n", "5"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                     flout.write(process.stdout.decode("ASCII"))
                     pp_time, algo_time, mem, maj_flt, min_flt, blk_in, blk_out = parse_log(process.stdout.decode("ASCII"))

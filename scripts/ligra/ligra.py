@@ -14,8 +14,8 @@ def parse_log(buffer):
     regex_read = re.compile(r"^Reading\stime\s+:\s+(\d+\.\d+)")
     regex_algo = re.compile(r"^Running\s+time\s+:\s+(\d+\.\d+)")
     regex_mem = re.compile(r"MemoryCounter:\s+\d+\s+MB\s->\s+\d+\s+MB,\s+(\d+)\s+MB\s+total")
-    regex_faults = re.compile(r"FaultCounter:\s+(\d+)\s+major\s+faults,\s+(\d+)\s+minor\s+faults")
-    regex_blockIO = re.compile(r"BIOCounter:\s+(\d+)\s+block\s+input operations,\s+(\d+)\s+block\s+output\s+operations")
+    regex_faults = re.compile(r"MemoryCounter:\s+(\d+)\s+major\s+faults,\s+(\d+)\s+minor\s+faults")
+    regex_block_io = re.compile(r"MemoryCounter:\s+(\d+)\s+block\s+input operations,\s+(\d+)\s+block\s+output\s+operations")
 
     # Print the matches
     read_time = 0
@@ -25,20 +25,21 @@ def parse_log(buffer):
     min_faults = []
     blk_in = []
     blk_out = []
+    print(buffer)
     for line in buffer.splitlines():
         #we want to print the sum of times if the first element of the tuple is 'Read' or 'Build'
         if "Reading" in line:
             read_time = regex_read.search(line).group(1)
         elif "Running" in line:
             algo_time.append(float(regex_algo.search(line).group(1)))
-        elif "MemoryCounter" in line:
+        elif "->" in line:
             mem = regex_mem.search(line).group(1)
-        elif "FaultCounter" in line:
-            maj_faults.append(regex_faults.search(line).group(1))
-            min_faults.append(regex_faults.search(line).group(2))
-        elif "BIOCounter" in line:
-            blk_in.append(regex_blockIO.search(line).group(1))
-            blk_out.append(regex_blockIO.search(line).group(2))
+        elif "faults" in line:
+            maj_faults.append(int(regex_faults.search(line).group(1)))
+            min_faults.append(int(regex_faults.search(line).group(2)))
+        elif "input operations" in line:
+            blk_in.append(int(regex_block_io.search(line).group(1)))
+            blk_out.append(int(regex_block_io.search(line).group(2)))
 
     print(f"Read time: {read_time}, Algo time: {algo_time}, Memory: {mem}"
           f"Major Faults: {maj_faults}, Minor Faults: {min_faults}, "
@@ -95,7 +96,7 @@ def main():
                         flog.write(process.stdout.decode("ASCII"))
                         read_t, algo_t, mem, maj_flt, min_flt, blk_in, blk_out = parse_log(process.stdout.decode("ASCII"))
                         fout.write("convert_time(s), read_time(s), algo_time(s), memory(MB),start_vertex, maj_flt, min_flt, blk_in, blk_out \n")
-                        fout.write(f"{convert_time}, {read_t}, {algo_t}, {mem}, {start_vertex}\n")
+                        fout.write(f"{convert_time}, {read_t}, {algo_t}, {mem}, {start_vertex}, {maj_flt}, {min_flt}, {blk_in}, {blk_out} \n")
 
         # Remove temp dataset after processing
         os.remove(f"{converted_file}")

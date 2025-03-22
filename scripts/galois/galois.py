@@ -18,8 +18,8 @@ def parse_log(buffer, algo):
     regex_algo = re.compile(fr"STAT, {algo}_MAIN, Time, TMAX, (\d+)")
     regex_read = re.compile(r"STAT, ReadGraph, Time, TMAX, (\d+)")
     regex_mem = re.compile(r"MemoryCounter:\s+\d+\s+MB\s->\s+\d+\s+MB,\s+(\d+)\s+MB\s+total")
-    regex_faults = re.compile(r"FaultCounter:\s+(\d+)\s+major\s+faults,\s+(\d+)\s+minor\s+faults")
-    regex_blockIO = re.compile(r"BIOCounter:\s+(\d+)\s+block\s+input operations,\s+(\d+)\s+block\s+output\s+operations")
+    regex_faults = re.compile(r"MemoryCounter:\s+(\d+)\s+major\s+faults,\s+(\d+)\s+minor\s+faults")
+    regex_blockIO = re.compile(r"MemoryCounter:\s+(\d+)\s+block\s+input operations,\s+(\d+)\s+block\s+output\s+operations")
     algo_time =0
     read_time =0
     mem = 0
@@ -32,12 +32,12 @@ def parse_log(buffer, algo):
             read_time = regex_read.search(line).group(1)
         elif f"{algo}_MAIN" in line:
             algo_time = regex_algo.search(line).group(1)
-        elif "MemoryCounter" in line:
+        elif "MB total" in line:
             mem = regex_mem.search(line).group(1)
-        elif "FaultCounter" in line:
+        elif "faults" in line:
             major_faults = regex_faults.search(line).group(1)
             minor_faults = regex_faults.search(line).group(2)
-        elif "BIOCounter" in line:
+        elif "output operations" in line:
             block_input = regex_blockIO.search(line).group(1)
             block_output = regex_blockIO.search(line).group(2)
 

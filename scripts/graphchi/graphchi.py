@@ -16,23 +16,48 @@ cachesize_mb = 100000
 
 datasets = [
   "graph500_23"]  # ,"road_asia", "road_usa", "livejournal", "orkut", "dota_league", "graph500_26", "graph500_28", "graph500_30"]
-benchmarks = ["trianglecounting"] #["pagerank_functional", "connectedcomponents", "trianglecounting"]
+benchmarks = ["trianglecounting", "pagerank_functional", "connectedcomponents"]
+
+
+def parse_preprocessing_log(filename):
+  regexes = {
+    "preprocessing": re.compile(r'^preprocessing:\s+(\d+.\d+)\s*s'),
+    "shard_final": re.compile(r'^shard_final:\s+(\d+.\d+)\s*s'),
+    "execute_sharding": re.compile(r'^execute_sharding:\s+(\d+.\d+)\s*s'),
+    "edata_flush": re.compile(r'^edata_flush:\s+(\d+.\d+)\s*s'),
+  }
+  # Dictionary to store extracted values
+  extracted_data = {key: [] for key in regexes}
+  with open(filename, "r") as file:
+    for line in file:
+      for key, pattern in regexes.items():
+        match = pattern.search(line)
+        if match :
+          extracted_data[key].append(float(match.group(1)))  # Capture first group
+  #return the sum of average values of the preprocessing steps
+  pp_total = (sum(extracted_data['preprocessing'])/len(extracted_data['preprocessing']) +
+              sum(extracted_data['shard_final'])/len(extracted_data['shard_final']) +
+              sum(extracted_data['execute_sharding'])/len(extracted_data['execute_sharding']) +
+              sum(extracted_data['edata_flush'])/len(extracted_data['edata_flush']))
+  return pp_total
 
 def parse_log(filename):
   regexes = {
-    "preprocessing": re.compile(r'^preprocessing:\s+(\d+.\d+)\s+s'),
-    "shard_final": re.compile(r'^shard_final:\s+(\d+.\d+)\s+s'),
     "runtime": re.compile(r'runtime:\s+(\d+.\d+)\s+s'),
     "nshards": re.compile(r'nshards:\s+(\d+)'),
     "cachesize_mb": re.compile(r'cachesize_mb:\s+(\d+)'),
     "membudget_mb": re.compile(r'membudget_mb:\s+(\d+)'),
     "niters": re.compile(r'niters:\s+(\d+)'),
     "memory_total": re.compile(r"MemoryCounter:\s+\d+\s+MB\s->\s+\d+\s+MB,\s+(\d+)\s+MB\s+total"),
-    "regex_faults": re.compile(r"FaultCounter:\s+(\d+)\s+major\s+faults,\s+(\d+)\s+minor\s+faults"),
-    "regex_blockIO": re.compile(r"BIOCounter:\s+(\d+)\s+block\s+input operations,\s+(\d+)\s+block\s+output\s+operations")
+    "regex_faults": re.compile(r"MemoryCounter:\s+(\d+)\s+major\s+faults,\s+(\d+)\s+minor\s+faults"),
+    "regex_blockIO": re.compile(r"MemoryCounter:\s+(\d+)\s+block\s+input operations,\s+(\d+)\s+block\s+output\s+operations")
   }
   # Dictionary to store extracted values
   extracted_data = {key: [] for key in regexes}
+  extracted_data['maj_flt'] = []
+  extracted_data['min_flt'] = []
+  extracted_data['blk_in'] = []
+  extracted_data['blk_out'] = []
 
   # Read the log file and match regex patterns
   with open(filename, "r") as file:
@@ -142,6 +167,11 @@ def main():
 
   #now we can parse the logs
   for dataset in datasets:
+    #the preprocessing step happens only once for the first benchmark. We have chosen the first benchmark to be TC
+    #because it has an additional sort step, which is not present in the other benchmarks.
+    #Even if another benchmark runs first, TC will run preprocessing again, so it is safe to choose TC as the first benchmark
+    pp_file = f"{results_dir}/preprocess_{dataset}_trianglecounting.log"
+    preprocessing_total = parse_preprocessing_log(pp_file)
     for benchmark in benchmarks:
       extracted_data = parse_log(f"{results_dir}/{dataset}_{benchmark}.out")
       print(f"Dataset: {dataset}, Benchmark: {benchmark}")
@@ -151,7 +181,7 @@ def main():
           print(key, values)
         mems = extracted_data['memory_total']
         mems.sort()
-        f.write(f"{float(extracted_data['preprocessing'][0])}, "
+        f.write(f"{preprocessing_total}, "
                 f"{int(extracted_data['nshards'][0])}, "
                 f"{sum(extracted_data['runtime'])/len(extracted_data['runtime'])}, "
                 f"{int(extracted_data['cachesize_mb'][0])}, "
