@@ -10,13 +10,13 @@ mkdir -p systems/in-mem
 cd systems/in-mem
 
 #Now clone the systems
-systems=( "Galois" "gapbs" "ligra" "GeminiGraph" "graphit" )
+systems=( "Galois" "gapbs" "ligra" "GeminiGraph" )
 for system in "${systems[@]}"
 do
     if [ -d "$system" ]; then
         echo "$system exists"
     else
-        git clone git@github.com:artorhem/$system.git
+        git clone https://github.com/artorhem/$system.git
     fi
 done
 
@@ -32,7 +32,7 @@ do
     if [ -d "$system" ]; then
         echo "$system exists"
     else
-        git clone git@github.com:artorhem/$system.git
+        git clone https://github.com/artorhem/$system.git
     fi
 done
 
@@ -40,7 +40,7 @@ done
 if [ -d "x-stream" ]; then
   echo "X-Stream already cloned"
 else
-  git clone git@github.com:artorhem/x-stream.git 
+  git clone https://github.com/artorhem/x-stream.git
 fi
 cd x-stream
 git checkout sosp
@@ -48,6 +48,11 @@ git checkout sosp
 # Clone FlexoGraph and checkout the iter_fix branch
 cd $SYS_DIR
 mkdir -p systems/FlexoGraph
-git clone git@github.com:ubc-systopia/margraphita.git systems/FlexoGraph/
+git clone https://github.com/artorhem/margraphita.git systems/FlexoGraph/
 cd systems/FlexoGraph
 git fetch && git checkout iter_fix
+
+
+#CLone the gfe-driver for dynamic systems
+cd $SYS_DIR
+mkdir -p systems/gfe-driver

@@ -79,28 +79,21 @@ services:
       - results:/results
       - extra_space:/extra_space
 
-  flexograph:
-    privileged: true
-    build:
-      context: ./
-      dockerfile: ./containers/Flexograph.Dockerfile
-    container_name: flexograph
-    volumes:
-      - db:/db
-      - systems:/systems
-      - results:/results
-
   margraphita:
     privileged: true
-    mem_limit: "1g"
+    #mem_limit: "1g"
     build:
       context: ./
       dockerfile: ../margraphita/Dockerfile
     container_name: margraphita
     volumes:
       - db:/db
+      - datasets:/datasets
+      - graph30:/graph30
+      - extra_space:/extra_space
       - margraphita:/margraphita
       - results:/results
+      - golden_images:/golden_images
 
 volumes:
   systems:
@@ -145,3 +138,10 @@ volumes:
       type: none
       o: bind
       device: ./db/
+
+  golden_images:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./golden_images
