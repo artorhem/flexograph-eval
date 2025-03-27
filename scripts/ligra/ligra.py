@@ -4,7 +4,7 @@ import subprocess
 import time
 import re
 
-datasets = ["graph500_23", "graph500_26", "graph500_28", "graph500_30", "dota_league", "livejournal", "orkut", "road_asia",  "road_usa"]
+datasets = ["graph500_23", "graph500_26", "graph500_28", "twitter_mpi", "dota_league", "livejournal", "orkut", "road_asia",  "road_usa"] #graph500_30
 directed = ["livejournal"]
 benchmarks = ["Components", "PageRank","Triangle", "BFS"]
 dataset_dir = "/datasets"

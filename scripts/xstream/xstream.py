@@ -13,8 +13,7 @@ mem = 1073741824 #1GB in Bytes
 pr_iters = 10
 RUNS = 5
 
-datasets = [
-  "graph500_23"]  # ,"road_asia", "road_usa", "livejournal", "orkut", "dota_league", "graph500_26", "graph500_28", "graph500_30"]
+datasets = [ "graph500_23","road_asia", "road_usa", "livejournal", "orkut", "dota_league", "graph500_26", "graph500_28", "twitter_mpi"] #graph500_30
 benchmarks = ["bfs", "sssp", "cc", "pagerank"]#, "triangle_counting"] TC does not work/gets stuck
 
 def parse_log(log):

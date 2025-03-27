@@ -130,7 +130,7 @@ def main():
     os.makedirs("/results/galois", exist_ok=True)
     os.makedirs("/datasets/galois", exist_ok=True)
 
-    datasets = ["graph500_23", "graph500_26", "graph500_28", "graph500_30", "dota_league", "livejournal", "orkut", "road_asia", "road_usa"]
+    datasets = ["graph500_23", "graph500_26", "graph500_28", "dota_league", "livejournal", "orkut", "road_asia", "road_usa", "twitter_mpi"]# "graph500_30",
 
     for dataset in datasets:
         dataset_path = Path(f"/datasets/{dataset}/{dataset}")

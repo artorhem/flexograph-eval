@@ -131,7 +131,7 @@ def main():
   NUM_WORKERS = os.cpu_count() - 8
 
   # No need to build the project -- done in dockerfile
-  datasets = ["graph500_23", "road_asia", "road_usa", "livejournal", "orkut", "dota_league", "graph500_26", "graph500_28", "graph500_30"]
+  datasets = ["graph500_23", "road_asia", "road_usa", "livejournal", "orkut", "dota_league", "graph500_26", "graph500_28", "twitter_mpi"]#, "graph500_30"]
 
   # Blaze needs the galois format to begin with. Galois stores the graph in a binary .gr format in /datasets/galois directory.
   # We need to convert this to blaze format. Once we are done, we can delete the galois format and the blaze format.

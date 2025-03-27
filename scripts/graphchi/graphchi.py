@@ -14,8 +14,7 @@ repeats = 5
 membudget_mb = 100000
 cachesize_mb = 100000
 
-datasets = [
-  "graph500_23"]  # ,"road_asia", "road_usa", "livejournal", "orkut", "dota_league", "graph500_26", "graph500_28", "graph500_30"]
+datasets = ["graph500_23", "road_asia", "road_usa", "livejournal", "orkut", "dota_league", "graph500_26", "graph500_28", "twitter_mpi"] #"graph500_30"
 benchmarks = ["trianglecounting", "pagerank_functional", "connectedcomponents"]
 
 
