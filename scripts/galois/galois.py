@@ -108,7 +108,7 @@ def do_triangles(gr_path, output_path, num_threads):
             process = subprocess.run(command, stdout=subprocess.PIPE, text=True)
             fout.write(f"{process.stdout}\n----------------\n")
             read_time, algo_time, mem, maj_flt, min_flt, blck_in, blck_out  = parse_log(process.stdout, "ORDEREDCOUNT")
-            f.write(f"read_time,{algo_time},{mem},{num_threads},{maj_flt},{min_flt},{blck_in},{blck_out}\n")
+            f.write(f"{read_time},{algo_time},{mem},{num_threads},{maj_flt},{min_flt},{blck_in},{blck_out}\n")
 
 
 def main():
