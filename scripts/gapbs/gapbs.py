@@ -2,7 +2,7 @@ import subprocess
 import re
 import os
 
-datasets = ["graph500_23", "graph500_26", "graph500_28", "graph500_30", "dota_league", "livejournal", "orkut", "road_asia", "road_usa"]
+datasets = ["graph500_23", "graph500_26", "graph500_28", "dota_league", "livejournal", "orkut", "road_asia", "road_usa", "twitter_mpi"] #"graph500_30",
 directed = ["livejournal"]
 benchmarks = ["cc", "pr", "sssp", "bfs"]
 dataset_dir = "/datasets"
@@ -48,24 +48,39 @@ def parse_log(buffer):
         block_out.append(int(matches.group(2)))
 
     # print(f"Read times: {read_time}\nBuild times: {build_time}\nTrial times: {trial_times}\nMemory: {mem}\n")
-    read_avg = sum(read_time) / len(read_time)
-    build_avg = sum(build_time) / len(build_time)
-    trial_avg = round(sum(trial_times) / len(trial_times),4)
-    mem_avg = round(sum(mem) / len(mem))
+    if len(read_time) == 0:
+        read_avg = 0
+    else:
+        read_avg = sum(read_time) / len(read_time)
+
+    if len(build_time) == 0:
+        build_avg = 0
+    else:
+        build_avg = sum(build_time) / len(build_time)
+
+    if len(trial_times) == 0:
+        trial_avg = 0
+    else:
+        trial_avg = round(sum(trial_times) / len(trial_times),4)
+
+    if len(mem) == 0:
+        mem_avg = int(round(sum(mem) / len(mem)))
+    else:
+        mem_avg = 0
 
     if len(major_faults) == 0:
         major_faults_avg = 0
     else:
-        major_faults_avg = sum(major_faults) / len(major_faults)
+        major_faults_avg = int(sum(major_faults) / len(major_faults))
     if len(minor_faults) == 0:
         minor_faults_avg = 0
     else:
-        minor_faults_avg = sum(minor_faults) / len(minor_faults)
+        minor_faults_avg = int(sum(minor_faults) / len(minor_faults))
 
     if len(block_in) == 0:
         block_in_avg = 0
     else:
-        block_in_avg = sum(block_in) / len(block_in)
+        block_in_avg = int(sum(block_in) / len(block_in))
 
     if len(block_out) == 0:
         block_out_avg = 0

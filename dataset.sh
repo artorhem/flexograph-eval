@@ -68,6 +68,7 @@ do
 
   elif [[ $dataset = "dota_league" ]];
   then
+    echo "Getting dota_league"
     wget https://pub-383410a98aef4cb686f0c7601eddd25f.r2.dev/graphalytics/dota-league.tar.zst
     mkdir dota-league
     mv dota-league.tar.zst dota-league/dota-league.tar.zst
@@ -76,6 +77,9 @@ do
     mv dota-league.e ../dota_league
     cd ..
     rm -r dota-league
+    echo "dota_league is a weighted graph, so we need to remove the weights"
+    awk '{print $1, $2}' dota_league > dota_league_temp
+    mv dota_league_temp dota_league
 
   elif [[ $dataset = "graph500_22" ]];
   then
