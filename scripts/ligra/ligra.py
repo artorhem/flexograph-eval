@@ -11,8 +11,8 @@ dataset_dir = "/datasets"
 tempdir = "/extra_space"
 
 def parse_log(buffer):
-    regex_read = re.compile(r"^Reading\stime\s+:\s+(\d+\.\d+)")
-    regex_algo = re.compile(r"^Running\s+time\s+:\s+(\d+\.\d+)")
+    regex_read = re.compile(r"^Reading\stime\s+:\s+(\d+\.*\d+)")
+    regex_algo = re.compile(r"^Running\s+time\s+:\s+(\d+\.*\d+)")
     regex_mem = re.compile(r"MemoryCounter:\s+\d+\s+MB\s->\s+\d+\s+MB,\s+(\d+)\s+MB\s+total")
     regex_faults = re.compile(r"MemoryCounter:\s+(\d+)\s+major\s+faults,\s+(\d+)\s+minor\s+faults")
     regex_block_io = re.compile(r"MemoryCounter:\s+(\d+)\s+block\s+input operations,\s+(\d+)\s+block\s+output\s+operations")
@@ -84,6 +84,7 @@ def main():
                     read_t, algo_t, mem, maj_flt, min_flt, blk_in, blk_out = parse_log(process.stdout.decode("ASCII"))
                     fout.write("convert_time(s), read_time(s), algo_time(s), memory(MB), maj_flt, min_flt, blk_in, blk_out \n")
                     fout.write(f"{convert_time}, {read_t}, {algo_t}, {mem}, {maj_flt}, {min_flt}, {blk_in}, {blk_out} \n")
+                    flog.write(process.stdout.decode("ASCII"))
                 # read_time, round(sum(algo_time)/len(algo_time),4), mem, round(sum(maj_faults)/len(maj_faults),4), round(sum(min_faults)/len(min_faults),4), round(sum(blk_in)/len(blk_in),4), round(sum(blk_out)/len(blk_out),4)
 
                 else:
