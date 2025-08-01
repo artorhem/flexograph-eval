@@ -22,6 +22,7 @@ def parse_pagerank_log(dataset_name, program_name, iterations):
     return None
   
   # Regex patterns for the new format
+  regex_iteration = r"Iteration\s+(\d+):\s+active\s+vertices\s+=\s+(\d+)"
   regex_exectime = r"(\d+)\s+iterations\s+of\s+pagerank\s+took\s+(\d+\.\d+)\s+seconds"
   regex_mem = r"MemoryCounter:\s+\d+\s+MB\s+->\s+(\d+)\s+MB,\s+(\d+)\s+MB\s+total"
   regex_faults = r"MemoryCounter:\s+(\d+)\s+major\s+faults,\s+(\d+)\s+minor\s+faults"
@@ -34,17 +35,27 @@ def parse_pagerank_log(dataset_name, program_name, iterations):
   min_faults = 0
   blkio_in = 0
   blkio_out = 0
-  actual_iterations = 0
+  requested_iterations = 0
+  actual_iterations = 0  # This will be the convergence iteration
   
   try:
     with open(input_file, 'r') as f:
       for line in f:
         line = line.strip()
         
+        # Match iteration lines to find convergence
+        match = re.search(regex_iteration, line)
+        if match:
+          iter_num = int(match.group(1))
+          active_vertices = int(match.group(2))
+          # First iteration where active vertices = 0 is the convergence point
+          if active_vertices == 0 and actual_iterations == 0:
+            actual_iterations = iter_num
+        
         # Match execution time
         match = re.search(regex_exectime, line)
         if match:
-          actual_iterations = int(match.group(1))
+          requested_iterations = int(match.group(1))
           exec_time = float(match.group(2))
         
         # Match memory usage
@@ -68,7 +79,7 @@ def parse_pagerank_log(dataset_name, program_name, iterations):
     return {
       'dataset': dataset_name,
       'program': program_name,
-      'requested_iterations': iterations,
+      'requested_iterations': requested_iterations,
       'actual_iterations': actual_iterations,
       'exec_time': exec_time,
       'max_mem_mb': max_mem,
@@ -83,7 +94,7 @@ def parse_pagerank_log(dataset_name, program_name, iterations):
     print(f"Error parsing {input_file}: {e}")
     return None
 
-def parse_pagerank_logs(datasets):
+def parse_pagerank_logs(datasets, conversion_times, preprocessing_times):
   """Parse all PageRank log files and create CSV summary"""
   programs = ["pagerank", "pagerank_gg", "pagerank_delta"]
   iterations = [10, 20, 30]
@@ -91,9 +102,13 @@ def parse_pagerank_logs(datasets):
   # Create main summary CSV
   csv_file = f"{RESULTS_DIR}/lumos_pagerank_results.csv"
   with open(csv_file, 'w') as f:
-    f.write("dataset,program,requested_iterations,actual_iterations,exec_time_s,max_mem_mb,total_mem_mb,major_faults,minor_faults,block_input,block_output\n")
+    f.write("dataset,program,requested_iterations,actual_iterations,exec_time_s,max_mem_mb,total_mem_mb,major_faults,minor_faults,block_input,block_output,conversion_time_s,preprocessing_time_s\n")
     
     for dataset_name in datasets:
+      # Get conversion and preprocessing times for this dataset
+      conv_time = conversion_times.get(dataset_name, 0.0)
+      preproc_time = preprocessing_times.get(dataset_name, 0.0)
+      
       for program in programs:
         for iters in iterations:
           result = parse_pagerank_log(dataset_name, program, iters)
@@ -101,7 +116,7 @@ def parse_pagerank_logs(datasets):
             f.write(f"{result['dataset']},{result['program']},{result['requested_iterations']},"
                    f"{result['actual_iterations']},{result['exec_time']},{result['max_mem_mb']},"
                    f"{result['total_mem_mb']},{result['major_faults']},{result['minor_faults']},"
-                   f"{result['block_input']},{result['block_output']}\n")
+                   f"{result['block_input']},{result['block_output']},{conv_time},{preproc_time}\n")
   
   print(f"PageRank results written to {csv_file}")
   
@@ -264,6 +279,10 @@ def main(self):
 
   datasets = ["graph500_23", "road_asia", "road_usa", "livejournal", "orkut", "dota_league", "graph500_26", "graph500_28"]
   
+  # Track timing data for parsing
+  conversion_times = {}
+  preprocessing_times = {}
+  
   for dataset_name in datasets:
     print(f"Processing dataset: {dataset_name}")
     dataset_path = f"{DATASET_DIR}/{dataset_name}/{dataset_name}"
@@ -276,6 +295,7 @@ def main(self):
     # Convert to binary format if needed
     bin_file, conversion_time = convert_to_binary(dataset_path, args.dry_run)
     print(f"Using binary file: {bin_file}")
+    conversion_times[dataset_name] = conversion_time
     
     # Get the maximum vertex ID
     max_vertex_id = get_max_vertex_id(dataset_name)
@@ -291,6 +311,7 @@ def main(self):
     if not preprocessing_success:
       print(f"Warning: Preprocessing failed for {dataset_name}, skipping")
       continue
+    preprocessing_times[dataset_name] = preprocessing_time
     
     # Run PageRank programs
     preprocessed_file = f"{dataset_name}.pl"
@@ -303,81 +324,8 @@ def main(self):
     print(f"  Preprocessing time: {preprocessing_time:.2f} seconds")
     print(f"  Total time: {total_time:.2f} seconds")
 
-  # os.chdir(TOOLS_DIR)
-
-  # datasets = ["road_asia", "road_usa", "livejournal", "orkut", "dota_league", "graph500_23", "graph500_26", "graph500_28", "twitter_mpi"]
-
-  # for dataset_name in datasets:
-  #   print (f"Running for dataset: {dataset_name}")
-
-  #   #read the random start nodes from the .bfsver file
-  #   start_nodes = []
-  #   with open(f"{DATASET_DIR}/{dataset_name}/{dataset_name}.bfsver") as f:
-  #     for line in f:
-  #       start_nodes.append(int(line.strip()))
-  #   #remove duplicates
-  #   start_nodes = list(set(start_nodes))
-
-
-  #   cmd = f"{TOOLS_DIR}/convert {DATASET_DIR}/{dataset_name}/{dataset_name} >> {RESULTS_DIR}/{dataset_name}_gemini_convert.log"
-  #   print(cmd)
-  #   if not args.dry_run:
-  #     os.system(cmd)
-
-  #   #now find the max_vertex_id in the convert.log file
-  #   max_vertex_id = 0
-  #   with open(f"{RESULTS_DIR}/{dataset_name}_gemini_convert.log") as f:
-  #     lines = f.readlines()
-  #     if lines[-1].startswith("max_vertex_id"):
-  #       max_vertex_id = int(lines[-1].split()[1])
-
-  #   num_vertices = max_vertex_id + 1
-
-  #   #Now we can run each benchmark:
-  #   print("PageRank...")
-  #   #delete the previous log file
-  #   if not args.dry_run and os.path.exists(f"{RESULTS_DIR}/{dataset_name}_pagerank.log"):
-  #       os.remove(f"{RESULTS_DIR}/{dataset_name}_pagerank.log")
-  #   max_iters = 20
-  #   cmd = f"{TOOLS_DIR}/pagerank {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {max_iters} >> {RESULTS_DIR}/{dataset_name}_pagerank.log"
-  #   print(cmd)
-  #   for iter in range(REPEATS):
-  #     if not args.dry_run:
-  #       os.system(cmd)
-
-  #   print("BFS...")
-  #   #delete the previous log file
-  #   if not args.dry_run and os.path.exists(f"{RESULTS_DIR}/{dataset_name}_bfs.log"):
-  #     os.remove(f"{RESULTS_DIR}/{dataset_name}_bfs.log")
-  #   for start_node in start_nodes:
-  #     cmd = f"{TOOLS_DIR}/bfs {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {start_node} >> {RESULTS_DIR}/{dataset_name}_bfs.log"
-  #     print(cmd)
-  #     if not args.dry_run:
-  #       os.system(cmd)
-
-
-  #   print("CC...")
-  #   #delete the previous log file
-  #   if not args.dry_run and os.path.exists(f"{RESULTS_DIR}/{dataset_name}_cc.log"):
-  #     os.remove(f"{RESULTS_DIR}/{dataset_name}_cc.log")
-  #   cmd = f"{TOOLS_DIR}/cc {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} >> {RESULTS_DIR}/{dataset_name}_cc.log"
-  #   print(cmd)
-  #   for iter in range(REPEATS):
-  #     if not args.dry_run:
-  #       os.system(cmd)
-
-  #   print("SSSP...")
-  #   #delete the previous log file
-  #   if not args.dry_run and os.path.exists(f"{RESULTS_DIR}/{dataset_name}_sssp.log"):
-  #     os.remove(f"{RESULTS_DIR}/{dataset_name}_sssp.log")
-  #   for start_node in start_nodes:
-  #     cmd = f"{TOOLS_DIR}/sssp {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {start_node} >> {RESULTS_DIR}/{dataset_name}_sssp.log"
-  #     print(cmd)
-  #     if not args.dry_run:
-  #       os.system(cmd)
-
   if args.parse:
-    parse_pagerank_logs(datasets)
+    parse_pagerank_logs(datasets, conversion_times, preprocessing_times)
 
 if __name__ == "__main__":
   main(sys.argv)
