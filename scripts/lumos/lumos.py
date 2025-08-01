@@ -36,22 +36,23 @@ def parse_pagerank_log(dataset_name, program_name, iterations):
   blkio_in = 0
   blkio_out = 0
   requested_iterations = 0
-  actual_iterations = 0  # This will be the convergence iteration
+  actual_iterations = 0
+  convergence_iteration = None  # Only for pagerank_delta
   
   try:
     with open(input_file, 'r') as f:
       for line in f:
         line = line.strip()
         
-        # Match iteration lines to find convergence
+        # Match iteration lines - only check for convergence in pagerank_delta
         match = re.search(regex_iteration, line)
-        if match:
+        if match and program_name == "pagerank_delta":
           iter_num = int(match.group(1))
           active_vertices = int(match.group(2))
           # First iteration where active vertices = 0 is the convergence point
-          if active_vertices == 0 and actual_iterations == 0:
-            actual_iterations = iter_num
-        
+          if active_vertices == 0 and convergence_iteration is None:
+            convergence_iteration = iter_num
+
         # Match execution time
         match = re.search(regex_exectime, line)
         if match:
@@ -76,6 +77,13 @@ def parse_pagerank_log(dataset_name, program_name, iterations):
           blkio_in = int(match.group(1))
           blkio_out = int(match.group(2))
     
+    # Set actual iterations based on program type
+    if program_name == "pagerank_delta" and convergence_iteration is not None:
+      actual_iterations = convergence_iteration
+    else:
+      # For pagerank and pagerank_gg, actual iterations = requested iterations
+      actual_iterations = requested_iterations
+          
     return {
       'dataset': dataset_name,
       'program': program_name,
@@ -93,6 +101,58 @@ def parse_pagerank_log(dataset_name, program_name, iterations):
   except Exception as e:
     print(f"Error parsing {input_file}: {e}")
     return None
+
+def save_timing_data(conversion_times, preprocessing_times):
+  """Save timing data to a JSON file for later use during parsing"""
+  timing_file = f"{RESULTS_DIR}/lumos_timing_data.json"
+  timing_data = {
+    'conversion_times': conversion_times,
+    'preprocessing_times': preprocessing_times
+  }
+  
+  with open(timing_file, 'w') as f:
+    json.dump(timing_data, f, indent=2)
+  print(f"Timing data saved to {timing_file}")
+
+def load_timing_data():
+  """Load timing data from JSON file"""
+  timing_file = f"{RESULTS_DIR}/lumos_timing_data.json"
+  
+  if not os.path.exists(timing_file):
+    print(f"Warning: Timing data file {timing_file} not found, using zeros")
+    return {}, {}
+  
+  try:
+    with open(timing_file, 'r') as f:
+      timing_data = json.load(f)
+    
+    conversion_times = timing_data.get('conversion_times', {})
+    preprocessing_times = timing_data.get('preprocessing_times', {})
+    print(f"Timing data loaded from {timing_file}")
+    return conversion_times, preprocessing_times
+    
+  except Exception as e:
+    print(f"Error loading timing data: {e}, using zeros")
+    return {}, {}
+
+def discover_datasets_from_logs():
+  """Discover datasets from existing log files"""
+  if not os.path.exists(RESULTS_DIR):
+    print(f"Results directory {RESULTS_DIR} does not exist")
+    return []
+  
+  log_files = [f for f in os.listdir(RESULTS_DIR) if f.endswith('.log')]
+  datasets = set()
+  
+  for log_file in log_files:
+    # Extract dataset name from log filename: <dataset>_<program>_iter<N>.log
+    parts = log_file.replace('.log', '').split('_')
+    if len(parts) >= 3 and parts[-1].startswith('iter'):
+      # Join all parts except the last two (program and iterN)
+      dataset_name = '_'.join(parts[:-2])
+      datasets.add(dataset_name)
+  
+  return sorted(list(datasets))
 
 def parse_pagerank_logs(datasets, conversion_times, preprocessing_times):
   """Parse all PageRank log files and create CSV summary"""
@@ -267,15 +327,35 @@ def main(self):
   parser = argparse.ArgumentParser(description="run Lumos benchmarks")
   parser.add_argument("-d", "--dry_run",action="store_true",default=False, help="don't delete prior logs or run any commands.")
   parser.add_argument("-p","--parse",action="store_true",default=False, help="parse the logs to make the csv")
+  parser.add_argument("--parse-only",action="store_true",default=False, help="only parse existing logs without running benchmarks")
   args = parser.parse_args()
-
-  os.chdir(SRC_DIR)
-  #run make here
-  os.system("make clean && make -j")
 
   # Ensure results directory exists
   if not os.path.exists(RESULTS_DIR):
     os.makedirs(RESULTS_DIR)
+
+  # Handle parse-only mode
+  if args.parse_only:
+    print("Running in parse-only mode...")
+    
+    # Discover datasets from existing log files
+    datasets = discover_datasets_from_logs()
+    if not datasets:
+      print("No log files found to parse")
+      return
+    
+    print(f"Found datasets in logs: {datasets}")
+    
+    # Load timing data
+    conversion_times, preprocessing_times = load_timing_data()
+    
+    # Parse the logs
+    parse_pagerank_logs(datasets, conversion_times, preprocessing_times)
+    return
+
+  os.chdir(SRC_DIR)
+  #run make here
+  os.system("make clean && make -j")
 
   datasets = ["graph500_23", "road_asia", "road_usa", "livejournal", "orkut", "dota_league", "graph500_26", "graph500_28"]
   
@@ -323,6 +403,10 @@ def main(self):
     print(f"  Conversion time: {conversion_time:.2f} seconds")
     print(f"  Preprocessing time: {preprocessing_time:.2f} seconds")
     print(f"  Total time: {total_time:.2f} seconds")
+
+  # Save timing data for later parsing
+  if not args.dry_run:
+    save_timing_data(conversion_times, preprocessing_times)
 
   if args.parse:
     parse_pagerank_logs(datasets, conversion_times, preprocessing_times)
