@@ -1,4 +1,4 @@
-FROM ubuntu:18.04 
+FROM ubuntu:22.04 
 
 ARG PROJECT_HOME=/systems/ooc/blaze
 ARG DATASET_HOME=/mnt/nvme

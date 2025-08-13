@@ -17,5 +17,5 @@ COPY scripts/ligra/ligra.py /ligra.py
 
 # The volume containing the source code is mounted at /systems
 WORKDIR /
-CMD python3 ligra.py > /results/ligra/ligra.log 2>&1
-#CMD sleep infinity
+#CMD python3 ligra.py > /results/ligra/ligra.log 2>&1
+CMD sleep infinity
