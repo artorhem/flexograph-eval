@@ -2,6 +2,9 @@ import os
 import subprocess
 import re
 import time
+import threading
+import signal
+from datetime import datetime
 
 src_dir = "/systems/ooc/graphchi-cpp"
 app_dir = "/systems/ooc/graphchi-cpp/bin/example_apps"
@@ -17,6 +20,20 @@ cachesize_mb = 100000
 datasets = ["graph500_23", "road_asia", "road_usa", "livejournal", "orkut", "dota_league", "graph500_26", "graph500_28", "twitter_mpi"] #"graph500_30"
 benchmarks = ["trianglecounting", "pagerank_functional", "connectedcomponents"]
 
+iostat_process = None
+
+def start_iostat_monitoring(output_file):
+  global iostat_process
+  cmd = "iostat -d -x 1 | grep -v 'loop'"
+  iostat_process = subprocess.Popen(cmd, shell=True, stdout=open(output_file, 'w'), stderr=subprocess.PIPE)
+  return iostat_process
+
+def stop_iostat_monitoring():
+  global iostat_process
+  if iostat_process:
+    iostat_process.terminate()
+    iostat_process.wait()
+    iostat_process = None
 
 def parse_preprocessing_log(filename):
   regexes = {
@@ -113,10 +130,19 @@ def exec_benchmarks():
       with open(f"{results_dir}/{dataset}_{benchmark}.out", "w") as fout, open(f"{results_dir}/{dataset}_{benchmark}.err", "w") as ferr:
         for i in range(repeats):
           print(f"Running iteration {i}")
+          
+          # Start I/O monitoring for this specific run
+          iostat_log = f"{results_dir}/{dataset}_{benchmark}_iter{i}_iostat.log"
+          start_iostat_monitoring(iostat_log)
+          
           start = time.time()
           cmd = globals() [f"make_{benchmark}_cmd"](dataset, benchmark)
           process = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=app_dir)
           end = time.time()
+          
+          # Stop I/O monitoring
+          stop_iostat_monitoring()
+          
           fout.write(f"Time taken: {end - start}s\n")
           fout.write(f"command: {process.args}\n")
           # Parse the output

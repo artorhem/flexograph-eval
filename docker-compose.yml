@@ -90,6 +90,17 @@ services:
       - results:/results
       - extra_space:/extra_space
 
+  gridgraph:
+    privileged: true
+    build:
+      context: ./
+      dockerfile: containers/gridgraph.Dockerfile
+    container_name: gridgraph
+    volumes:
+      - datasets:/datasets
+      - results:/results
+      - extra_space:/extra_space
+
   margraphita:
     privileged: true
     #mem_limit: "1g"

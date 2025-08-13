@@ -16,6 +16,21 @@ RUNS = 5
 datasets = [ "graph500_23","road_asia", "road_usa", "livejournal", "orkut", "dota_league", "graph500_26", "graph500_28", "twitter_mpi"] #graph500_30
 benchmarks = ["bfs", "sssp", "cc", "pagerank"]#, "triangle_counting"] TC does not work/gets stuck
 
+iostat_process = None
+
+def start_iostat_monitoring(output_file):
+  global iostat_process
+  cmd = "iostat -d -x 1 | grep -v 'loop'"
+  iostat_process = subprocess.Popen(cmd, shell=True, stdout=open(output_file, 'w'), stderr=subprocess.PIPE)
+  return iostat_process
+
+def stop_iostat_monitoring():
+  global iostat_process
+  if iostat_process:
+    iostat_process.terminate()
+    iostat_process.wait()
+    iostat_process = None
+
 def parse_log(log):
   regexes = {
     "convert_time": re.compile(r'Time to convert:\s+(\d+\.*\d*)\s+seconds'),
@@ -91,7 +106,15 @@ def exec_benchmarks():
       with open(f"{results_dir}/{dataset}_{benchmark}.log", "w") as flog:
         flog.write(f"Time to convert: {convert_time} seconds\n")
         for i in range(0, RUNS):
+          # Start I/O monitoring for this specific run
+          iostat_log = f"{results_dir}/{dataset}_{benchmark}_iter{i}_iostat.log"
+          start_iostat_monitoring(iostat_log)
+          
           process = subprocess.run(cmd, stderr=subprocess.PIPE, cwd=dataset_cpy)
+          
+          # Stop I/O monitoring
+          stop_iostat_monitoring()
+          
           flog.write(f"Args: {process.args}\n")
           flog.write(process.stderr.decode("ASCII"))
 
@@ -105,9 +128,17 @@ def exec_benchmarks():
           random_starts = f.read().splitlines()
         with open (f"{results_dir}/{dataset}_{benchmark}.log", "a") as flog:
           flog.write(f"Time to convert: {convert_time} seconds\n")
-          for start_vertex in random_starts:
+          for i, start_vertex in enumerate(random_starts):
+            # Start I/O monitoring for this specific run
+            iostat_log = f"{results_dir}/{dataset}_{benchmark}_iter{i}_iostat.log"
+            start_iostat_monitoring(iostat_log)
+            
             cmd = globals() [f"make_{benchmark}_cmd"](dataset, start_vertex)
             process = subprocess.run(cmd, stderr=subprocess.PIPE, cwd=dataset_cpy)
+            
+            # Stop I/O monitoring
+            stop_iostat_monitoring()
+            
             flog.write(f"Args: {process.args}\n")
             flog.write(process.stderr.decode("ASCII"))
 

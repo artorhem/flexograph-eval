@@ -26,7 +26,7 @@ mkdir -p systems/ooc
 cd systems/ooc
 
 #Now clone the systems
-systems=("blaze" "graphchi-cpp" "lumos" "MiniGraph" "Graphene")
+systems=("blaze" "graphchi-cpp" "GridGraph" "lumos" "MiniGraph" "Graphene")
 for system in "${systems[@]}"
 do
     if [ -d "$system" ]; then

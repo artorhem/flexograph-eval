@@ -4,6 +4,7 @@ import sys
 import json
 import re
 import time
+import subprocess
 
 SRC_DIR = "/systems/ooc/lumos"
 TOOLS_DIR = "/systems/in-mem/lumos/toolkits"
@@ -12,6 +13,21 @@ RESULTS_DIR = "/results/lumos"
 
 REPEATS = 5
 PR_MAX_ITERS = 20
+
+iostat_process = None
+
+def start_iostat_monitoring(output_file):
+  global iostat_process
+  cmd = "iostat -d -x 1 | grep -v 'loop'"
+  iostat_process = subprocess.Popen(cmd, shell=True, stdout=open(output_file, 'w'), stderr=subprocess.PIPE)
+  return iostat_process
+
+def stop_iostat_monitoring():
+  global iostat_process
+  if iostat_process:
+    iostat_process.terminate()
+    iostat_process.wait()
+    iostat_process = None
 
 def parse_pagerank_log(dataset_name, program_name, iterations):
   """Parse PageRank log files with the new format"""
@@ -309,12 +325,19 @@ def run_pagerank_programs(dataset_name, preprocessed_file, dry_run=False):
       if not dry_run:
         # Create log file for this specific run
         log_file = f"{RESULTS_DIR}/{dataset_name}_{program}_iter{iters}.log"
+        iostat_log = f"{RESULTS_DIR}/{dataset_name}_{program}_iter{iters}_iostat.log"
         cmd_with_log = f"{cmd} >> {log_file} 2>&1"
+        
+        # Start I/O monitoring for this specific run
+        start_iostat_monitoring(iostat_log)
         
         start_time = time.time()
         result = os.system(cmd_with_log)
         end_time = time.time()
         execution_time = end_time - start_time
+        
+        # Stop I/O monitoring
+        stop_iostat_monitoring()
         
         if result != 0:
           print(f"  Warning: {program} with {iters} iterations failed with exit code {result}")
