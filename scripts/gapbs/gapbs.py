@@ -1,13 +1,17 @@
 import subprocess
 import re
 import os
+import sys
+
+# Add parent directory to path to import shared utilities
+sys.path.insert(0, '/scripts')
+from dataset_properties import PropertiesReader
 
 datasets = ["graph500_23", "graph500_26", "graph500_28", "dota_league", "livejournal", "orkut", "road_asia", "road_usa", "twitter_mpi"] #"graph500_30",
-directed = ["livejournal"]
-benchmarks = ["cc", "pr", "sssp", "bfs"]
 dataset_dir = "/datasets"
 tempdir = "/extra_space"
-num_threads =1
+num_threads = 1
+
 def parse_log(buffer):
     '''
     Returns the average preprocessing time (average read time + average build time),
@@ -93,27 +97,49 @@ def parse_log(buffer):
 def main():
     num_threads = os.cpu_count()
     for dataset in datasets:
-        src = f"/datasets/{dataset}/{dataset}"
+        dataset_path = f"/datasets/{dataset}"
+        src = f"{dataset_path}/{dataset}"
         if not os.path.exists(src):
             print(f"Dataset {dataset} does not exist")
             continue
+
+        # Read properties file using PropertiesReader
+        props_reader = PropertiesReader(dataset, dataset_path, system_name='gapbs')
+        properties = props_reader.read()
+
+        if properties is None:
+            print(f"Could not read properties for {dataset}, skipping")
+            continue
+
+        # Get mapped algorithms for GAPBS
+        supported_benchmarks = props_reader.get_mapped_algorithms()
+
+        if not supported_benchmarks:
+            print(f"No supported GAPBS algorithms found for {dataset}, skipping")
+            continue
+
+        print(f"Dataset: {dataset}")
+        print(f"  Supported algorithms from properties: {properties['algorithms']}")
+        print(f"  GAPBS benchmarks to run: {supported_benchmarks}")
+        print(f"  Directed: {props_reader.is_directed()}")
+
         dst = f"{tempdir}/{dataset}.el"
         print(f"Copying {src} to {dst}")
         os.system(f"cp {src} {dst}")
 
-        bfsver_path = f"{src}.bfsver"
-        if not os.path.exists(bfsver_path):
-            print("BFS vertex start file does not exist. SKIPPING BFS")
+        # Separate benchmarks that need source vertex (bfs, sssp) from those that don't
+        benchmarks_no_source = [b for b in supported_benchmarks if b not in ['bfs', 'sssp']]
+        benchmarks_with_source = [b for b in supported_benchmarks if b in ['bfs', 'sssp']]
 
-
-        for benchmark in benchmarks[:-2]: #all benchmarks except bfs and sssp
+        # Run benchmarks that don't need source vertex
+        for benchmark in benchmarks_no_source:
             print(f"Running {benchmark} on {dataset}")
             result_file = f"/results/gapbs/{dataset}_{benchmark}.csv"
             log_file = f"/results/gapbs/{dataset}_{benchmark}.log"
             with open(result_file, "w") as f, open(log_file, "w") as flout:
                 f.write("pp_time(s),algo_time(s),mem(MB),num_threads, maj_flt, min_flt, blk_in, blk_out\n")
                 process = 0
-                if dataset not in directed:
+                if not props_reader.is_directed():
                     print(f"./{benchmark} -f {dst} -n 5 -s")
                     process = subprocess.run([f"./{benchmark}", "-f", f"{dst}", "-n", "5", "-s"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 else:
@@ -122,27 +148,35 @@ def main():
                 pp_time, algo_time, mem, maj_flt, min_flt, blk_in, blk_out = parse_log(process.stdout.decode("ASCII"))
                 flout.write(process.stdout.decode("ASCII"))
                 f.write(f"{pp_time},{algo_time},{mem},{num_threads}, {maj_flt}, {min_flt}, {blk_in}, {blk_out}\n")
-        #run bfs and sssp
-        for benchmark in benchmarks[-2:]:
+
+        # Run benchmarks that need source vertex (BFS and SSSP)
+        for benchmark in benchmarks_with_source:
             print(f"Running {benchmark} on {dataset}")
             result_file = f"/results/gapbs/{dataset}_{benchmark}.csv"
             log_file = f"/results/gapbs/{dataset}_{benchmark}.log"
-            with open(bfsver_path, "r") as f:
-                random_starts = f.read().splitlines()
-                print(random_starts)
-            with open(result_file, "w") as f, open ( log_file, "w") as flout:
+
+            # Get source vertex from properties using the reader
+            source_vertex = props_reader.get_source_vertex(benchmark)
+
+            if source_vertex is None:
+                print(f"  No source vertex found in properties for {benchmark}, skipping")
+                continue
+
+            print(f"  Using source vertex: {source_vertex}")
+
+            with open(result_file, "w") as f, open(log_file, "w") as flout:
                 f.write("pp_time(s),algo_time(s),start_node,mem_used(MB),num_threads, maj_flt, min_flt, blk_in, blk_out\n")
-                for start_vertex in random_starts:
-                    process = 0
-                    if dataset not in directed:
-                        print(f"./{benchmark} -f {dst} -r {start_vertex} -n 5 -s")
-                        process = subprocess.run([f"./{benchmark}", "-f", f"{dst}", "-r", f"{start_vertex}", "-n", "5", "-s"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                    else:
-                        print(f"./{benchmark} -f {dst} -r {start_vertex} -n 5")
-                        process = subprocess.run([f"./{benchmark}", "-f", f"{dst}", "-r", f"{start_vertex}", "-n", "5"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                    flout.write(process.stdout.decode("ASCII"))
-                    pp_time, algo_time, mem, maj_flt, min_flt, blk_in, blk_out = parse_log(process.stdout.decode("ASCII"))
-                    f.write(f"{pp_time}, {algo_time}, {start_vertex}, {mem}, {num_threads}, {maj_flt}, {min_flt}, {blk_in}, {blk_out}\n")
+                process = 0
+                if not props_reader.is_directed():
+                    print(f"./{benchmark} -f {dst} -r {source_vertex} -n 5 -s")
+                    process = subprocess.run([f"./{benchmark}", "-f", f"{dst}", "-r", f"{source_vertex}", "-n", "5", "-s"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                else:
+                    print(f"./{benchmark} -f {dst} -r {source_vertex} -n 5")
+                    process = subprocess.run([f"./{benchmark}", "-f", f"{dst}", "-r", f"{source_vertex}", "-n", "5"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                flout.write(process.stdout.decode("ASCII"))
+                pp_time, algo_time, mem, maj_flt, min_flt, blk_in, blk_out = parse_log(process.stdout.decode("ASCII"))
+                f.write(f"{pp_time}, {algo_time}, {source_vertex}, {mem}, {num_threads}, {maj_flt}, {min_flt}, {blk_in}, {blk_out}\n")
+
         os.remove(dst)
 
 if __name__ == "__main__":
