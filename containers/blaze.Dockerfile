@@ -1,17 +1,9 @@
-FROM ubuntu:22.04 
+FROM flexograph/flexograph-eval-base:latest
 
+LABEL project="Blaze"
 ARG PROJECT_HOME=/systems/ooc/blaze
-ARG DATASET_HOME=/mnt/nvme
 ARG BLAZE_BUILD_TYPE=Release
 ARG NUM_CORES=8
-
-RUN apt update
-RUN apt install -y build-essential cmake git libboost-dev \
-    sysstat psmisc vim python3-pip python3 google-perftools time
-
-RUN pip3 install pandas
-
-RUN ln -s /usr/lib/x86_64-linux-gnu/libtcmalloc.so.4 /usr/lib/x86_64-linux-gnu/libtcmalloc.so
 
 # Build Blaze
 RUN mkdir -p ${PROJECT_HOME}

@@ -1,4 +1,4 @@
-FROM ubuntu:22.04 AS ligra
+FROM flexograph/flexograph-eval-base:latest
 
 LABEL project="Ligra"
 LABEL maintainer="Puneet Mehrotra"
