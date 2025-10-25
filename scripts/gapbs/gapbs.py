@@ -123,7 +123,10 @@ def main():
         print(f"  GAPBS benchmarks to run: {supported_benchmarks}")
         print(f"  Directed: {props_reader.is_directed()}")
 
-        dst = f"{tempdir}/{dataset}.el"
+        if props_reader.is_weighted():
+            dst = f"{tempdir}/{dataset}.wel"
+        else:
+            dst = f"{tempdir}/{dataset}.el"
         print(f"Copying {src} to {dst}")
         os.system(f"cp {src} {dst}")
 

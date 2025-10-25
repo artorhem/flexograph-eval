@@ -15,6 +15,7 @@ COPY systems/in-mem/gapbs /gapbs
 WORKDIR /gapbs
 RUN cd /gapbs && make clean && make -j
 
+COPY scripts/dataset_properties.py /gapbs
 COPY scripts/gapbs/gapbs.py /gapbs
 
 CMD sleep infinity

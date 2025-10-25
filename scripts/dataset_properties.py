@@ -17,7 +17,7 @@ class PropertiesReader:
     The properties files contain information about datasets including:
     - Supported algorithms
     - Source vertices for BFS, SSSP, etc.
-    - Graph metadata (vertices, edges, directed/undirected)
+    - Graph metadata (vertices, edges, directed/undirected, weighted/unweighted)
     - Algorithm-specific parameters
     """
 
@@ -84,6 +84,7 @@ class PropertiesReader:
                  - 'bfs_source': BFS source vertex (string or None)
                  - 'sssp_source': SSSP source vertex (string or None)
                  - 'directed': boolean indicating if graph is directed
+                 - 'weighted': boolean indicating if graph has weighted edges
                  - 'vertices': number of vertices (int or None)
                  - 'edges': number of edges (int or None)
                  - 'raw_config': raw ConfigParser object for custom queries
@@ -105,6 +106,7 @@ class PropertiesReader:
             'bfs_source': None,
             'sssp_source': None,
             'directed': False,
+            'weighted': False,
             'vertices': None,
             'edges': None,
             'raw_config': config,
@@ -137,6 +139,13 @@ class PropertiesReader:
         directed_key = f"graph.{dataset_key}.directed"
         if directed_key in config['DEFAULT']:
             properties['directed'] = config['DEFAULT'][directed_key].strip().lower() == 'true'
+
+        # Get weighted property (check if edge-properties.names contains 'weight')
+        edge_props_key = f"graph.{dataset_key}.edge-properties.names"
+        if edge_props_key in config['DEFAULT']:
+            edge_props = config['DEFAULT'][edge_props_key].strip()
+            # Check if 'weight' is in the comma-separated list of edge properties
+            properties['weighted'] = 'weight' in [prop.strip() for prop in edge_props.split(',')]
 
         # Get metadata (vertices and edges)
         vertices_key = f"graph.{dataset_key}.meta.vertices"
@@ -242,6 +251,21 @@ class PropertiesReader:
             return False
 
         return self._properties['directed']
+
+    def is_weighted(self):
+        """
+        Check if the graph has weighted edges.
+
+        Returns:
+            bool: True if graph has weighted edges, False otherwise
+        """
+        if self._properties is None:
+            self.read()
+
+        if self._properties is None:
+            return False
+
+        return self._properties['weighted']
 
     def get_property(self, key):
         """
