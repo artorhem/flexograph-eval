@@ -1,18 +1,41 @@
 #!/bin/bash
 
+# Parse arguments
+TEST_MODE=false
+SERVICE_NAME=""
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --test)
+      TEST_MODE=true
+      shift
+      ;;
+    *)
+      SERVICE_NAME="$1"
+      shift
+      ;;
+  esac
+done
+
 # Check if service name is provided
-if [ -z "$1" ]; then
-  echo "Usage: $0 <service_name>"
+if [ -z "$SERVICE_NAME" ]; then
+  echo "Usage: $0 [--test] <service_name>"
   echo "Example: $0 gapbs"
+  echo "Example: $0 --test gapbs"
   echo "Available services: gapbs, gemini, ligra, galois, blaze, graphchi, xstream, lumos, gridgraph, margraphita"
   exit 1
 fi
 
-SERVICE_NAME="$1"
-
-# NUMA node 0: physical cores and hyperthreads
-# Adjust these based on Kitkat's NUMA topology
-NUMA_NODE_0_CPUS="0-47,96-143"
+# NUMA settings based on test mode
+if [ "$TEST_MODE" = true ]; then
+  # Test mode: use CPUs 0-27
+  NUMA_NODE_0_CPUS="0-27"
+  echo "Running in TEST mode with CPUs 0-27"
+else
+  # Production mode: NUMA node 0 physical cores and hyperthreads
+  # Adjust these based on Kitkat's NUMA topology
+  NUMA_NODE_0_CPUS="0-47,96-143"
+fi
 
 # Verify that the service exists in docker-compose.yml
 if ! docker compose config --services | grep -q "^${SERVICE_NAME}$"; then
@@ -54,17 +77,17 @@ docker run -d \
   --privileged \
   --cpuset-mems="0" \
   --cpuset-cpus="$NUMA_NODE_0_CPUS" \
-  -v datasets:/datasets \
-  -v systems:/systems \
-  -v results:/results \
-  -v extra_space:/extra_space \
+  -v "$(pwd)/datasets":/datasets \
+  -v "$(pwd)/systems":/systems \
+  -v "$(pwd)/results":/results \
+  -v "$(pwd)/extra_space":/extra_space \
   "$IMAGE_NAME" \
   /bin/bash -c "
       echo 'Verifying configuration:'
       grep 'Cpus_allowed_list' /proc/self/status
       grep 'Mems_allowed_list' /proc/self/status
       echo ''
-      
+
       sleep infinity
     "
 
