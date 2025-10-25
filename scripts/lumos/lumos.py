@@ -380,7 +380,7 @@ def main(self):
   #run make here
   os.system("make clean && make -j")
 
-  datasets = ["graph500_23", "road_asia", "road_usa", "livejournal", "orkut", "dota_league", "graph500_26", "graph500_28"]
+  datasets = ["dota_league","graph500_26", "graph500_28", "graph500_30", "uniform_26", "twitter_mpi","uk-2007", "com-friendster"]
   
   # Track timing data for parsing
   conversion_times = {}

@@ -7,7 +7,7 @@ import sys
 sys.path.insert(0, '/scripts')
 from dataset_properties import PropertiesReader
 
-datasets = ["graph500_23", "graph500_26", "graph500_28", "dota_league", "livejournal", "orkut", "road_asia", "road_usa", "twitter_mpi"] #"graph500_30",
+datasets = ["dota_league","graph500_26", "graph500_28", "graph500_30", "uniform_26", "twitter_mpi","uk-2007", "com-friendster"]
 dataset_dir = "/datasets"
 tempdir = "/extra_space"
 num_threads = 1

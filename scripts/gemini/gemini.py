@@ -144,7 +144,7 @@ def main(self):
 
   os.chdir(TOOLS_DIR)
 
-  datasets = ["road_asia", "road_usa", "livejournal", "orkut", "dota_league", "graph500_23", "graph500_26", "graph500_28", "twitter_mpi"]
+  datasets = ["dota_league","graph500_26", "graph500_28", "graph500_30", "uniform_26", "twitter_mpi","uk-2007", "com-friendster"]
 
   for dataset_name in datasets:
     print (f"Running for dataset: {dataset_name}")
