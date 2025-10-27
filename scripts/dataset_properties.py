@@ -22,40 +22,48 @@ class PropertiesReader:
     """
 
     # Common algorithm mappings for different systems
+    '''
+    This map is mostly for my benefit. The goal is to have a table where I can look
+    up what which algorithms are supported by which systems, and what they are called in each system.
+    The keys are the only ones that matter, since they are the ones used in the properties files.
+    '''
     ALGORITHM_MAPPINGS = {
         'gapbs': {
             'bfs': 'bfs',
             'pr': 'pr',
             'wcc': 'cc',  # WCC (weakly connected components) maps to cc
             'sssp': 'sssp',
-            'lcc': None,  # LCC (local clustering coefficient) not supported
-            'cdlp': None,  # CDLP (community detection label propagation) not supported
+            'triangle': 'tc', 
+            'bc': 'bc',  
         },
         'ligra': {
             'bfs': 'BFS',
             'pr': 'PageRank',
             'wcc': 'Components',
-            'sssp': None,  # SSSP not commonly available in Ligra
-            'lcc': 'Triangle',  # Triangle counting, closest to LCC
-            'cdlp': None,
+            'sssp': 'BellmanFord',  # SSSP
+            'triangle': 'Triangle',  
+            'bc': 'BC',
         },
         'gemini': {
             'bfs': 'bfs',
             'pr': 'pagerank',
             'wcc': 'cc',
             'sssp': 'sssp',
-            'lcc': None,
-            'cdlp': None,
+            'triangle': None,
+            'bc': 'BC',
         },
         'galois': {
             'bfs': 'bfs',
             'pr': 'pagerank',
-            'wcc': 'cc',
+            'wcc': 'connectedcomponents',
             'sssp': 'sssp',
-            'lcc': None,
-            'cdlp': None,
+            'triangle': 'triangles',
+            'bc': 'betweennesscentrality',
         },
     }
+
+    BENCHMARKS_REQUIRING_SOURCE = ['bfs', 'sssp', 'bc']
+    BENCHMARKS_NO_SOURCE = ['pr', 'wcc', 'triangle']
 
     def __init__(self, dataset_name, dataset_path, system_name=None):
         """
@@ -124,6 +132,9 @@ class PropertiesReader:
         if algo_key in config['DEFAULT']:
             algos_str = config['DEFAULT'][algo_key]
             properties['algorithms'] = [algo.strip() for algo in algos_str.split(',')]
+        # Every system implicitly supports triangles and bc.
+        properties['algorithms'].append('triangle')
+        properties['algorithms'].append('bc')
 
         # Get BFS source vertex
         bfs_key = f"graph.{dataset_key}.bfs.source-vertex"
@@ -296,6 +307,38 @@ class PropertiesReader:
             self.read()
 
         return self._properties
+
+    def get_benchmarks_requiring_source(self):
+        """
+        Get list of supported benchmarks that require a source vertex.
+
+        Returns:
+            list: List of benchmark names requiring source vertex
+        """
+        if self._properties is None:
+            self.read()
+
+        if self._properties is None:
+            return []
+
+        supported = self.get_mapped_algorithms()
+        return [b for b in supported if b in self.BENCHMARKS_REQUIRING_SOURCE]
+
+    def get_benchmarks_no_source(self):
+        """
+        Get list of supported benchmarks that do not require a source vertex.
+
+        Returns:
+            list: List of benchmark names not requiring source vertex
+        """
+        if self._properties is None:
+            self.read()
+
+        if self._properties is None:
+            return []
+
+        supported = self.get_mapped_algorithms()
+        return [b for b in supported if b in self.BENCHMARKS_NO_SOURCE]
 
     @staticmethod
     def add_algorithm_mapping(system_name, mapping):

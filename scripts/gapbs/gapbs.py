@@ -130,19 +130,15 @@ def main():
         print(f"Copying {src} to {dst}")
         os.system(f"cp {src} {dst}")
 
-        # Separate benchmarks that need source vertex (bfs, sssp) from those that don't
-        benchmarks_no_source = [b for b in supported_benchmarks if b not in ['bfs', 'sssp']]
-        benchmarks_with_source = [b for b in supported_benchmarks if b in ['bfs', 'sssp']]
-
         # Run benchmarks that don't need source vertex
-        for benchmark in benchmarks_no_source:
+        for benchmark in props_reader.get_benchmarks_no_source():
             print(f"Running {benchmark} on {dataset}")
             result_file = f"/results/gapbs/{dataset}_{benchmark}.csv"
             log_file = f"/results/gapbs/{dataset}_{benchmark}.log"
             with open(result_file, "w") as f, open(log_file, "w") as flout:
                 f.write("pp_time(s),algo_time(s),mem(MB),num_threads, maj_flt, min_flt, blk_in, blk_out\n")
                 process = 0
-                if not props_reader.is_directed():
+                if not props_reader.is_directed(): # undirected graphs use -s flag
                     print(f"./{benchmark} -f {dst} -n 5 -s")
                     process = subprocess.run([f"./{benchmark}", "-f", f"{dst}", "-n", "5", "-s"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 else:
@@ -152,8 +148,8 @@ def main():
                 flout.write(process.stdout.decode("ASCII"))
                 f.write(f"{pp_time},{algo_time},{mem},{num_threads}, {maj_flt}, {min_flt}, {blk_in}, {blk_out}\n")
 
-        # Run benchmarks that need source vertex (BFS and SSSP)
-        for benchmark in benchmarks_with_source:
+        # Run benchmarks that need source vertex (BFS, BC, and SSSP)
+        for benchmark in props_reader.get_benchmarks_requiring_source():
             print(f"Running {benchmark} on {dataset}")
             result_file = f"/results/gapbs/{dataset}_{benchmark}.csv"
             log_file = f"/results/gapbs/{dataset}_{benchmark}.log"
@@ -170,7 +166,7 @@ def main():
             with open(result_file, "w") as f, open(log_file, "w") as flout:
                 f.write("pp_time(s),algo_time(s),start_node,mem_used(MB),num_threads, maj_flt, min_flt, blk_in, blk_out\n")
                 process = 0
-                if not props_reader.is_directed():
+                if not props_reader.is_directed(): # undirected graphs use -s flag
                     print(f"./{benchmark} -f {dst} -r {source_vertex} -n 5 -s")
                     process = subprocess.run([f"./{benchmark}", "-f", f"{dst}", "-r", f"{source_vertex}", "-n", "5", "-s"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 else:

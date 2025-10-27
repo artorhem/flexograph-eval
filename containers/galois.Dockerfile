@@ -19,6 +19,7 @@ ENV CC=/usr/bin/gcc
 ENV CXX=/usr/bin/g++
 
 ADD scripts/galois/galois.py /galois.py
+ADD scripts/dataset_properties.py /dataset_properties.py
 
 #CMD python3 /galois.py
 CMD sleep infinity
