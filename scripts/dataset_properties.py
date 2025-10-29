@@ -225,12 +225,12 @@ class PropertiesReader:
 
         return mapped_algorithms
 
-    def get_source_vertex(self, algorithm):
+    def get_source_vertex(self):
         """
-        Get the source vertex for a specific algorithm.
+        Get the source vertex for algorithms that need it (BFS, SSSP, BC).
 
-        Args:
-            algorithm: Algorithm name (e.g., 'bfs', 'sssp')
+        All algorithms that require a source vertex use the same BFS source vertex
+        for a given dataset.
 
         Returns:
             str: Source vertex as string, or None if not found
@@ -241,12 +241,7 @@ class PropertiesReader:
         if self._properties is None:
             return None
 
-        if algorithm.lower() == 'bfs':
-            return self._properties['bfs_source']
-        elif algorithm.lower() == 'sssp':
-            return self._properties['sssp_source']
-
-        return None
+        return self._properties['bfs_source']
 
     def is_directed(self):
         """
@@ -312,8 +307,10 @@ class PropertiesReader:
         """
         Get list of supported benchmarks that require a source vertex.
 
+        Returns system-specific algorithm names for algorithms that require a source vertex.
+
         Returns:
-            list: List of benchmark names requiring source vertex
+            list: List of system-specific benchmark names requiring source vertex
         """
         if self._properties is None:
             self.read()
@@ -321,15 +318,32 @@ class PropertiesReader:
         if self._properties is None:
             return []
 
-        supported = self.get_mapped_algorithms()
-        return [b for b in supported if b in self.BENCHMARKS_REQUIRING_SOURCE]
+        # Get the property-level algorithms (e.g., ['bfs', 'pr', 'sssp'])
+        property_algos = self._properties['algorithms']
+
+        # Filter to only those requiring source in property-level names
+        requiring_source = [algo for algo in property_algos if algo in self.BENCHMARKS_REQUIRING_SOURCE]
+
+        # Map to system-specific names
+        if not self.system_name or self.system_name not in self.ALGORITHM_MAPPINGS:
+            return requiring_source
+
+        mapping = self.ALGORITHM_MAPPINGS[self.system_name]
+        mapped = []
+        for algo in requiring_source:
+            if algo in mapping and mapping[algo] is not None:
+                mapped.append(mapping[algo])
+
+        return mapped
 
     def get_benchmarks_no_source(self):
         """
         Get list of supported benchmarks that do not require a source vertex.
 
+        Returns system-specific algorithm names for algorithms that do not require a source vertex.
+
         Returns:
-            list: List of benchmark names not requiring source vertex
+            list: List of system-specific benchmark names not requiring source vertex
         """
         if self._properties is None:
             self.read()
@@ -337,8 +351,23 @@ class PropertiesReader:
         if self._properties is None:
             return []
 
-        supported = self.get_mapped_algorithms()
-        return [b for b in supported if b in self.BENCHMARKS_NO_SOURCE]
+        # Get the property-level algorithms (e.g., ['bfs', 'pr', 'sssp'])
+        property_algos = self._properties['algorithms']
+
+        # Filter to only those not requiring source in property-level names
+        no_source = [algo for algo in property_algos if algo in self.BENCHMARKS_NO_SOURCE]
+
+        # Map to system-specific names
+        if not self.system_name or self.system_name not in self.ALGORITHM_MAPPINGS:
+            return no_source
+
+        mapping = self.ALGORITHM_MAPPINGS[self.system_name]
+        mapped = []
+        for algo in no_source:
+            if algo in mapping and mapping[algo] is not None:
+                mapped.append(mapping[algo])
+
+        return mapped
 
     @staticmethod
     def add_algorithm_mapping(system_name, mapping):

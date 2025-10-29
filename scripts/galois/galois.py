@@ -223,7 +223,7 @@ def main():
         print( "Supported benchmarks: ", supported_benchmarks)
         if 'bfs' in supported_benchmarks:
             # Get source vertex from properties
-            source_vertex = props_reader.get_source_vertex('bfs')
+            source_vertex = props_reader.get_source_vertex()
             if source_vertex is None:
                 print(f"  No source vertex found in properties for BFS, skipping")
             else:
@@ -241,7 +241,7 @@ def main():
 
         if 'betweennesscentrality' in supported_benchmarks:
             # Get source vertex from properties
-            source_vertex = props_reader.get_source_vertex('bfs')
+            source_vertex = props_reader.get_source_vertex()
             if source_vertex is None:
                 print(f"  No source vertex found in properties for BC, skipping")
             else:
@@ -250,7 +250,7 @@ def main():
 
         if 'sssp' in supported_benchmarks:
             # Get source vertex from properties
-            source_vertex = props_reader.get_source_vertex('sssp')
+            source_vertex = props_reader.get_source_vertex()
             if source_vertex is None:
                 print(f"  No source vertex found in properties for SSSP, skipping")
             else:

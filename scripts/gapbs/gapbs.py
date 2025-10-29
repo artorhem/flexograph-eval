@@ -155,7 +155,7 @@ def main():
             log_file = f"/results/gapbs/{dataset}_{benchmark}.log"
 
             # Get source vertex from properties using the reader
-            source_vertex = props_reader.get_source_vertex(benchmark)
+            source_vertex = props_reader.get_source_vertex()
 
             if source_vertex is None:
                 print(f"  No source vertex found in properties for {benchmark}, skipping")
