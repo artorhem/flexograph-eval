@@ -48,13 +48,13 @@ def parse_log(buffer, algo):
 
     return read_time, algo_time, mem, major_faults, minor_faults, block_input, block_output
 
-def do_bfs(gr_path, output_path, source_vertex, num_threads):
+def do_bfs(gr_path, output_path, source_vertex, num_threads, conv_time):
     dataset = gr_path
     outfile = f"{output_path}_synctile_parallel_time.csv"
     outfile_stats = f"{output_path}_synctile_parallel_stats.log"
     # Run BFS
     with open (outfile, "w") as f:
-        f.write("read_time(ms), algo_time(ms), start_node, mem_used(MB), num_threads, major_faults, minor_faults, block_input, block_output\n")
+        f.write("conv_time(s),read_time(ms),algo_time(ms),start_node,mem_used(MB),num_threads,major_faults,minor_faults,block_input,block_output\n")
 
     command = [f"{BUILD_DIR}/lonestar/bfs/bfs", "-algo=SyncTile", "-exec=PARALLEL", f"-t={num_threads}", f"-startNode={source_vertex}", "-noverify", f"{dataset}"]
     with open(outfile_stats, "a") as fout, open(outfile, "a") as f:
@@ -63,17 +63,17 @@ def do_bfs(gr_path, output_path, source_vertex, num_threads):
             process = subprocess.run(command, stdout=subprocess.PIPE, text=True)
             fout.write(f"{process.stdout}\n----------------\n")
             read_time, algo_time, mem, maj_flt, min_flt, blck_in, blck_out = parse_log(process.stdout, "BFS")
-            f.write(f"{read_time},{algo_time},{source_vertex},{mem},{num_threads},{maj_flt},{min_flt},{blck_in},{blck_out}\n")
+            f.write(f"{conv_time},{read_time},{algo_time},{source_vertex},{mem},{num_threads},{maj_flt},{min_flt},{blck_in},{blck_out}\n")
 
 
-def do_pagerank(gr_path, output_path, num_threads):
+def do_pagerank(gr_path, output_path, num_threads, conv_time):
     print("arguments are: ", gr_path, output_path, num_threads)
     dataset = gr_path
     outfile = f"{output_path}_residual.csv"
     outfile_stats = f"{output_path}_residual_stats.log"
     # Run PageRank
     with open (outfile, "w") as f:
-        f.write("read_time(ms), algo_time(ms), mem_used(MB), num_threads, major_faults, minor_faults, block_input, block_output\n")
+        f.write("conv_time(s),read_time(ms),algo_time(ms),mem_used(MB),num_threads,major_faults,minor_faults,block_input,block_output\n")
     command = [f"{BUILD_DIR}/lonestar/pagerank/pagerank-pull", f"-t={num_threads}", "-tolerance=0.0001", "-algo=Residual", "-noverify", f"{dataset}"]
     with open(outfile_stats, "a") as fout, open(outfile, "a") as f:
         print(command)
@@ -81,15 +81,15 @@ def do_pagerank(gr_path, output_path, num_threads):
             process = subprocess.run(command, stdout=subprocess.PIPE, text=True)
             fout.write(f"{process.stdout}\n----------------\n")
             read_time, algo_time, mem, maj_flt, min_flt, blck_in, blck_out= parse_log(process.stdout, "PAGERANK")
-            f.write(f"{read_time},{algo_time},{mem},{num_threads}, {maj_flt}, {min_flt}, {blck_in}, {blck_out}\n")
+            f.write(f"{conv_time},{read_time},{algo_time},{mem},{num_threads},{maj_flt},{min_flt},{blck_in},{blck_out}\n")
 
-def do_connectedcomponents(gr_path, output_path, num_threads):
+def do_connectedcomponents(gr_path, output_path, num_threads, conv_time):
     dataset = gr_path
     outfile = f"{output_path}_labelprop.csv"
     outfile_stats = f"{output_path}_labelprop_stats.log"
     # Run Connected Components
     with open (outfile, "w") as f:
-        f.write("read_time(ms), algo_time(ms), mem_used(MB), num_threads, major_faults, minor_faults, block_input, block_output\n")
+        f.write("conv_time(s),read_time(ms),algo_time(ms),mem_used(MB),num_threads,major_faults,minor_faults,block_input,block_output\n")
     command = [f"{BUILD_DIR}/lonestar/connectedcomponents/connectedcomponents", f"-t={num_threads}", "-algo=LabelProp", "-noverify", f"{dataset}"]
     with open(outfile_stats, "a") as fout, open(outfile, "a") as f:
         print(command)
@@ -97,15 +97,15 @@ def do_connectedcomponents(gr_path, output_path, num_threads):
             process = subprocess.run(command, stdout=subprocess.PIPE, text=True)
             fout.write(f"{process.stdout}\n----------------\n")
             read_time, algo_time, mem, maj_flt, min_flt, blck_in, blck_out  = parse_log(process.stdout, "LABELPROP")
-            f.write(f"{read_time},{algo_time},{mem},{num_threads},{maj_flt},{min_flt},{blck_in},{blck_out}\n")
+            f.write(f"{conv_time},{read_time},{algo_time},{mem},{num_threads},{maj_flt},{min_flt},{blck_in},{blck_out}\n")
 
-def do_triangles(gr_path, output_path, num_threads):
+def do_triangles(gr_path, output_path, num_threads, conv_time):
     dataset = gr_path
     outfile = f"{output_path}_orderedCount.csv"
     outfile_stats = f"{output_path}_orderedCount_stats.log"
     # Run Triangle Counting
     with open (outfile, "w") as f:
-        f.write("read_time(ms),algo_time(ms),mem_used(MB),num_threads, major_faults, minor_faults, block_input, block_output\n")
+        f.write("conv_time(s),read_time(ms),algo_time(ms),mem_used(MB),num_threads,major_faults,minor_faults,block_input,block_output\n")
     command = [f"{BUILD_DIR}/lonestar/triangles/triangles", f"-t={num_threads}", "-algo=orderedCount", "-noverify", f"{dataset}"]
     with open(outfile_stats, "a") as fout, open(outfile, "a") as f:
         print(command)
@@ -113,15 +113,15 @@ def do_triangles(gr_path, output_path, num_threads):
             process = subprocess.run(command, stdout=subprocess.PIPE, text=True)
             fout.write(f"{process.stdout}\n----------------\n")
             read_time, algo_time, mem, maj_flt, min_flt, blck_in, blck_out  = parse_log(process.stdout, "ORDEREDCOUNT")
-            f.write(f"{read_time},{algo_time},{mem},{num_threads},{maj_flt},{min_flt},{blck_in},{blck_out}\n")
+            f.write(f"{conv_time},{read_time},{algo_time},{mem},{num_threads},{maj_flt},{min_flt},{blck_in},{blck_out}\n")
 
-def do_bc(gr_path, output_path, source_vertex, num_threads):
+def do_bc(gr_path, output_path, source_vertex, num_threads, conv_time):
     dataset = gr_path
     outfile = f"{output_path}_bc.csv"
     outfile_stats = f"{output_path}_bc_stats.log"
     # Run Betweenness Centrality
     with open (outfile, "w") as f:
-        f.write("read_time(ms), algo_time(ms), mem_used(MB), num_threads, major_faults, minor_faults, block_input, block_output\n")
+        f.write("conv_time(s),read_time(ms),algo_time(ms),mem_used(MB),num_threads,major_faults,minor_faults,block_input,block_output\n")
     command = [f"{BUILD_DIR}/lonestar/betweennesscentrality/bc-async", f"-t={num_threads}", f"-sourcesToUse={source_vertex}", "-numOfSources=1", "-noverify", f"{dataset}"]
     with open(outfile_stats, "a") as fout, open(outfile, "a") as f:
         print(command)
@@ -129,15 +129,15 @@ def do_bc(gr_path, output_path, source_vertex, num_threads):
             process = subprocess.run(command, stdout=subprocess.PIPE, text=True)
             fout.write(f"{process.stdout}\n----------------\n")
             read_time, algo_time, mem, maj_flt, min_flt, blck_in, blck_out  = parse_log(process.stdout, "BC")
-            f.write(f"{read_time},{algo_time},{mem},{num_threads},{maj_flt},{min_flt},{blck_in},{blck_out}\n")
+            f.write(f"{conv_time},{read_time},{algo_time},{mem},{num_threads},{maj_flt},{min_flt},{blck_in},{blck_out}\n")
 
-def do_sssp(gr_path, output_path, source_vertex, num_threads):
+def do_sssp(gr_path, output_path, source_vertex, num_threads, conv_time):
     dataset = gr_path
     outfile = f"{output_path}_sssp.csv"
     outfile_stats = f"{output_path}_sssp_stats.log"
     # Run SSSP
     with open (outfile, "w") as f:
-        f.write("read_time(ms), algo_time(ms), mem_used(MB), num_threads, major_faults, minor_faults, block_input, block_output\n")
+        f.write("conv_time(s),read_time(ms),algo_time(ms),mem_used(MB),num_threads,major_faults,minor_faults,block_input,block_output\n")
     command = [f"{BUILD_DIR}/lonestar/sssp/sssp", f"-t={num_threads}", f"-startNode={source_vertex}", "-algo=deltaStep", "-noverify", f"{dataset}"]
     with open(outfile_stats, "a") as fout, open(outfile, "a") as f:
         print(command)
@@ -145,7 +145,7 @@ def do_sssp(gr_path, output_path, source_vertex, num_threads):
             process = subprocess.run(command, stdout=subprocess.PIPE, text=True)
             fout.write(f"{process.stdout}\n----------------\n")
             read_time, algo_time, mem, maj_flt, min_flt, blck_in, blck_out  = parse_log(process.stdout, "SSSP")
-            f.write(f"{read_time},{algo_time},{mem},{num_threads},{maj_flt},{min_flt},{blck_in},{blck_out}\n")
+            f.write(f"{conv_time},{read_time},{algo_time},{mem},{num_threads},{maj_flt},{min_flt},{blck_in},{blck_out}\n")
 
 
 def main():
@@ -166,6 +166,7 @@ def main():
     # Ensure results and datasets directories exist
     os.makedirs("/results/galois", exist_ok=True)
     os.makedirs("/datasets/galois", exist_ok=True)
+    os.makedirs("/extra_space/galois", exist_ok=True)
 
     datasets = ["dota_league","graph500_26", "graph500_28", "graph500_30", "uniform_26", "twitter_mpi","uk-2007", "com-friendster"]
 
@@ -194,6 +195,17 @@ def main():
         print(f"  Supported algorithms from properties: {properties['algorithms']}")
         print(f"  Galois benchmarks to run: {supported_benchmarks}")
         print(f"  Directed: {props_reader.is_directed()}")
+        print(f"  Weighted: {props_reader.is_weighted()}")
+
+        # Determine graph format requirements
+        graph_format_notes = []
+        if not props_reader.is_directed():
+            graph_format_notes.append("Will convert to .sgr (symmetric)")
+        if 'pagerank' in supported_benchmarks and props_reader.is_directed():
+            graph_format_notes.append("Will generate .tgr (transpose) for PageRank")
+
+        if graph_format_notes:
+            print(f"  Graph conversions: {', '.join(graph_format_notes)}")
 
         # Convert to .gr format if needed
         if not gr_path.exists() or not conv_time_file.exists():
@@ -203,7 +215,6 @@ def main():
                 command.append("-edgeType=float64")
             
             command.extend([str(dataset_path), str(gr_path)])
-            
             result = subprocess.run(["/usr/bin/time", "-p"] + command, stderr=subprocess.PIPE, universal_newlines=True)
 
             time_taken = ""
@@ -219,6 +230,51 @@ def main():
             with open(conv_time_file, "r") as f:
                 time_taken = f.read().strip()
 
+        # After initial .gr conversion, handle undirected graphs
+        if not props_reader.is_directed():
+            sgr_path = Path(f"/extra_space/galois/{dataset}.sgr")
+            sgr_conv_time_file = Path(f"/results/galois/conv_time_{dataset}_sgr.txt")
+
+            if not sgr_path.exists() or not sgr_conv_time_file.exists():
+                print(f"Converting {dataset} to symmetric graph format (.sgr)")
+                command = [
+                    f"{BUILD_DIR}/tools/graph-convert/graph-convert",
+                    "-gr2sgr",
+                    str(gr_path),
+                    str(sgr_path)
+                ]
+
+                result = subprocess.run(
+                    ["/usr/bin/time", "-p"] + command,
+                    stderr=subprocess.PIPE,
+                    universal_newlines=True,
+                    check=True
+                )
+
+                time_taken_sgr = ""
+                for line in result.stderr.splitlines():
+                    if line.startswith("real"):
+                        time_taken_sgr = line.split()[1]
+
+                with open(sgr_conv_time_file, "w") as f:
+                    f.write(time_taken_sgr + "\n")
+                print(f"Time to convert {dataset} to .sgr: {time_taken_sgr}")
+            else:
+                print(f"Dataset {dataset} already exists in .sgr format")
+                with open(sgr_conv_time_file, "r") as f:
+                    time_taken_sgr = f.read().strip()
+
+            # Use symmetric graph for all subsequent algorithms
+            gr_path = sgr_path
+
+        # Calculate base conversion time for most algorithms
+        # For undirected graphs: base time = .gr + .sgr
+        # For directed graphs: base time = .gr only
+        if not props_reader.is_directed():
+            base_conv_time = float(time_taken) + float(time_taken_sgr)
+        else:
+            base_conv_time = float(time_taken)
+
         # Run benchmarks based on supported algorithms from properties
         print( "Supported benchmarks: ", supported_benchmarks)
         if 'bfs' in supported_benchmarks:
@@ -228,16 +284,62 @@ def main():
                 print(f"  No source vertex found in properties for BFS, skipping")
             else:
                 print(f"  Using BFS source vertex: {source_vertex}")
-                do_bfs(gr_path, f"/results/galois/{dataset}_bfs", source_vertex, THREADS)
+                do_bfs(gr_path, f"/results/galois/{dataset}_bfs", source_vertex, THREADS, base_conv_time)
 
         if 'pagerank' in supported_benchmarks:
-            do_pagerank(gr_path, f"/results/galois/{dataset}_pagerank-pull", THREADS)
+            # PageRank-pull requires transpose graph for directed graphs
+            if props_reader.is_directed():
+                tgr_path = Path(f"/extra_space/galois/{dataset}.tgr")
+                tgr_conv_time_file = Path(f"/results/galois/conv_time_{dataset}_tgr.txt")
+
+                if not tgr_path.exists() or not tgr_conv_time_file.exists():
+                    print(f"Generating transpose graph (.tgr) for PageRank-pull")
+                    command = [
+                        f"{BUILD_DIR}/tools/graph-convert/graph-convert",
+                        "-gr2tgr",
+                        str(gr_path),
+                        str(tgr_path)
+                    ]
+
+                    result = subprocess.run(
+                        ["/usr/bin/time", "-p"] + command,
+                        stderr=subprocess.PIPE,
+                        universal_newlines=True,
+                        check=True
+                    )
+
+                    time_taken_tgr = ""
+                    for line in result.stderr.splitlines():
+                        if line.startswith("real"):
+                            time_taken_tgr = line.split()[1]
+
+                    with open(tgr_conv_time_file, "w") as f:
+                        f.write(time_taken_tgr + "\n")
+                    print(f"Time to convert {dataset} to .tgr: {time_taken_tgr}")
+                else:
+                    print(f"Transpose graph {dataset}.tgr already exists")
+                    with open(tgr_conv_time_file, "r") as f:
+                        time_taken_tgr = f.read().strip()
+
+                # For directed graphs with PageRank: conv_time = .gr + .tgr
+                pagerank_conv_time = float(time_taken) + float(time_taken_tgr)
+                do_pagerank(tgr_path, f"/results/galois/{dataset}_pagerank-pull", THREADS, pagerank_conv_time)
+            else:
+                # For undirected graphs, use symmetric .sgr (which is already in gr_path)
+                # conv_time = .gr + .sgr (which is base_conv_time)
+                do_pagerank(gr_path, f"/results/galois/{dataset}_pagerank-pull", THREADS, base_conv_time)
 
         if 'connectedcomponents' in supported_benchmarks:
-            do_connectedcomponents(gr_path, f"/results/galois/{dataset}_connectedcomponents", THREADS)
-        
+            if props_reader.is_directed():
+                print(f"  Skipping Connected Components - requires undirected graph (graph is directed)")
+            else:
+                do_connectedcomponents(gr_path, f"/results/galois/{dataset}_connectedcomponents", THREADS, base_conv_time)
+
         if 'triangles' in supported_benchmarks:
-            do_triangles(gr_path, f"/results/galois/{dataset}_triangle", THREADS)
+            if props_reader.is_directed():
+                print(f"  Skipping Triangle Counting - requires undirected graph (graph is directed)")
+            else:
+                do_triangles(gr_path, f"/results/galois/{dataset}_triangle", THREADS, base_conv_time)
 
         if 'betweennesscentrality' in supported_benchmarks:
             # Get source vertex from properties
@@ -246,7 +348,7 @@ def main():
                 print(f"  No source vertex found in properties for BC, skipping")
             else:
                 print(f"  Using BFS source vertex for BC: {source_vertex}")
-            do_bc(gr_path, f"/results/galois/{dataset}_bc", source_vertex, THREADS)
+                do_bc(gr_path, f"/results/galois/{dataset}_bc", source_vertex, THREADS, base_conv_time)
 
         if 'sssp' in supported_benchmarks:
             # Get source vertex from properties
@@ -255,7 +357,7 @@ def main():
                 print(f"  No source vertex found in properties for SSSP, skipping")
             else:
                 print(f"  Using SSSP source vertex: {source_vertex}")
-                do_sssp(gr_path, f"/results/galois/{dataset}_sssp", source_vertex, THREADS)
+                do_sssp(gr_path, f"/results/galois/{dataset}_sssp", source_vertex, THREADS, base_conv_time)
 
 if __name__ == "__main__":
     main()
