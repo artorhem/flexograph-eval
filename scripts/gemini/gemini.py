@@ -4,6 +4,10 @@ import sys
 import json
 import re
 
+# Add parent directory to path to import shared utilities
+sys.path.insert(0, '/scripts')
+from dataset_properties import PropertiesReader
+
 SRC_DIR = "/systems/in-mem/GeminiGraph"
 TOOLS_DIR = "/systems/in-mem/GeminiGraph/toolkits"
 DATASET_DIR = "/datasets"
@@ -149,13 +153,42 @@ def main(self):
   for dataset_name in datasets:
     print (f"Running for dataset: {dataset_name}")
 
-    #read the random start nodes from the .bfsver file
-    start_nodes = []
-    with open(f"{DATASET_DIR}/{dataset_name}/{dataset_name}.bfsver") as f:
-      for line in f:
-        start_nodes.append(int(line.strip()))
-    #remove duplicates
-    start_nodes = list(set(start_nodes))
+    dataset_path = f"{DATASET_DIR}/{dataset_name}"
+
+    # Read properties file using PropertiesReader
+    props_reader = PropertiesReader(dataset_name, dataset_path, system_name='gemini')
+    properties = props_reader.read()
+
+    if properties is None:
+      print(f"Could not read properties for {dataset_name}, skipping")
+      continue
+
+    # Get mapped algorithms for Gemini
+    supported_benchmarks = props_reader.get_mapped_algorithms()
+
+    if not supported_benchmarks:
+      print(f"No supported Gemini algorithms found for {dataset_name}, skipping")
+      continue
+
+    # Filter benchmarks based on weighted/unweighted graph type
+    # GeminiGraph SSSP uses Graph<Weight> and requires weighted graphs
+    # GeminiGraph BFS, PageRank, CC, BC use Graph<Empty> and can work on both weighted/unweighted (they ignore weights)
+    if not props_reader.is_weighted():
+      # Unweighted graphs: run all algorithms except SSSP (which requires weights)
+      supported_benchmarks = [b for b in supported_benchmarks if b != 'sssp']
+      print(f"  Graph is unweighted - will skip SSSP")
+    else:
+      # Weighted graphs: can run all algorithms (SSSP uses weights, others ignore them)
+      print(f"  Graph is weighted - will run all supported algorithms")
+
+    if not supported_benchmarks:
+      print(f"No compatible Gemini algorithms for this graph type, skipping")
+      continue
+
+    print(f"  Supported algorithms from properties: {properties['algorithms']}")
+    print(f"  Gemini benchmarks to run: {supported_benchmarks}")
+    print(f"  Directed: {props_reader.is_directed()}")
+    print(f"  Weighted: {props_reader.is_weighted()}")
 
 
     cmd = f"{TOOLS_DIR}/convert {DATASET_DIR}/{dataset_name}/{dataset_name} >> {RESULTS_DIR}/{dataset_name}_gemini_convert.log"
@@ -172,51 +205,52 @@ def main(self):
 
     num_vertices = max_vertex_id + 1
 
-    #Now we can run each benchmark:
-    print("PageRank...")
-    #delete the previous log file
-    if not args.dry_run and os.path.exists(f"{RESULTS_DIR}/{dataset_name}_pagerank.log"):
-        os.remove(f"{RESULTS_DIR}/{dataset_name}_pagerank.log")
-    max_iters = 20
-    cmd = f"{TOOLS_DIR}/pagerank {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {max_iters} >> {RESULTS_DIR}/{dataset_name}_pagerank.log"
-    print(cmd)
-    for iter in range(REPEATS):
-      if not args.dry_run:
-        os.system(cmd)
+    #Now we can run each benchmark based on properties
+    for benchmark in supported_benchmarks:
+      print(f"{benchmark}...")
+      #delete the previous log file
+      if not args.dry_run and os.path.exists(f"{RESULTS_DIR}/{dataset_name}_{benchmark}.log"):
+        os.remove(f"{RESULTS_DIR}/{dataset_name}_{benchmark}.log")
 
-    print("BFS...")
-    #delete the previous log file
-    if not args.dry_run and os.path.exists(f"{RESULTS_DIR}/{dataset_name}_bfs.log"):
-      os.remove(f"{RESULTS_DIR}/{dataset_name}_bfs.log")
-    for start_node in start_nodes:
-      cmd = f"{TOOLS_DIR}/bfs {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {start_node} >> {RESULTS_DIR}/{dataset_name}_bfs.log"
-      print(cmd)
-      if not args.dry_run:
-        os.system(cmd)
+      # Check if this benchmark needs a source vertex
+      if benchmark in ['bfs', 'sssp']:
+        # Get source vertex from properties
+        source_vertex = props_reader.get_source_vertex()
+        if source_vertex is None:
+          print(f"  No source vertex found in properties for {benchmark}, skipping")
+          continue
 
+        print(f"  Using source vertex: {source_vertex}")
+        cmd = f"{TOOLS_DIR}/{benchmark} {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {source_vertex} >> {RESULTS_DIR}/{dataset_name}_{benchmark}.log"
+        print(cmd)
+        for iter in range(REPEATS):
+          if not args.dry_run:
+            os.system(cmd)
+      else:
+        # Benchmarks that don't need source vertex (pagerank, cc)
+        if benchmark == "pagerank":
+          max_iters = PR_MAX_ITERS
+          cmd = f"{TOOLS_DIR}/{benchmark} {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {max_iters} >> {RESULTS_DIR}/{dataset_name}_{benchmark}.log"
+        else:
+          cmd = f"{TOOLS_DIR}/{benchmark} {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} >> {RESULTS_DIR}/{dataset_name}_{benchmark}.log"
 
-    print("CC...")
-    #delete the previous log file
-    if not args.dry_run and os.path.exists(f"{RESULTS_DIR}/{dataset_name}_cc.log"):
-      os.remove(f"{RESULTS_DIR}/{dataset_name}_cc.log")
-    cmd = f"{TOOLS_DIR}/cc {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} >> {RESULTS_DIR}/{dataset_name}_cc.log"
-    print(cmd)
-    for iter in range(REPEATS):
-      if not args.dry_run:
-        os.system(cmd)
-
-    print("SSSP...")
-    #delete the previous log file
-    if not args.dry_run and os.path.exists(f"{RESULTS_DIR}/{dataset_name}_sssp.log"):
-      os.remove(f"{RESULTS_DIR}/{dataset_name}_sssp.log")
-    for start_node in start_nodes:
-      cmd = f"{TOOLS_DIR}/sssp {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {start_node} >> {RESULTS_DIR}/{dataset_name}_sssp.log"
-      print(cmd)
-      if not args.dry_run:
-        os.system(cmd)
+        print(cmd)
+        for iter in range(REPEATS):
+          if not args.dry_run:
+            os.system(cmd)
 
   if args.parse:
-    parse_log( datasets, ["pagerank", "bfs", "cc", "sssp"])
+    # Collect all benchmarks that were run
+    all_benchmarks = set()
+    for dataset_name in datasets:
+      dataset_path = f"{DATASET_DIR}/{dataset_name}"
+      props_reader = PropertiesReader(dataset_name, dataset_path, system_name='gemini')
+      properties = props_reader.read()
+      if properties:
+        benchmarks = props_reader.get_mapped_algorithms()
+        all_benchmarks.update(benchmarks)
+
+    parse_log(datasets, list(all_benchmarks))
 
 if __name__ == "__main__":
   main(sys.argv)

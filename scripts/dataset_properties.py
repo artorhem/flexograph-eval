@@ -50,7 +50,7 @@ class PropertiesReader:
             'wcc': 'cc',
             'sssp': 'sssp',
             'triangle': None,
-            'bc': 'BC',
+            'bc': 'bc',
         },
         'galois': {
             'bfs': 'bfs',
