@@ -273,6 +273,34 @@ class PropertiesReader:
 
         return self._properties['weighted']
 
+    def get_edge_file(self):
+        """
+        Get the edge file name from properties.
+        Converts hyphens to underscores to match actual filesystem naming.
+
+        Returns:
+            str: Edge file name (e.g., 'graph500_26.e'), or None if not specified
+        """
+        if self._properties is None:
+            self.read()
+
+        if self._properties is None or 'raw_config' not in self._properties:
+            return None
+
+        config = self._properties['raw_config']
+        dataset_key = self._find_dataset_key(config)
+
+        if not dataset_key:
+            return None
+
+        edge_file_key = f"graph.{dataset_key}.edge-file"
+        if edge_file_key in config['DEFAULT']:
+            edge_file = config['DEFAULT'][edge_file_key].strip()
+            # Convert hyphens to underscores to match filesystem naming
+            return edge_file.replace('-', '_')
+
+        return None
+
     def get_property(self, key):
         """
         Get a specific property by key.

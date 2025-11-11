@@ -16,6 +16,27 @@ RESULTS_DIR = "/results/gemini"
 REPEATS = 5
 PR_MAX_ITERS = 20
 
+# NUMA control settings
+NUMA_CPU_NODE = 0
+NUMA_MEM_NODE = 0
+
+def make_numactl_prefix():
+  """
+  Create numactl command prefix to restrict GeminiGraph to specific NUMA node.
+  This prevents the segfault when container only has access to node 0 but
+  GeminiGraph tries to use all detected NUMA nodes.
+  """
+  if NUMA_CPU_NODE is None and NUMA_MEM_NODE is None:
+    return ""
+
+  numa_cmd = "numactl"
+  if NUMA_CPU_NODE is not None:
+    numa_cmd += f" --cpunodebind={NUMA_CPU_NODE}"
+  if NUMA_MEM_NODE is not None:
+    numa_cmd += f" --membind={NUMA_MEM_NODE}"
+
+  return numa_cmd + " "
+
 def parse_log_single(dataset_name, benchmark_name):
   convert_log_file = f"{RESULTS_DIR}/{dataset_name}_gemini_convert.log"
   input_file = f"{RESULTS_DIR}/{dataset_name}_{benchmark_name}.log"
@@ -142,6 +163,15 @@ def main(self):
   parser.add_argument("-p","--parse",action="store_true",default=False, help="parse the logs to make the csv")
   args = parser.parse_args()
 
+  # Get numactl prefix
+  numactl_prefix = make_numactl_prefix()
+  if numactl_prefix:
+    print(f"Using NUMA control: {numactl_prefix.strip()}")
+    print(f"  CPU node: {NUMA_CPU_NODE}")
+    print(f"  Memory node: {NUMA_MEM_NODE}")
+  else:
+    print("NUMA control disabled - using all available nodes")
+
   os.chdir(SRC_DIR)
   #run make here
   os.system("make clean && make -j")
@@ -190,8 +220,16 @@ def main(self):
     print(f"  Directed: {props_reader.is_directed()}")
     print(f"  Weighted: {props_reader.is_weighted()}")
 
+    # Get edge file name from properties
+    edge_file = props_reader.get_edge_file()
+    if edge_file is None:
+      print(f"Could not find edge file in properties for {dataset_name}, skipping")
+      continue
 
-    cmd = f"{TOOLS_DIR}/convert {DATASET_DIR}/{dataset_name}/{dataset_name} >> {RESULTS_DIR}/{dataset_name}_gemini_convert.log"
+    print(f"  Edge file: {edge_file}")
+
+    # Convert command with numactl wrapper
+    cmd = f"{numactl_prefix}{TOOLS_DIR}/convert {DATASET_DIR}/{dataset_name}/{edge_file} >> {RESULTS_DIR}/{dataset_name}_gemini_convert.log"
     print(cmd)
     if not args.dry_run:
       os.system(cmd)
@@ -221,7 +259,8 @@ def main(self):
           continue
 
         print(f"  Using source vertex: {source_vertex}")
-        cmd = f"{TOOLS_DIR}/{benchmark} {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {source_vertex} >> {RESULTS_DIR}/{dataset_name}_{benchmark}.log"
+        # Add numactl prefix to command
+        cmd = f"{numactl_prefix}{TOOLS_DIR}/{benchmark} {DATASET_DIR}/{dataset_name}/{edge_file}.bin {num_vertices} {source_vertex} >> {RESULTS_DIR}/{dataset_name}_{benchmark}.log"
         print(cmd)
         for iter in range(REPEATS):
           if not args.dry_run:
@@ -230,9 +269,9 @@ def main(self):
         # Benchmarks that don't need source vertex (pagerank, cc)
         if benchmark == "pagerank":
           max_iters = PR_MAX_ITERS
-          cmd = f"{TOOLS_DIR}/{benchmark} {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} {max_iters} >> {RESULTS_DIR}/{dataset_name}_{benchmark}.log"
+          cmd = f"{numactl_prefix}{TOOLS_DIR}/{benchmark} {DATASET_DIR}/{dataset_name}/{edge_file}.bin {num_vertices} {max_iters} >> {RESULTS_DIR}/{dataset_name}_{benchmark}.log"
         else:
-          cmd = f"{TOOLS_DIR}/{benchmark} {DATASET_DIR}/{dataset_name}/{dataset_name}.bin {num_vertices} >> {RESULTS_DIR}/{dataset_name}_{benchmark}.log"
+          cmd = f"{numactl_prefix}{TOOLS_DIR}/{benchmark} {DATASET_DIR}/{dataset_name}/{edge_file}.bin {num_vertices} >> {RESULTS_DIR}/{dataset_name}_{benchmark}.log"
 
         print(cmd)
         for iter in range(REPEATS):
