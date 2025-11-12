@@ -2,12 +2,17 @@
 
 # Parse arguments
 TEST_MODE=false
+NO_NUMA=false
 SERVICE_NAME=""
 
 while [[ $# -gt 0 ]]; do
   case $1 in
     --test)
       TEST_MODE=true
+      shift
+      ;;
+    --no_numa)
+      NO_NUMA=true
       shift
       ;;
     *)
@@ -19,15 +24,19 @@ done
 
 # Check if service name is provided
 if [ -z "$SERVICE_NAME" ]; then
-  echo "Usage: $0 [--test] <service_name>"
+  echo "Usage: $0 [--test] [--no_numa] <service_name>"
   echo "Example: $0 gapbs"
   echo "Example: $0 --test gapbs"
+  echo "Example: $0 --no_numa gapbs"
   echo "Available services: gapbs, gemini, ligra, galois, blaze, graphchi, xstream, lumos, gridgraph, margraphita"
   exit 1
 fi
 
-# NUMA settings based on test mode
-if [ "$TEST_MODE" = true ]; then
+# NUMA settings based on test mode and no_numa flag
+if [ "$NO_NUMA" = true ]; then
+  NUMA_NODE_0_CPUS=""
+  echo "Running with NUMA settings disabled"
+elif [ "$TEST_MODE" = true ]; then
   # Test mode: use CPUs 0-27
   NUMA_NODE_0_CPUS="0-27"
   echo "Running in TEST mode with CPUs 0-27"
@@ -68,28 +77,51 @@ fi
 
 echo "Launching service: ${SERVICE_NAME} in detached mode"
 echo "Using image: ${IMAGE_NAME}"
-echo "NUMA settings: CPUs=${NUMA_NODE_0_CPUS}, Memory node=0"
+if [ "$NO_NUMA" = true ]; then
+  echo "NUMA settings: Disabled"
+else
+  echo "NUMA settings: CPUs=${NUMA_NODE_0_CPUS}, Memory node=0"
+fi
 echo ""
 
-# Launch the service in detached mode with NUMA settings
-docker run -d \
-  --name "${SERVICE_NAME}" \
-  --privileged \
-  --cpuset-mems="0" \
-  --cpuset-cpus="$NUMA_NODE_0_CPUS" \
-  -v "$(pwd)/datasets":/datasets \
-  -v "$(pwd)/systems":/systems \
-  -v "$(pwd)/results":/results \
-  -v "$(pwd)/extra_space":/extra_space \
-  "$IMAGE_NAME" \
-  /bin/bash -c "
-      echo 'Verifying configuration:'
-      grep 'Cpus_allowed_list' /proc/self/status
-      grep 'Mems_allowed_list' /proc/self/status
-      echo ''
+# Launch the service in detached mode with conditional NUMA settings
+if [ "$NO_NUMA" = true ]; then
+  docker run -d \
+    --name "${SERVICE_NAME}" \
+    --privileged \
+    -v "$(pwd)/datasets":/datasets \
+    -v "$(pwd)/systems":/systems \
+    -v "$(pwd)/results":/results \
+    -v "$(pwd)/extra_space":/extra_space \
+    "$IMAGE_NAME" \
+    /bin/bash -c "
+        echo 'Verifying configuration:'
+        grep 'Cpus_allowed_list' /proc/self/status
+        grep 'Mems_allowed_list' /proc/self/status
+        echo ''
 
-      sleep infinity
-    "
+        sleep infinity
+      "
+else
+  docker run -d \
+    --name "${SERVICE_NAME}" \
+    --privileged \
+    --cpuset-mems="0" \
+    --cpuset-cpus="$NUMA_NODE_0_CPUS" \
+    -v "$(pwd)/datasets":/datasets \
+    -v "$(pwd)/systems":/systems \
+    -v "$(pwd)/results":/results \
+    -v "$(pwd)/extra_space":/extra_space \
+    "$IMAGE_NAME" \
+    /bin/bash -c "
+        echo 'Verifying configuration:'
+        grep 'Cpus_allowed_list' /proc/self/status
+        grep 'Mems_allowed_list' /proc/self/status
+        echo ''
+
+        sleep infinity
+      "
+fi
 
 if [ $? -eq 0 ]; then
   echo "✓ Container '${SERVICE_NAME}' launched successfully"
