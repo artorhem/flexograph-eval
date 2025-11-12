@@ -7,12 +7,13 @@ from pathlib import Path
 
 # Add parent directory to path to import shared utilities
 sys.path.insert(0, '/scripts')
-from dataset_properties import PropertiesReader
+from dataset_properties import PropertiesReader, get_available_cpus
 
 SRC_DIR = "/systems/in-mem/Galois"
 BUILD_DIR = "/systems/in-mem/Galois/build"
 ITERATIONS = 5
-THREADS = os.cpu_count()
+THREADS = get_available_cpus()
+print(f"Using {THREADS} threads based on available CPUs")
 
 def parse_log(buffer, algo):
     '''Read the log file line by line and match the regex to get the required values:

@@ -1,8 +1,13 @@
 import os
+import sys
 import subprocess
 import re
 import argparse
 from pathlib import Path
+
+# Add parent directory to path to import shared utilities
+sys.path.insert(0, '/scripts')
+from dataset_properties import get_available_cpus
 
 SRC_DIR = "/systems/ooc/blaze"
 BUILD_DIR = "/systems/ooc/blaze/build"
@@ -128,7 +133,8 @@ def main():
   args = parser.parse_args()
 
   # find the number of threads available
-  NUM_WORKERS = os.cpu_count() - 8
+  NUM_WORKERS = max(1, get_available_cpus() - 8)  # Reserve 8 CPUs for system, but ensure at least 1
+  print(f"Using {NUM_WORKERS} worker threads (available CPUs - 8)")
 
   # No need to build the project -- done in dockerfile
   datasets = ["graph500_23", "road_asia", "road_usa", "livejournal", "orkut", "dota_league", "graph500_26", "graph500_28", "twitter_mpi"]#, "graph500_30"]

@@ -1,7 +1,12 @@
 import os
+import sys
 import subprocess
 import re
 import time
+
+# Add parent directory to path to import shared utilities
+sys.path.insert(0, '/scripts')
+from dataset_properties import get_available_cpus
 
 src_dir = "/xstream"
 app_dir = "/xstream/bin"
@@ -144,10 +149,12 @@ def exec_benchmarks():
 
 def main():
   os.makedirs(dataset_cpy, exist_ok=True)
-  
+
   #X-Stream needs the processor count to be a power of 2
   global nproc
-  nproc = 2 ** (os.cpu_count().bit_length() - 1)
+  available_cpus = get_available_cpus()
+  nproc = 2 ** (available_cpus.bit_length() - 1)
+  print(f"Using {nproc} threads (nearest power of 2 for {available_cpus} available CPUs)")
 
   #get the physcial memory in Bytes
   mem = os.sysconf('SC_PAGE_SIZE') * os.sysconf('SC_PHYS_PAGES')

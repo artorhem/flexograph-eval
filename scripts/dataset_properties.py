@@ -10,6 +10,36 @@ import os
 import configparser
 
 
+def get_available_cpus():
+    """
+    Get the number of CPUs available to the container.
+    This respects Docker's --cpuset-cpus limitation.
+
+    Returns:
+        int: Number of available CPUs
+    """
+    try:
+        # Try to read from cgroup cpuset (works in containers with cpuset limits)
+        with open('/proc/self/status', 'r') as f:
+            for line in f:
+                if line.startswith('Cpus_allowed_list:'):
+                    cpus_allowed = line.split(':', 1)[1].strip()
+                    # Parse CPU list (e.g., "0-47,96-143" or "0-27")
+                    count = 0
+                    for cpu_range in cpus_allowed.split(','):
+                        if '-' in cpu_range:
+                            start, end = map(int, cpu_range.split('-'))
+                            count += end - start + 1
+                        else:
+                            count += 1
+                    return count
+    except Exception as e:
+        print(f"Warning: Could not determine available CPUs from cgroups: {e}")
+
+    # Fallback to os.cpu_count()
+    return os.cpu_count()
+
+
 class PropertiesReader:
     """
     A class to read and parse dataset properties files.

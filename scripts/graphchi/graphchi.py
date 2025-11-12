@@ -1,10 +1,15 @@
 import os
+import sys
 import subprocess
 import re
 import time
 import threading
 import signal
 from datetime import datetime
+
+# Add parent directory to path to import shared utilities
+sys.path.insert(0, '/scripts')
+from dataset_properties import get_available_cpus
 
 src_dir = "/systems/ooc/graphchi-cpp"
 app_dir = "/systems/ooc/graphchi-cpp/bin/example_apps"
@@ -172,13 +177,15 @@ def main():
     # I/O settings
     io.blocksize = 1048576, mmap = 0  # Use mmaped files where applicable
   '''
+  num_cpus = get_available_cpus()
+  print(f"Using {num_cpus} threads based on available CPUs")
   with open(f"{app_dir}/graphchi_local.conf", "w") as f:
     f.write("# GraphChi configuration.\n")
     f.write("# Commandline parameters override values in the configuration file.\n")
     # setting all threads to the number of cores
-    f.write(f"execthreads = {os.cpu_count()}\n")
-    f.write(f"loadthreads = {os.cpu_count()}\n")
-    f.write(f"niothreads = {os.cpu_count()}\n")
+    f.write(f"execthreads = {num_cpus}\n")
+    f.write(f"loadthreads = {num_cpus}\n")
+    f.write(f"niothreads = {num_cpus}\n")
     f.write("membudget_mb = 100000\n")
     f.write("cachesize_mb = 100000\n")
     f.write("io.blocksize = 1048576\n")

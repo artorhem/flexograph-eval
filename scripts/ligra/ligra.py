@@ -91,6 +91,14 @@ def main():
         print(f"  Ligra benchmarks to run: {supported_benchmarks}")
         print(f"  Directed: {props_reader.is_directed()}")
 
+        # Get edge file name from properties
+        edge_file = props_reader.get_edge_file()
+        if edge_file is None:
+            print(f"Could not find edge file in properties for {dataset}, skipping")
+            continue
+
+        print(f"  Edge file: {edge_file}")
+
         # Measure the time to convert the dataset to adj format and save in a variable
         converted_file = f"{tempdir}/{dataset}"
         converted_file_wgh = f"{tempdir}/{dataset}_wgh"
@@ -100,7 +108,7 @@ def main():
 
         # Always create unweighted version (needed by BFS, PageRank, Components, Triangle, BC)
         print(f"  Converting to unweighted format using SNAPtoAdj")
-        command = f"/systems/in-mem/ligra/utils/SNAPtoAdj {sym_flag} {dataset_dir}/{dataset}/{dataset} {converted_file}".strip()
+        command = f"/systems/in-mem/ligra/utils/SNAPtoAdj {sym_flag} {dataset_dir}/{dataset}/{edge_file} {converted_file}".strip()
         print(command)
         start_time = time.perf_counter()
         result = subprocess.run(
@@ -115,7 +123,7 @@ def main():
         convert_time_wgh = 0
         if props_reader.is_weighted():
             print(f"  Converting to weighted format using wghSNAPtoAdj")
-            command_wgh = f"/systems/in-mem/ligra/utils/wghSNAPtoAdj {sym_flag} {dataset_dir}/{dataset}/{dataset} {converted_file_wgh}".strip()
+            command_wgh = f"/systems/in-mem/ligra/utils/wghSNAPtoAdj {sym_flag} {dataset_dir}/{dataset}/{edge_file} {converted_file_wgh}".strip()
             print(command_wgh)
             start_time = time.perf_counter()
             result = subprocess.run(
@@ -153,7 +161,7 @@ def main():
             if benchmark == 'BellmanFord' and props_reader.is_weighted():
                 # Check if weights are floating-point by reading a sample edge
                 try:
-                    with open(f"{dataset_dir}/{dataset}/{dataset}", 'r') as f:
+                    with open(f"{dataset_dir}/{dataset}/{edge_file}", 'r') as f:
                         for line in f:
                             if line.strip() and not line.startswith('#'):
                                 parts = line.strip().split()

@@ -5,7 +5,7 @@ import sys
 
 # Add parent directory to path to import shared utilities
 sys.path.insert(0, '/scripts')
-from dataset_properties import PropertiesReader
+from dataset_properties import PropertiesReader, get_available_cpus
 
 datasets = ["dota_league","graph500_26", "graph500_28", "graph500_30", "uniform_26", "twitter_mpi","uk-2007", "com-friendster"]
 dataset_dir = "/datasets"
@@ -95,7 +95,8 @@ def parse_log(buffer):
     return pp_time, trial_avg, mem_avg, major_faults_avg, minor_faults_avg, block_in_avg, block_out_avg
 
 def main():
-    num_threads = os.cpu_count()
+    num_threads = get_available_cpus()
+    print(f"Using {num_threads} threads based on available CPUs")
     for dataset in datasets:
         dataset_path = f"/datasets/{dataset}"
         src = f"{dataset_path}/{dataset}"
