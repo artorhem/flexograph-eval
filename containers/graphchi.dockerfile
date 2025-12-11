@@ -7,6 +7,6 @@ ARG DATASET_HOME=/datasets
 # RUN apt-get --no-install-recommends -y install build-essential cmake git libboost-all-dev \
 #     libomp-dev wget gdb automake libtool time gnupg2 python3 vim sysstat
 
-ADD scripts/graphchi/graphchi.py /graphchi.py
+# Scripts are now mounted as volumes, not copied
 WORKDIR /
 CMD sleep infinity

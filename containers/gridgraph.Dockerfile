@@ -17,7 +17,7 @@ ENV CXX=/usr/bin/g++
 # Build GridGraph
 RUN mkdir -p ${PROJECT_HOME}
 COPY systems/ooc/GridGraph ${PROJECT_HOME}/
-ADD scripts/gridgraph/gridgraph.py /gridgraph.py
+# Scripts are now mounted as volumes, not copied
 WORKDIR /
 # CMD python3 /gridgraph.py --parse
 CMD sleep infinity

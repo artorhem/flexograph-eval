@@ -12,6 +12,6 @@ WORKDIR ${PROJECT_HOME}
 RUN mkdir -p build && \
     cd build && cmake -DCMAKE_BUILD_TYPE=${BLAZE_BUILD_TYPE} .. && make -j${NUM_CORES}
 
-ADD scripts/blaze/blaze.py /blaze.py
+# Scripts are now mounted as volumes, not copied
 WORKDIR /
 CMD sleep infinity

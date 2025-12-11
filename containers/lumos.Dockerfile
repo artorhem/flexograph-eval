@@ -19,7 +19,7 @@ ENV CXX=/usr/bin/g++
 RUN mkdir -p ${PROJECT_HOME}
 COPY systems/ooc/lumos ${PROJECT_HOME}/
 COPY systems/ooc/GridGraph ${GG_HOME}/
-ADD scripts/lumos/lumos.py /lumos.py
+# Scripts are now mounted as volumes, not copied
 WORKDIR /
 # CMD python3 /lumos.py --parse
 CMD sleep infinity
