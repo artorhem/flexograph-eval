@@ -68,9 +68,9 @@ def parse_log(buffer):
         trial_avg = round(sum(trial_times) / len(trial_times),4)
 
     if len(mem) == 0:
-        mem_avg = int(round(sum(mem) / len(mem)))
-    else:
         mem_avg = 0
+    else:
+        mem_avg = int(round(sum(mem) / len(mem)))
 
     if len(major_faults) == 0:
         major_faults_avg = 0
@@ -99,7 +99,7 @@ def main():
     print(f"Using {num_threads} threads based on available CPUs")
     for dataset in datasets:
         dataset_path = f"/datasets/{dataset}"
-        src = f"{dataset_path}/{dataset}"
+        src = f"{dataset_path}/{dataset}.e"
         if not os.path.exists(src):
             print(f"Dataset {dataset} does not exist")
             continue
