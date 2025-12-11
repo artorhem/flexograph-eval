@@ -9,6 +9,7 @@ services:
       - datasets:/datasets
       - results:/results
       - extra_space:/extra_space
+      - scripts:/scripts
 
   gemini:
     privileged: true
@@ -20,6 +21,7 @@ services:
       - systems:/systems
       - datasets:/datasets
       - results:/results
+      - scripts:/scripts
   
   ligra:
     privileged: true
@@ -32,6 +34,7 @@ services:
       - datasets:/datasets
       - results:/results
       - extra_space:/extra_space
+      - scripts:/scripts
 
   galois:
     privileged: true
@@ -44,6 +47,7 @@ services:
       - results:/results
       - systems:/systems
       - extra_space:/extra_space
+      - scripts:/scripts
   
   blaze:
     privileged: true
@@ -55,6 +59,7 @@ services:
       - datasets:/datasets
       - results:/results
       - extra_space:/extra_space
+      - scripts:/scripts
 
   graphchi:
     privileged: true
@@ -67,6 +72,7 @@ services:
       - systems:/systems
       - results:/results
       - extra_space:/extra_space
+      - scripts:/scripts
   
   xstream:
     privileged: true
@@ -78,6 +84,7 @@ services:
       - datasets:/datasets
       - results:/results
       - extra_space:/extra_space
+      - scripts:/scripts
 
   lumos:
     privileged: true
@@ -89,6 +96,7 @@ services:
       - datasets:/datasets
       - results:/results
       - extra_space:/extra_space
+      - scripts:/scripts
 
   gridgraph:
     privileged: true
@@ -100,14 +108,14 @@ services:
       - datasets:/datasets
       - results:/results
       - extra_space:/extra_space
+      - scripts:/scripts
 
-  margraphita:
+  flexograph:
     privileged: true
-    #mem_limit: "1g"
     build:
       context: ./
-      dockerfile: ../margraphita/Dockerfile
-    container_name: margraphita
+      dockerfile: containers/Flexograph.Dockerfile
+    container_name: flexograph
     volumes:
       - db:/db
       - datasets:/datasets
@@ -116,6 +124,7 @@ services:
       - margraphita:/margraphita
       - results:/results
       - golden_images:/golden_images
+      - scripts:/scripts
 
 volumes:
   systems:
@@ -124,12 +133,18 @@ volumes:
       type: none
       o: bind
       device: ./systems/
+  scripts:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./scripts/
   margraphita:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ../margraphita/
+      device: systems/FlexoGraph
   datasets:
     driver: local
     driver_opts:

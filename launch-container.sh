@@ -93,6 +93,7 @@ if [ "$NO_NUMA" = true ]; then
     -v "$(pwd)/systems":/systems \
     -v "$(pwd)/results":/results \
     -v "$(pwd)/extra_space":/extra_space \
+    -v "$(pwd)/scripts":/scripts \
     "$IMAGE_NAME" \
     /bin/bash -c "
         echo 'Verifying configuration:'
@@ -112,6 +113,7 @@ else
     -v "$(pwd)/systems":/systems \
     -v "$(pwd)/results":/results \
     -v "$(pwd)/extra_space":/extra_space \
+    -v "$(pwd)/scripts":/scripts \
     "$IMAGE_NAME" \
     /bin/bash -c "
         echo 'Verifying configuration:'

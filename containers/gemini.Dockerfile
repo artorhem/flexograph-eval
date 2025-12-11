@@ -12,8 +12,7 @@ SHELL [ "/bin/bash" , "-c" ]
 ENV CC=/usr/bin/gcc
 ENV CXX=/usr/bin/g++
 
-ADD scripts/gemini/gemini.py /gemini.py
-ADD scripts/dataset_properties.py /dataset_properties.py
+# Scripts are now mounted as volumes, not copied
 WORKDIR /
 # CMD python3 /gemini.py --parse
 CMD sleep infinity

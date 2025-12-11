@@ -40,6 +40,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     python3-pip \
     # System monitoring and utilities
     sysstat \
+    strace \
     psmisc \
     software-properties-common \
     # Google performance tools
