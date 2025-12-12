@@ -10,6 +10,7 @@ from datetime import datetime
 # Add parent directory to path to import shared utilities
 sys.path.insert(0, '/scripts')
 from dataset_properties import get_available_cpus
+from get_mem_estimates import get_memory_budgets
 
 src_dir = "/systems/ooc/graphchi-cpp"
 app_dir = "/systems/ooc/graphchi-cpp/bin/example_apps"
@@ -19,8 +20,9 @@ dataset_cpy = "/extra_space/graphchi_datasets"
 results_dir = "/results/graphchi"
 pr_iters= 10
 repeats = 5
-membudget_mb = 100000
-cachesize_mb = 100000
+# Note: membudget_mb and cachesize_mb are now set dynamically based on memory_estimates.json
+# Memory budget percentages to test
+memory_percentages = [50, 75, 100, 125, 150]
 
 datasets = ["dota_league","graph500_26", "graph500_28", "graph500_30", "uniform_26", "twitter_mpi","uk-2007", "com-friendster"]
 benchmarks = ["trianglecounting", "pagerank_functional"]#, "connectedcomponents"]
@@ -111,123 +113,159 @@ def copy_dataset(dataset):
 def cleanup(dataset):
   os.system(f"rm -rf {dataset_cpy}/*")
 
-def make_pagerank_functional_cmd(dataset, benchmark):
+def make_pagerank_functional_cmd(dataset, benchmark, membudget_mb, cachesize_mb):
   cmd = f"{app_dir}/{benchmark} --mode=semisync --filetype=edgelist --niters={pr_iters} --file={dataset_cpy}/{dataset} --cachesize={cachesize_mb} --membudget={membudget_mb}"
   return cmd
 
-def make_connectedcomponents_cmd(dataset, benchmark):
+def make_connectedcomponents_cmd(dataset, benchmark, membudget_mb, cachesize_mb):
   cmd = f"{app_dir}/{benchmark} --filetype=edgelist --file={dataset_cpy}/{dataset} --cachesize={cachesize_mb} --membudget={membudget_mb}"
   return cmd
 
-def make_trianglecounting_cmd(dataset, benchmark):
+def make_trianglecounting_cmd(dataset, benchmark, membudget_mb, cachesize_mb):
   cmd = f"{app_dir}/{benchmark} --filetype=edgelist --file={dataset_cpy}/{dataset} --cachesize={cachesize_mb} --membudget={membudget_mb} --nshards=2"
   return cmd
 
+def update_graphchi_config(membudget_mb, cachesize_mb):
+  """Update GraphChi config file with specified memory budgets"""
+  num_cpus = get_available_cpus()
+  config_path = f"{app_dir}/conf/graphchi.local.conf"
+
+  with open(config_path, "w") as f:
+    f.write("# GraphChi configuration.\n")
+    f.write("# Commandline parameters override values in the configuration file.\n")
+    f.write(f"execthreads = {num_cpus}\n")
+    f.write(f"loadthreads = {num_cpus}\n")
+    f.write(f"niothreads = {num_cpus}\n")
+    f.write(f"membudget_mb = {membudget_mb}\n")
+    f.write(f"cachesize_mb = {cachesize_mb}\n")
+    f.write("io.blocksize = 1048576\n")
+    f.write("mmap = 0\n")
+
+  print(f"Updated GraphChi config: membudget_mb={membudget_mb}, cachesize_mb={cachesize_mb}")
+
 def exec_benchmarks():
   for dataset in datasets:
+    print(f"\n{'='*80}")
+    print(f"Processing dataset: {dataset}")
+    print(f"{'='*80}")
+
+    # Get memory budgets for this dataset
+    memory_budgets = get_memory_budgets(dataset, memory_percentages)
+
+    if not memory_budgets:
+      print(f"Warning: No memory estimates available for {dataset}, skipping...")
+      continue
+
     os.system("mkdir -p %s" % dataset_cpy)
     # Now copy the dataset to the graphchi directory
     copy_dataset(dataset)
-    for benchmark in benchmarks:
-      print("Running benchmark: ", benchmark, " on dataset: ", dataset)
-      # Run the benchmark
-      # start timer here
-      with open(f"{results_dir}/{dataset}_{benchmark}.out", "w") as fout, open(f"{results_dir}/{dataset}_{benchmark}.err", "w") as ferr:
-        for i in range(repeats):
-          print(f"Running iteration {i}")
-          
-          # Start I/O monitoring for this specific run
-          iostat_log = f"{results_dir}/{dataset}_{benchmark}_iter{i}_iostat.log"
-          start_iostat_monitoring(iostat_log)
-          
-          start = time.time()
-          cmd = globals() [f"make_{benchmark}_cmd"](dataset, benchmark)
-          process = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=app_dir, shell=True)
-          end = time.time()
-          
-          # Stop I/O monitoring
-          stop_iostat_monitoring()
-          
-          fout.write(f"Time taken: {end - start}s\n")
-          fout.write(f"command: {process.args}\n")
-          # Parse the output
-          fout.write(process.stdout.decode("ASCII"))
-          ferr.write(process.stderr.decode("ASCII"))
-          # Iter 0 is the preprocessing time
-          if(i == 0):
-            preproccess_log = open(f"{results_dir}/preprocess_{dataset}_{benchmark}.log", "w")
-            preproccess_log.write(f"Time for preprocessing: {end - start}s\n")
-            preproccess_log.write(process.stdout.decode("ASCII"))
-            preproccess_log.close()
-    # Cleanup the dataset
+
+    # Loop through each memory budget percentage
+    for mem_pct, membudget_mb in memory_budgets:
+      # Set cachesize_mb to the same value as membudget_mb
+      cachesize_mb = membudget_mb
+
+      print(f"\n{'-'*80}")
+      print(f"Memory Budget: {mem_pct}% ({membudget_mb} MB)")
+      print(f"{'-'*80}")
+
+      # Update GraphChi config file with current memory budget
+      update_graphchi_config(membudget_mb, cachesize_mb)
+
+      for benchmark in benchmarks:
+        print(f"Running benchmark: {benchmark} on dataset: {dataset} with {mem_pct}% memory budget")
+
+        # Create result files with memory percentage in the name
+        result_base = f"{results_dir}/{dataset}_{benchmark}_mem{mem_pct}pct"
+
+        with open(f"{result_base}.out", "w") as fout, open(f"{result_base}.err", "w") as ferr:
+          for i in range(repeats):
+            print(f"  Running iteration {i}")
+
+            # Start I/O monitoring for this specific run
+            iostat_log = f"{result_base}_iter{i}_iostat.log"
+            start_iostat_monitoring(iostat_log)
+
+            start = time.time()
+            cmd = globals()[f"make_{benchmark}_cmd"](dataset, benchmark, membudget_mb, cachesize_mb)
+            process = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=app_dir, shell=True)
+            end = time.time()
+
+            # Stop I/O monitoring
+            stop_iostat_monitoring()
+
+            fout.write(f"Time taken: {end - start}s\n")
+            fout.write(f"command: {process.args}\n")
+            # Parse the output
+            fout.write(process.stdout.decode("ASCII"))
+            ferr.write(process.stderr.decode("ASCII"))
+
+            # Iter 0 is the preprocessing time
+            if i == 0:
+              preprocess_log = open(f"{results_dir}/preprocess_{dataset}_{benchmark}_mem{mem_pct}pct.log", "w")
+              preprocess_log.write(f"Time for preprocessing: {end - start}s\n")
+              preprocess_log.write(process.stdout.decode("ASCII"))
+              preprocess_log.close()
+
+    # Cleanup the dataset after all memory budgets are tested
     cleanup(dataset)
 def main():
   # build GraphChi if not already built
   if not os.path.exists(f"{src_dir}/bin/example_apps/pagerank_functional"):
     os.system(f"cd {src_dir} && make -j apps")
 
-  # make the graphchi local config file
-  '''
-    # GraphChi configuration.
-    # Commandline parameters override values in the configuration file.
-    execthreads= ${nproc -all}, loadthreads = $(nproc -all) , niothreads = $(nproc -all)
-    # Memory budget for GraphChi engine (in MB) we will use 100GB
-    membudget_mb = 100000
-    cachesize_mb = 100000
-    # I/O settings
-    io.blocksize = 1048576, mmap = 0  # Use mmaped files where applicable
-  '''
-  num_cpus = get_available_cpus()
-  print(f"Using {num_cpus} threads based on available CPUs")
-  with open(f"{app_dir}/conf/graphchi.local.conf", "w") as f:
-    f.write("# GraphChi configuration.\n")
-    f.write("# Commandline parameters override values in the configuration file.\n")
-    # setting all threads to the number of cores
-    f.write(f"execthreads = {num_cpus}\n")
-    f.write(f"loadthreads = {num_cpus}\n")
-    f.write(f"niothreads = {num_cpus}\n")
-    f.write("membudget_mb = 100000\n")
-    f.write("cachesize_mb = 100000\n")
-    f.write("io.blocksize = 1048576\n")
-    f.write("mmap = 0\n")
-
-  #set the environment variable
+  # Set the environment variable
   os.environ["GRAPHCHI_ROOT"] = app_dir
 
-  #run the benchmarks
+  # Note: GraphChi config file is now created/updated dynamically for each memory budget
+  # in the exec_benchmarks() function
+
+  # Run the benchmarks
   exec_benchmarks()
 
-  #now we can parse the logs
+  # Now we can parse the logs
   for dataset in datasets:
-    #the preprocessing step happens only once for the first benchmark. We have chosen the first benchmark to be TC
-    #because it has an additional sort step, which is not present in the other benchmarks.
-    #Even if another benchmark runs first, TC will run preprocessing again, so it is safe to choose TC as the first benchmark
-    pp_file = f"{results_dir}/preprocess_{dataset}_trianglecounting.log"
-    preprocessing_total = parse_preprocessing_log(pp_file)
-    for benchmark in benchmarks:
-      extracted_data = parse_log(f"{results_dir}/{dataset}_{benchmark}.out")
-      print(f"Dataset: {dataset}, Benchmark: {benchmark}")
-      with open (f"{results_dir}/{dataset}_{benchmark}.csv", "w") as f:
-        f.write("preprocessing_total, num_shards, runtime_avg, cache_mb, membudget_mb, niters, runtime_mem_total_mb, preprocessing_mem_mb, maj_flt, min_flt, blk_in, blk_out\n")
-        for key, values in extracted_data.items():
-          print(key, values)
-        mems = extracted_data['memory_total']
-        mems.sort()
-        # Handle case where memory data may be sparse
-        mem_avg = sum(mems[:-1])/len(mems[:-1]) if len(mems) > 1 else (mems[0] if mems else 0)
-        mem_peak = int(mems[-1]) if mems else 0
-        f.write(f"{preprocessing_total}, "
-                f"{int(extracted_data['nshards'][0])}, "
-                f"{sum(extracted_data['runtime'])/len(extracted_data['runtime'])}, "
-                f"{int(extracted_data['cachesize_mb'][0])}, "
-                f"{int(extracted_data['membudget_mb'][0])}, "
-                f"{int(pr_iters)}, "
-                f"{mem_avg}, "
-                f"{mem_peak},"
-                f"{int(sum(extracted_data['maj_flt'])/len(extracted_data['maj_flt']))},"
-                f"{int(sum(extracted_data['min_flt'])/len(extracted_data['min_flt']))},"
-                f"{int(sum(extracted_data['blk_in'])/len(extracted_data['blk_in']))},"
-                f"{int(sum(extracted_data['blk_out'])/len(extracted_data['blk_out']))}\n")
-      print("Parsed log file: ", dataset, benchmark)
+    # Get memory budgets for this dataset
+    memory_budgets = get_memory_budgets(dataset, memory_percentages)
+
+    if not memory_budgets:
+      print(f"Warning: No memory estimates available for {dataset}, skipping parsing...")
+      continue
+
+    for mem_pct, membudget_mb in memory_budgets:
+      # The preprocessing step happens only once for the first benchmark. We have chosen the first benchmark to be TC
+      # because it has an additional sort step, which is not present in the other benchmarks.
+      # Even if another benchmark runs first, TC will run preprocessing again, so it is safe to choose TC as the first benchmark
+      pp_file = f"{results_dir}/preprocess_{dataset}_trianglecounting_mem{mem_pct}pct.log"
+      preprocessing_total = parse_preprocessing_log(pp_file)
+
+      for benchmark in benchmarks:
+        result_base = f"{results_dir}/{dataset}_{benchmark}_mem{mem_pct}pct"
+        extracted_data = parse_log(f"{result_base}.out")
+        print(f"Dataset: {dataset}, Benchmark: {benchmark}, Memory Budget: {mem_pct}%")
+
+        with open(f"{result_base}.csv", "w") as f:
+          f.write("mem_budget_pct, preprocessing_total, num_shards, runtime_avg, cache_mb, membudget_mb, niters, runtime_mem_total_mb, preprocessing_mem_mb, maj_flt, min_flt, blk_in, blk_out\n")
+          for key, values in extracted_data.items():
+            print(key, values)
+          mems = extracted_data['memory_total']
+          mems.sort()
+          # Handle case where memory data may be sparse
+          mem_avg = sum(mems[:-1])/len(mems[:-1]) if len(mems) > 1 else (mems[0] if mems else 0)
+          mem_peak = int(mems[-1]) if mems else 0
+          f.write(f"{mem_pct}, "
+                  f"{preprocessing_total}, "
+                  f"{int(extracted_data['nshards'][0])}, "
+                  f"{sum(extracted_data['runtime'])/len(extracted_data['runtime'])}, "
+                  f"{int(extracted_data['cachesize_mb'][0])}, "
+                  f"{int(extracted_data['membudget_mb'][0])}, "
+                  f"{int(pr_iters)}, "
+                  f"{mem_avg}, "
+                  f"{mem_peak},"
+                  f"{int(sum(extracted_data['maj_flt'])/len(extracted_data['maj_flt']))},"
+                  f"{int(sum(extracted_data['min_flt'])/len(extracted_data['min_flt']))},"
+                  f"{int(sum(extracted_data['blk_in'])/len(extracted_data['blk_in']))},"
+                  f"{int(sum(extracted_data['blk_out'])/len(extracted_data['blk_out']))}\n")
+        print(f"Parsed log file: {dataset} {benchmark} {mem_pct}%")
 if __name__ == "__main__":
   main()
