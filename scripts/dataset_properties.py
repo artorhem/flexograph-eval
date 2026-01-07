@@ -306,10 +306,10 @@ class PropertiesReader:
     def get_edge_file(self):
         """
         Get the edge file name from properties.
-        Converts hyphens to underscores to match actual filesystem naming.
+        Intelligently handles hyphen/underscore naming by checking the filesystem.
 
         Returns:
-            str: Edge file name (e.g., 'graph500_26.e'), or None if not specified
+            str: Edge file name (e.g., 'graph500_26.e' or 'com-friendster.e'), or None if not specified
         """
         if self._properties is None:
             self.read()
@@ -326,8 +326,20 @@ class PropertiesReader:
         edge_file_key = f"graph.{dataset_key}.edge-file"
         if edge_file_key in config['DEFAULT']:
             edge_file = config['DEFAULT'][edge_file_key].strip()
-            # Convert hyphens to underscores to match filesystem naming
-            return edge_file.replace('-', '_')
+
+            # Check if file exists with the original name (as specified in properties)
+            original_path = os.path.join(self.dataset_path, edge_file)
+            if os.path.exists(original_path):
+                return edge_file
+
+            # If not, try with hyphens converted to underscores
+            converted_file = edge_file.replace('-', '_')
+            converted_path = os.path.join(self.dataset_path, converted_file)
+            if os.path.exists(converted_path):
+                return converted_file
+
+            # If neither exists, return the original name (let the calling code handle the error)
+            return edge_file
 
         return None
 

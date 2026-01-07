@@ -196,7 +196,7 @@ def main():
     os.makedirs("/datasets/galois", exist_ok=True)
     os.makedirs("/extra_space/galois", exist_ok=True)
 
-    datasets = ["dota_league","graph500_26", "graph500_28", "graph500_30", "uniform_26", "twitter_mpi","uk-2007", "com-friendster"]
+    datasets = ["uk-2007", "com-friendster", "graph500_26", "graph500_28", "graph500_30", "uniform_26", "twitter_mpi"]  #"dota_league",
 
     for dataset in datasets:
         dataset_dir = f"/datasets/{dataset}"
@@ -401,7 +401,8 @@ def main():
                 print(f"  No source vertex found in properties for BC, skipping")
             else:
                 print(f"  Using BFS source vertex for BC: {source_vertex}")
-                do_bc(gr_path, f"/results/galois/{dataset}_bc", source_vertex, THREADS, base_conv_time, args.dry_run)
+                print(f"Skipping BC -- it never finishes")
+                #do_bc(gr_path, f"/results/galois/{dataset}_bc", source_vertex, THREADS, base_conv_time, args.dry_run)
 
         if 'sssp' in supported_benchmarks:
             # Get source vertex from properties

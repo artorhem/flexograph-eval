@@ -178,7 +178,7 @@ def main(self):
 
   os.chdir(TOOLS_DIR)
 
-  datasets = ["dota_league","graph500_26", "graph500_28", "graph500_30", "uniform_26", "twitter_mpi","uk-2007", "com-friendster"]
+  datasets = ["graph500_26", "graph500_28", "graph500_30", "twitter_mpi","uk-2007", "com-friendster"] #"dota_league","uniform_26"
 
   for dataset_name in datasets:
     print (f"Running for dataset: {dataset_name}")
@@ -251,7 +251,7 @@ def main(self):
         os.remove(f"{RESULTS_DIR}/{dataset_name}_{benchmark}.log")
 
       # Check if this benchmark needs a source vertex
-      if benchmark in ['bfs', 'sssp']:
+      if benchmark in ['bfs', 'sssp', 'bc']: #BC in Gemini needs a source vertex
         # Get source vertex from properties
         source_vertex = props_reader.get_source_vertex()
         if source_vertex is None:

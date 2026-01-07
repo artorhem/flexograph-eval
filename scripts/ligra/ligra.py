@@ -8,8 +8,7 @@ import re
 sys.path.insert(0, '/scripts')
 from dataset_properties import PropertiesReader
 
-datasets = ["dota_league","graph500_26", "graph500_28", "graph500_30", "uniform_26", "twitter_mpi","uk-2007", "com-friendster"]
-directed = ["livejournal"]
+datasets = [ "twitter_mpi","uk-2007", "com-friendster"] #"graph500_26", "graph500_28", "graph500_30", "uniform_26"] 
 dataset_dir = "/datasets"
 tempdir = "/extra_space"
 
@@ -60,11 +59,11 @@ def parse_log(buffer):
 def main():
     # Compile the convertor utils
     os.chdir("/systems/in-mem/ligra/utils")
-    os.system("make -j")
+    os.system(" make LONG=1 EDGELONG=1 OPENMP=1 -j$(nproc)")
 
     # Compile the Ligra applications
     os.chdir("/systems/in-mem/ligra/apps")
-    os.system("make -e OPENMP=1 -j all")
+    os.system(" make LONG=1 EDGELONG=1 OPENMP=1 -j$(nproc)")
 
     os.chdir("/systems/in-mem/ligra/apps")
 
