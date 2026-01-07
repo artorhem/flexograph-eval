@@ -1,5 +1,5 @@
 {
-  "dota_league": {
+  "dota-league": {
     "num_nodes": 317727,
     "num_edges": 50870313,
     "graph_size_disk": 776.88

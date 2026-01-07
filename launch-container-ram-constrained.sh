@@ -109,18 +109,18 @@ if [ ! -f "$MEMORY_ESTIMATES" ]; then
     exit 1
 fi
 
-# Get memory allocation from estimates or use absolute value
-WORKING_MEMORY_GB=$(python3 << PYTHON_EOF
+# Get memory allocation from estimates or use absolute value (in MB)
+WORKING_MEMORY_MB=$(python3 << PYTHON_EOF
 import json
 import sys
 
 try:
     if '$RAM_PERCENT' == 'absolute':
-        # Use absolute value directly
-        total_memory = int($RAM_ABSOLUTE_GB)
-        print(total_memory)
+        # Use absolute value directly (convert GB to MB)
+        total_memory_mb = int($RAM_ABSOLUTE_GB) * 1024
+        print(total_memory_mb)
     else:
-        # Use percentage of estimated memory
+        # Use percentage of graph_size_disk (following get_mem_estimates.py pattern)
         with open('$MEMORY_ESTIMATES') as f:
             estimates = json.load(f)
 
@@ -128,14 +128,23 @@ try:
             print(f"Error: Dataset '$DATASET_NAME' not found in memory_estimates.json", file=sys.stderr)
             sys.exit(1)
 
-        base_memory = estimates['$DATASET_NAME']['estimated_working_memory_gb']
-        allocated_memory = base_memory * ($RAM_PERCENT / 100.0)
+        # Get graph size in MB from disk size
+        graph_size_mb = estimates['$DATASET_NAME'].get('graph_size_disk')
 
-        # Add 10% overhead for OS, buffers, and runtime structures
-        os_overhead = 1.1
-        total_memory = int(allocated_memory * os_overhead)
+        if graph_size_mb is None:
+            print(f"Error: graph_size_disk not available for dataset '$DATASET_NAME'", file=sys.stderr)
+            sys.exit(1)
 
-        print(total_memory)
+        # Calculate memory budget as percentage of graph size (in MB)
+        allocated_memory_mb = int(graph_size_mb * ($RAM_PERCENT / 100.0))
+
+        # Add 25% overhead for OS, buffers, runtime structures, and system-specific overheads
+        # (e.g., GraphChi's 1GB hardcoded engine budget on top of membudget_mb)
+        os_overhead = 1.25
+        total_memory_mb = int(allocated_memory_mb * os_overhead)
+
+        # Return in MB to avoid precision loss (Docker supports --memory with 'm' suffix)
+        print(total_memory_mb)
 except Exception as e:
     print(f"Error: {e}", file=sys.stderr)
     sys.exit(1)
@@ -175,7 +184,7 @@ if [ "$RAM_PERCENT" = "absolute" ]; then
 else
     echo "RAM Allocation:    ${RAM_PERCENT}% (of estimated working memory)"
 fi
-echo "Allocated Memory:  ${WORKING_MEMORY_GB}GB"
+echo "Allocated Memory:  ${WORKING_MEMORY_MB}MB ($((WORKING_MEMORY_MB / 1024))GB)"
 echo "Image:             $IMAGE_NAME"
 echo "NUMA CPUs:         ${NUMA_NODE_0_CPUS:-disabled}"
 echo "═══════════════════════════════════════════════════════════════════"
@@ -200,13 +209,13 @@ echo "Container name: $CONTAINER_NAME"
 echo ""
 
 # Launch container with memory constraint
-echo "Launching container with memory limit ${WORKING_MEMORY_GB}GB..."
+echo "Launching container with memory limit ${WORKING_MEMORY_MB}MB ($((WORKING_MEMORY_MB / 1024))GB)..."
 
 if [ "$NO_NUMA" = true ]; then
     docker run -d \
         --name "$CONTAINER_NAME" \
-        --memory "${WORKING_MEMORY_GB}g" \
-        --memory-swap "${WORKING_MEMORY_GB}g" \
+        --memory "${WORKING_MEMORY_MB}m" \
+        --memory-swap "${WORKING_MEMORY_MB}m" \
         --privileged \
         -v "$(pwd)/datasets":/datasets \
         -v "$(pwd)/systems":/systems \
@@ -219,9 +228,26 @@ if [ "$NO_NUMA" = true ]; then
             echo 'Container Configuration:'
             echo '============================================='
             echo 'Dataset: $DATASET_NAME'
-            echo 'RAM Allocation: ${WORKING_MEMORY_GB}GB (${RAM_PERCENT}%)'
+            echo 'RAM Allocation: ${WORKING_MEMORY_MB}MB ($((WORKING_MEMORY_MB / 1024))GB) (${RAM_PERCENT}%)'
             echo ''
-            echo 'Memory Info:'
+            echo 'Memory Limit (cgroup):'
+            if [ -f /sys/fs/cgroup/memory.max ]; then
+                # cgroup v2
+                LIMIT=\$(cat /sys/fs/cgroup/memory.max)
+                if [ \"\$LIMIT\" != \"max\" ]; then
+                    echo \"  cgroup v2: \$((\$LIMIT / 1024 / 1024)) MB\"
+                else
+                    echo \"  cgroup v2: unlimited\"
+                fi
+            elif [ -f /sys/fs/cgroup/memory/memory.limit_in_bytes ]; then
+                # cgroup v1
+                LIMIT=\$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes)
+                echo \"  cgroup v1: \$((\$LIMIT / 1024 / 1024)) MB\"
+            else
+                echo \"  Unable to detect cgroup limit\"
+            fi
+            echo ''
+            echo 'Host Memory (for reference):'
             grep 'MemTotal' /proc/meminfo
             echo ''
             echo 'To run benchmarks:'
@@ -233,8 +259,8 @@ if [ "$NO_NUMA" = true ]; then
 else
     docker run -d \
         --name "$CONTAINER_NAME" \
-        --memory "${WORKING_MEMORY_GB}g" \
-        --memory-swap "${WORKING_MEMORY_GB}g" \
+        --memory "${WORKING_MEMORY_MB}m" \
+        --memory-swap "${WORKING_MEMORY_MB}m" \
         --privileged \
         --cpuset-cpus="$NUMA_NODE_0_CPUS" \
         --cpuset-mems="0" \
@@ -249,10 +275,27 @@ else
             echo 'Container Configuration:'
             echo '============================================='
             echo 'Dataset: $DATASET_NAME'
-            echo 'RAM Allocation: ${WORKING_MEMORY_GB}GB (${RAM_PERCENT}%)'
+            echo 'RAM Allocation: ${WORKING_MEMORY_MB}MB ($((WORKING_MEMORY_MB / 1024))GB) (${RAM_PERCENT}%)'
             echo 'NUMA CPUs: $NUMA_NODE_0_CPUS'
             echo ''
-            echo 'Memory Info:'
+            echo 'Memory Limit (cgroup):'
+            if [ -f /sys/fs/cgroup/memory.max ]; then
+                # cgroup v2
+                LIMIT=\$(cat /sys/fs/cgroup/memory.max)
+                if [ \"\$LIMIT\" != \"max\" ]; then
+                    echo \"  cgroup v2: \$((\$LIMIT / 1024 / 1024)) MB\"
+                else
+                    echo \"  cgroup v2: unlimited\"
+                fi
+            elif [ -f /sys/fs/cgroup/memory/memory.limit_in_bytes ]; then
+                # cgroup v1
+                LIMIT=\$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes)
+                echo \"  cgroup v1: \$((\$LIMIT / 1024 / 1024)) MB\"
+            else
+                echo \"  Unable to detect cgroup limit\"
+            fi
+            echo ''
+            echo 'Host Memory (for reference):'
             grep 'MemTotal' /proc/meminfo
             echo ''
             echo 'CPU Info:'

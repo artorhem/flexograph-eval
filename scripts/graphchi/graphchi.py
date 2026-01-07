@@ -22,16 +22,40 @@ pr_iters= 10
 repeats = 5
 # Note: membudget_mb and cachesize_mb are now set dynamically based on memory_estimates.json
 # Memory budget percentages to test
-memory_percentages = [50, 75, 100, 125, 150]
+memory_percentages = [200]#, 75, 100, 125, 150]
 
-datasets = ["dota_league","graph500_26", "graph500_28", "graph500_30", "uniform_26", "twitter_mpi","uk-2007", "com-friendster"]
-benchmarks = ["trianglecounting", "pagerank_functional"]#, "connectedcomponents"]
+datasets = ["graph500_26"] #dota-league"] #,"graph500_26", "graph500_28", "graph500_30", "uniform_26", "twitter_mpi","uk-2007", "com-friendster"]
+benchmarks = ["pagerank_functional"]#trianglecounting"] #, #, "connectedcomponents"]
 
 iostat_process = None
 
+def get_device_for_path(path):
+  """Get the block device for a given path"""
+  try:
+    # Use df to find the device for the path
+    result = subprocess.run(f"df {path} --output=source | tail -n 1",
+                          shell=True, capture_output=True, text=True, check=True)
+    device = result.stdout.strip()
+    # Extract just the device name (e.g., sda1, nvme1n1p2)
+    # iostat expects device names without /dev/ prefix but WITH partition number
+    if device.startswith('/dev/'):
+      device = device[5:]  # Remove /dev/ prefix (e.g., /dev/nvme1n1p2 -> nvme1n1p2)
+      return device
+    return device
+  except subprocess.CalledProcessError as e:
+    print(f"Warning: Could not determine device for {path}, monitoring all devices")
+    return None
+
 def start_iostat_monitoring(output_file):
   global iostat_process
-  cmd = "iostat -d -x 1 | grep -v 'loop'"
+  # Get the device where /extra_space is mounted
+  device = get_device_for_path("/extra_space")
+  if device:
+    cmd = f"iostat -d -x {device} 1"
+    print(f"Monitoring I/O for device: {device}")
+  else:
+    # Fallback to monitoring all devices
+    cmd = "iostat -d -x 1 | grep -v 'loop'"
   iostat_process = subprocess.Popen(cmd, shell=True, stdout=open(output_file, 'w'), stderr=subprocess.PIPE)
   return iostat_process
 
@@ -108,27 +132,37 @@ def parse_log(filename):
 def copy_dataset(dataset):
   # Copy the dataset to the graphchi directory
   if not os.path.exists(f"{dataset_cpy}/{dataset}"):
-    os.system(f"cp {dataset_dir}/{dataset}/{dataset}.e {dataset_cpy}/{dataset}")
+    cmd = f"cp {dataset_dir}/{dataset}/{dataset}.e {dataset_cpy}/{dataset}"
+    print(f"running command: {cmd}")
+    os.system(cmd)
+    #check if copy was successful
+    if not os.path.exists(f"{dataset_cpy}/{dataset}"):
+      print(f"Error: Dataset copy failed for {dataset}")
+  else:
+    print(f"Dataset {dataset} already exists in {dataset_cpy}, skipping copy")
 
 def cleanup(dataset):
   os.system(f"rm -rf {dataset_cpy}/*")
 
 def make_pagerank_functional_cmd(dataset, benchmark, membudget_mb, cachesize_mb):
-  cmd = f"{app_dir}/{benchmark} --mode=semisync --filetype=edgelist --niters={pr_iters} --file={dataset_cpy}/{dataset} --cachesize={cachesize_mb} --membudget={membudget_mb}"
+  cmd = f"{app_dir}/{benchmark} --mode=semisync --filetype=edgelist --niters={pr_iters} --file={dataset_cpy}/{dataset} --cachesize_mb={cachesize_mb} --membudget_mb={membudget_mb}"
   return cmd
 
 def make_connectedcomponents_cmd(dataset, benchmark, membudget_mb, cachesize_mb):
-  cmd = f"{app_dir}/{benchmark} --filetype=edgelist --file={dataset_cpy}/{dataset} --cachesize={cachesize_mb} --membudget={membudget_mb}"
+  cmd = f"{app_dir}/{benchmark} --filetype=edgelist --file={dataset_cpy}/{dataset} --cachesize_mb={cachesize_mb} --membudget_mb={membudget_mb}"
   return cmd
 
 def make_trianglecounting_cmd(dataset, benchmark, membudget_mb, cachesize_mb):
-  cmd = f"{app_dir}/{benchmark} --filetype=edgelist --file={dataset_cpy}/{dataset} --cachesize={cachesize_mb} --membudget={membudget_mb} --nshards=2"
+  cmd = f"{app_dir}/{benchmark} --filetype=edgelist --file={dataset_cpy}/{dataset} --cachesize_mb={cachesize_mb} --membudget_mb={membudget_mb} --nshards=2"
   return cmd
 
 def update_graphchi_config(membudget_mb, cachesize_mb):
   """Update GraphChi config file with specified memory budgets"""
   num_cpus = get_available_cpus()
-  config_path = f"{app_dir}/conf/graphchi.local.conf"
+  config_path = f"{app_dir}/conf/graphchi.local.cnf"
+  print(f"Updating GraphChi config file at {config_path} with membudget_mb={membudget_mb}, cachesize_mb={cachesize_mb}")
+  # Create config directory if it doesn't exist
+  os.makedirs(os.path.dirname(config_path), exist_ok=True)
 
   with open(config_path, "w") as f:
     f.write("# GraphChi configuration.\n")
@@ -160,13 +194,24 @@ def exec_benchmarks():
     # Now copy the dataset to the graphchi directory
     copy_dataset(dataset)
 
+    #check if dataset copy was successful
+    if not os.path.exists(f"{dataset_cpy}/{dataset}"):
+      print(f"Error: Dataset copy failed for {dataset}, Aborting...")
+      exit(1)
+
     # Loop through each memory budget percentage
     for mem_pct, membudget_mb in memory_budgets:
-      # Set cachesize_mb to the same value as membudget_mb
-      cachesize_mb = membudget_mb
-
+      # Calculate available cache size based on container headroom
+      # Container RAM = membudget_mb * 1.25 (from launch script)
+      # Available for cache = (membudget_mb * 0.25) - overhead
+      # Use conservative estimate: cap at 1500 MB or available headroom
+      overhead_mb = 200  # Conservative estimate for system overhead
+      available_for_cache = int(membudget_mb * 0.25 - overhead_mb)
+      cachesize_mb = 1400 #min(1500, max(0, available_for_cache))  # Cap at 1500 MB, minimum 0
+      membudget_mb = 2800 
       print(f"\n{'-'*80}")
       print(f"Memory Budget: {mem_pct}% ({membudget_mb} MB)")
+      print(f"Cache Size: {cachesize_mb} MB")
       print(f"{'-'*80}")
 
       # Update GraphChi config file with current memory budget
@@ -196,14 +241,38 @@ def exec_benchmarks():
 
             fout.write(f"Time taken: {end - start}s\n")
             fout.write(f"command: {process.args}\n")
+            fout.write(f"return_code: {process.returncode}\n")
             # Parse the output
             fout.write(process.stdout.decode("ASCII"))
             ferr.write(process.stderr.decode("ASCII"))
+
+            # Check if process was killed or failed
+            if process.returncode == -9:
+              error_msg = f"\n{'='*80}\nERROR: Process was KILLED (likely OOM - Out of Memory)\n"
+              error_msg += f"Dataset: {dataset}, Benchmark: {benchmark}, Memory: {mem_pct}%\n"
+              error_msg += f"This typically means the container ran out of memory.\n"
+              error_msg += f"Container limit may be too low for this configuration.\n"
+              error_msg += f"{'='*80}\n"
+              print(error_msg)
+              ferr.write(error_msg)
+              # Stop this benchmark configuration and move to next memory percentage
+              print(f"Skipping remaining iterations for {dataset}_{benchmark}_mem{mem_pct}pct")
+              break
+            elif process.returncode != 0:
+              error_msg = f"\n{'='*80}\nERROR: Process exited with non-zero return code: {process.returncode}\n"
+              error_msg += f"Dataset: {dataset}, Benchmark: {benchmark}, Memory: {mem_pct}%\n"
+              error_msg += f"{'='*80}\n"
+              print(error_msg)
+              ferr.write(error_msg)
+              # Stop on first failure - don't waste time on remaining iterations
+              print(f"Skipping remaining iterations for {dataset}_{benchmark}_mem{mem_pct}pct")
+              break
 
             # Iter 0 is the preprocessing time
             if i == 0:
               preprocess_log = open(f"{results_dir}/preprocess_{dataset}_{benchmark}_mem{mem_pct}pct.log", "w")
               preprocess_log.write(f"Time for preprocessing: {end - start}s\n")
+              preprocess_log.write(f"Return code: {process.returncode}\n")
               preprocess_log.write(process.stdout.decode("ASCII"))
               preprocess_log.close()
 

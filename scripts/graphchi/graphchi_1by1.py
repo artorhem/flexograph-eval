@@ -226,11 +226,17 @@ def exec_benchmarks(dataset, container_ram_mb=None):
     if not validate_memory_budget(membudget_mb, container_ram_mb, dataset, mem_pct):
       continue  # Skip this memory percentage if it doesn't fit
 
-    # Set cachesize_mb to the same value as membudget_mb
-    cachesize_mb = membudget_mb
+    # Calculate available cache size based on container headroom
+    # Container RAM = membudget_mb * 1.25 (from launch script)
+    # Available for cache = (membudget_mb * 0.25) - overhead
+    # Use conservative estimate: cap at 1500 MB or available headroom
+    overhead_mb = 200  # Conservative estimate for system overhead
+    available_for_cache = int(membudget_mb * 0.25 - overhead_mb)
+    cachesize_mb = min(1500, max(0, available_for_cache))  # Cap at 1500 MB, minimum 0
 
     print(f"\n{'-'*80}")
     print(f"Memory Budget: {mem_pct}% ({membudget_mb} MB)")
+    print(f"Cache Size: {cachesize_mb} MB")
     print(f"{'-'*80}")
 
     # Update GraphChi config file with current memory budget
@@ -260,14 +266,37 @@ def exec_benchmarks(dataset, container_ram_mb=None):
 
           fout.write(f"Time taken: {end - start}s\n")
           fout.write(f"command: {process.args}\n")
+          fout.write(f"return_code: {process.returncode}\n")
           # Parse the output
           fout.write(process.stdout.decode("ASCII"))
           ferr.write(process.stderr.decode("ASCII"))
+
+          # Check if process was killed
+          if process.returncode == -9:
+            error_msg = f"\n{'='*80}\nERROR: Process was KILLED (likely OOM - Out of Memory)\n"
+            error_msg += f"Dataset: {dataset}, Benchmark: {benchmark}, Memory: {mem_pct}%\n"
+            error_msg += f"This typically means the container ran out of memory.\n"
+            error_msg += f"Container limit may be too low for this configuration.\n"
+            error_msg += f"{'='*80}\n"
+            print(error_msg)
+            ferr.write(error_msg)
+            # Stop this benchmark configuration and move to next memory percentage
+            print(f"Skipping remaining iterations for {dataset}_{benchmark}_mem{mem_pct}pct")
+            break
+          elif process.returncode != 0:
+            error_msg = f"\n{'='*80}\nWARNING: Process exited with non-zero return code: {process.returncode}\n"
+            error_msg += f"Dataset: {dataset}, Benchmark: {benchmark}, Memory: {mem_pct}%\n"
+            error_msg += f"{'='*80}\n"
+            print(error_msg)
+            ferr.write(error_msg)
+            # Continue with next iteration to see if it's transient
+            print(f"Continuing to next iteration...")
 
           # Iter 0 is the preprocessing time
           if i == 0:
             preprocess_log = open(f"{results_dir}/preprocess_{dataset}_{benchmark}_mem{mem_pct}pct.log", "w")
             preprocess_log.write(f"Time for preprocessing: {end - start}s\n")
+            preprocess_log.write(f"Return code: {process.returncode}\n")
             preprocess_log.write(process.stdout.decode("ASCII"))
             preprocess_log.close()
 
